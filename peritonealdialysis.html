@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DART Tools — Peritoneal Dialysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b11; --card:#111a27; --card2:#0f1722;
+  --border:rgba(149,173,205,.14); --border-strong:rgba(122,162,255,.28);
+  --text:#e9f0fa; --muted:#96a7bf;
+  --primary:#61a8ff; --primary2:#3b82f6; --accent:#7ef0d2;
+  --gold:#cfa95f; --warn:#ffcd70; --danger:#ff6f6f; --purple:#b389ff;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --nav-bg:rgba(7,11,17,.82); --grid:rgba(255,255,255,.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top, rgba(97,168,255,.10), transparent 30%),radial-gradient(circle at 80% 20%, rgba(126,240,210,.08), transparent 24%),linear-gradient(180deg, var(--bg), #05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom, rgba(0,0,0,.35), transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1280px, calc(100% - 28px));margin:0 auto}
+
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-why{background:linear-gradient(135deg,rgba(207,169,95,.18),rgba(126,240,210,.10));border-color:rgba(207,169,95,.35);color:#f0dba8}
+.chip-why:hover{border-color:rgba(207,169,95,.6);color:#fff;transform:translateY(-1px)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(126,240,210,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.5}}
+
+.head-bar{padding:22px 0 14px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:18px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:800;margin-bottom:6px}
+.head-title{font-size:clamp(22px,3.4vw,32px);line-height:1.05;letter-spacing:-.03em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-meta{font-size:13px;color:var(--muted);max-width:520px;line-height:1.65;text-align:right}
+
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 40 C 180 -8, 380 -12, 600 18 C 820 50, 1020 42, 1340 8');offset-rotate:auto;opacity:0;animation:cometRun 3.4s cubic-bezier(0.42,0.04,0.58,0.98) 0.3s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+
+.grid-wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;padding-bottom:44px}
+.panel{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--border);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.panel-title{font-size:16px;font-weight:900;margin-bottom:4px}
+.panel-sub{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+
+.section-divider{margin:18px -20px 14px;padding:0 20px;border-top:1px solid var(--border);padding-top:14px}
+.section-divider:first-of-type{margin-top:0;border-top:none;padding-top:0}
+.section-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);margin-bottom:12px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1 / -1}
+.label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.11em;color:var(--muted)}
+
+input,select,button{font:inherit}
+input,select{width:100%;min-height:42px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);padding:0 12px;outline:none;transition:border-color .2s ease, box-shadow .2s ease}
+input:focus,select:focus{border-color:rgba(97,168,255,.45);box-shadow:0 0 0 3px rgba(97,168,255,.12)}
+input::placeholder{color:#70829a}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%),linear-gradient(135deg, var(--muted) 50%, transparent 50%);background-position:calc(100% - 16px) 50%, calc(100% - 11px) 50%;background-size:5px 5px, 5px 5px;background-repeat:no-repeat;padding-right:30px}
+
+.inline-toggle{display:flex;gap:6px;flex-wrap:wrap}
+.toggle-btn{flex:1;min-width:60px;min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s ease}
+.toggle-btn:hover{border-color:rgba(97,168,255,.34)}
+.toggle-btn.active{background:linear-gradient(135deg,rgba(97,168,255,.22),rgba(126,240,210,.14));border-color:rgba(97,168,255,.45);color:#eaf3ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+
+.mode-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.mode-btn{padding:10px 4px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);font-weight:800;font-size:12px;cursor:pointer;transition:all .18s ease;text-align:center;line-height:1.15}
+.mode-btn .sub{display:block;font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.mode-btn:hover{border-color:rgba(97,168,255,.34);color:var(--text)}
+.mode-btn.active{background:linear-gradient(135deg,rgba(97,168,255,.22),rgba(126,240,210,.14));border-color:rgba(126,240,210,.5);color:#fff}
+.mode-btn.active .sub{color:#9be8d0}
+
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tri-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* Bag quantity grid */
+.bag-quant{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px}
+.bag-quant-card{padding:10px 8px;border-radius:11px;border:1.5px solid;background:rgba(255,255,255,.02);text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.bag-quant-card.yellow{border-color:rgba(255,224,90,.45)}
+.bag-quant-card.green {border-color:rgba(126,240,140,.45)}
+.bag-quant-card.red   {border-color:rgba(255,120,120,.45)}
+.bag-quant-card.purple{border-color:rgba(179,137,255,.45)}
+.bag-quant-card .pct{font-size:13px;font-weight:900}
+.bag-quant-card.yellow .pct{color:#ffe16a}
+.bag-quant-card.green  .pct{color:#9beba5}
+.bag-quant-card.red    .pct{color:#ffa0a0}
+.bag-quant-card.purple .pct{color:#c8acff}
+.bag-quant-card input{width:100%;min-height:34px;text-align:center;font-weight:800;padding:0 4px}
+.bag-quant-card .lbl{font-size:10px;color:var(--muted);font-weight:700}
+
+.note{border:1px solid rgba(126,240,210,.18);background:rgba(126,240,210,.06);color:#d5fff2;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.65}
+.note.warning{border-color:rgba(255,205,112,.20);background:rgba(255,205,112,.08);color:#ffe8b6}
+.note.info{border-color:rgba(97,168,255,.2);background:rgba(97,168,255,.05);color:#cfe2ff}
+.note.danger{border-color:rgba(255,111,111,.30);background:rgba(255,111,111,.08);color:#ffd2d2}
+
+.calc-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:12px;border:1px solid transparent;font-weight:800;font-size:14px;cursor:pointer;transition:all .22s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 10px 26px rgba(59,130,246,.26)}
+.btn-primary:hover{box-shadow:0 14px 32px rgba(59,130,246,.38)}
+.btn-secondary{color:var(--text);background:rgba(255,255,255,.03);border-color:var(--border)}
+.btn-secondary:hover{border-color:rgba(97,168,255,.34)}
+
+.result-stack{display:grid;gap:12px}
+.result-card{border:1px solid var(--border);border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));padding:14px 16px}
+.result-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800;margin-bottom:6px}
+.result-value{font-size:clamp(20px,3vw,30px);letter-spacing:-.04em;line-height:1;font-weight:900;color:#f4f8ff;margin-bottom:6px}
+.result-meta{color:var(--muted);font-size:12px;line-height:1.6}
+.calc-line{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);color:#d6e0ee}
+.calc-line:last-child{border-bottom:none}
+.calc-line strong{color:#fff}
+.hidden{display:none!important}
+
+.result-card.hero{border:2px solid rgba(126,240,210,.55);background:linear-gradient(135deg, rgba(126,240,210,.12), rgba(97,168,255,.08));box-shadow:0 16px 44px rgba(126,240,210,.10), inset 0 1px 0 rgba(255,255,255,.08);padding:18px 22px;position:relative}
+.result-card.hero::before{content:"";position:absolute;inset:-2px;border-radius:18px;background:linear-gradient(135deg, rgba(126,240,210,.35), rgba(97,168,255,.15));z-index:-1;opacity:.5;filter:blur(8px)}
+.result-card.hero .result-kicker{font-size:11px;color:#9be8d0;letter-spacing:.16em;margin-bottom:10px}
+.result-card.hero .result-value{font-size:clamp(40px, 6.5vw, 56px);color:#ecfff8;letter-spacing:-.05em;font-weight:900;margin-bottom:8px;text-shadow:0 2px 12px rgba(126,240,210,.12)}
+.result-card.hero .result-value .unit{font-size:.32em;font-weight:800;color:#9be8d0;margin-left:4px;letter-spacing:0}
+.result-card.hero .result-meta{color:#cdd6e2;font-size:13px}
+
+.order-grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;line-height:1.55}
+.order-grid .lbl{color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;align-self:center}
+.order-grid .val{color:#f4f8ff;font-weight:700}
+
+details{margin-top:2px}
+details summary{cursor:pointer;list-style:none;padding:10px 12px;border-radius:11px;border:1px dashed var(--border);background:rgba(255,255,255,.02);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:space-between;transition:all .2s ease}
+details summary:hover{color:var(--text);border-color:rgba(97,168,255,.3)}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font-size:16px;color:var(--accent);font-weight:900}
+details[open] summary::after{content:"−"}
+details[open] summary{margin-bottom:10px;border-style:solid}
+
+.foot{padding:18px 0 32px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:8px}
+
+@media (max-width:980px){.grid-wrap{grid-template-columns:1fr}.head-meta{text-align:left}}
+@media (max-width:640px){.mode-row{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:540px){.form-grid,.sub-grid,.tri-grid{grid-template-columns:1fr}.bag-quant{grid-template-columns:repeat(2,1fr)}}
+
+/* ── Treatment Menu (Why / SOP / Safety) ───────────── */
+.treatment-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 22px}
+.menu-card{display:flex;flex-direction:column;padding:18px 18px 16px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));text-decoration:none;color:inherit;transition:all .22s ease;position:relative;overflow:hidden;min-height:128px}
+.menu-card::before{content:"";position:absolute;top:-40%;right:-20%;width:160px;height:160px;border-radius:50%;opacity:.10;pointer-events:none;transition:opacity .22s ease}
+.menu-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.30)}
+.menu-card:hover::before{opacity:.20}
+.menu-card.menu-why{border-color:rgba(97,168,255,.32);background:linear-gradient(135deg,rgba(97,168,255,.10),rgba(126,240,210,.04))}
+.menu-card.menu-why::before{background:radial-gradient(circle,rgba(97,168,255,.6),transparent 70%)}
+.menu-card.menu-why:hover{border-color:rgba(97,168,255,.6)}
+.menu-card.menu-sop{border-color:rgba(207,169,95,.30);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(255,255,255,.015));opacity:.78}
+.menu-card.menu-sop::before{background:radial-gradient(circle,rgba(207,169,95,.6),transparent 70%)}
+.menu-card.menu-sop:hover{border-color:rgba(207,169,95,.55);opacity:1}
+.menu-card.menu-safety{border-color:rgba(255,143,182,.30);background:linear-gradient(135deg,rgba(255,143,182,.10),rgba(126,240,210,.04))}
+.menu-card.menu-safety::before{background:radial-gradient(circle,rgba(255,143,182,.6),transparent 70%)}
+.menu-card.menu-safety:hover{border-color:rgba(255,143,182,.6)}
+.menu-icon{font-size:22px;line-height:1;margin-bottom:8px;position:relative;z-index:1}
+.menu-title{font-size:14.5px;font-weight:900;color:#fff;letter-spacing:-.01em;margin-bottom:5px;position:relative;z-index:1}
+.menu-desc{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;position:relative;z-index:1}
+.menu-foot{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;position:relative;z-index:1}
+.menu-foot .badge{padding:2px 8px;border-radius:999px;font-size:9.5px}
+.menu-foot.ready{color:#9be8d0}
+.menu-foot.ready .badge{background:rgba(126,240,210,.14);color:#cdfaea;border:1px solid rgba(126,240,210,.35)}
+.menu-foot.progress{color:#e6c682}
+.menu-foot.progress .badge{background:rgba(207,169,95,.14);color:#f0dba8;border:1px solid rgba(207,169,95,.35)}
+.menu-arrow{font-size:13px;font-weight:900}
+@media (max-width:780px){.treatment-menu{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">D</div>
+      <div>
+        <div class="brand-title">DART Tools</div>
+        <div class="brand-sub">Clinical calculator suite</div>
+      </div>
+    </a>
+    <div class="nav-right">
+      <span class="chip"><span class="dot"></span>Peritoneal Dialysis</span>
+      <a class="chip chip-home" href="index.html">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle"       style="--x:11%;--y:25%;--delay:0.70s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:0.95s"></div>
+      <div class="twinkle"       style="--x:28%;--y:8%; --delay:1.20s"></div>
+      <div class="twinkle tiny"  style="--x:34%;--y:12%;--delay:1.40s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.60s"></div>
+      <div class="twinkle"       style="--x:51%;--y:28%;--delay:1.85s"></div>
+      <div class="twinkle tiny"  style="--x:58%;--y:38%;--delay:2.05s"></div>
+      <div class="twinkle small" style="--x:65%;--y:45%;--delay:2.25s"></div>
+      <div class="twinkle"       style="--x:74%;--y:48%;--delay:2.50s"></div>
+      <div class="twinkle small" style="--x:82%;--y:38%;--delay:2.70s"></div>
+      <div class="twinkle tiny"  style="--x:89%;--y:25%;--delay:2.90s"></div>
+      <div class="twinkle small" style="--x:95%;--y:15%;--delay:3.10s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Peritoneal Dialysis</div>
+      <div class="head-title"><span class="accent">PD Order Builder</span></div>
+    </div>
+    <div class="head-meta" style="position:relative;z-index:1">Estimates fill safety (weight-based), cycler dwell-time, 6 L bag combinations, mode-aware prompts (CCPD · NIPD · Tidal · IPD · CAPD).</div>
+  </div>
+
+  <nav class="treatment-menu" aria-label="PD references">
+    <a class="menu-card menu-why" href="whyperitonealdialysis.html">
+      <div class="menu-icon">📖</div>
+      <div class="menu-title">Why Peritoneal Dialysis?</div>
+      <div class="menu-desc">Peritoneum as dialyzer, modalities, solution chemistry, advances.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-sop" href="soppd.html">
+      <div class="menu-icon">📋</div>
+      <div class="menu-title">PD Standards of Practice</div>
+      <div class="menu-desc">Institutional protocols, technique standards, and procedural workflow.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-safety" href="safetypd.html">
+      <div class="menu-icon">🛡️</div>
+      <div class="menu-title">PD Safety Considerations</div>
+      <div class="menu-desc">Peritonitis prevention, aseptic technique, hyperglycemia, hernia.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+  </nav>
+
+  <div class="grid-wrap">
+
+    <section class="panel">
+
+      <!-- PATIENT -->
+      <div class="section-divider"><div class="section-label">Patient</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="label">Weight Unit</label>
+            <div class="inline-toggle">
+              <button class="toggle-btn active" type="button" id="weightMetricBtn">kg</button>
+              <button class="toggle-btn" type="button" id="weightEnglishBtn">lb</button>
+            </div>
+          </div>
+          <div class="field" id="weightKgWrap">
+            <label class="label" for="weightKg">Weight (kg)</label>
+            <input id="weightKg" type="number" step="0.1" min="0" placeholder="e.g. 70" autofocus />
+          </div>
+          <div class="field hidden" id="weightLbWrap">
+            <label class="label" for="weightLb">Weight (lb)</label>
+            <input id="weightLb" type="number" step="0.1" min="0" placeholder="e.g. 154" />
+          </div>
+        </div>
+      </div>
+
+      <!-- MODALITY -->
+      <div class="section-divider"><div class="section-label">Modality</div>
+        <div class="mode-row" role="radiogroup" aria-label="PD modality">
+          <button type="button" class="mode-btn active" data-mode="ccpd"  role="radio" aria-checked="true">CCPD<span class="sub">night + last fill</span></button>
+          <button type="button" class="mode-btn"        data-mode="nipd"  role="radio" aria-checked="false">NIPD<span class="sub">dry day</span></button>
+          <button type="button" class="mode-btn"        data-mode="tidal" role="radio" aria-checked="false">Tidal<span class="sub">partial drains</span></button>
+          <button type="button" class="mode-btn"        data-mode="ipd"   role="radio" aria-checked="false">IPD<span class="sub">acute</span></button>
+          <button type="button" class="mode-btn"        data-mode="capd"  role="radio" aria-checked="false">CAPD<span class="sub">manual</span></button>
+        </div>
+      </div>
+
+      <!-- PRESCRIPTION — CYCLER (CCPD/NIPD/IPD) -->
+      <div class="section-divider hidden" id="rxCycler">
+        <div class="section-label">Prescription</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="label" for="fillVolume">Fill Volume per Cycle (mL)</label>
+            <input id="fillVolume" type="number" step="50" min="50" max="3500" placeholder="e.g. 2000" />
+          </div>
+          <div class="field">
+            <label class="label" for="cycles">Number of Cycles</label>
+            <input id="cycles" type="number" step="1" min="1" max="20" placeholder="e.g. 5" />
+          </div>
+          <div class="field">
+            <label class="label" for="totalTime">Total Therapy Time (hr)</label>
+            <input id="totalTime" type="number" step="0.25" min="2" max="24" placeholder="e.g. 9" />
+          </div>
+          <div class="field" id="lastFillWrap">
+            <label class="label" for="lastFillVolume">Last Fill (daytime dwell, mL)</label>
+            <input id="lastFillVolume" type="number" step="50" min="0" max="3500" placeholder="e.g. 1500" />
+          </div>
+        </div>
+      </div>
+
+      <!-- PRESCRIPTION — TIDAL -->
+      <div class="section-divider hidden" id="rxTidal">
+        <div class="section-label">Prescription · Tidal</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="label" for="tidalInitFill">Initial Fill Volume (mL)</label>
+            <input id="tidalInitFill" type="number" step="50" min="50" max="3500" placeholder="e.g. 2000" />
+          </div>
+          <div class="field">
+            <label class="label" for="tidalPct">Tidal % (drained per cycle)</label>
+            <input id="tidalPct" type="number" step="5" min="20" max="95" value="50" />
+          </div>
+          <div class="field">
+            <label class="label" for="tidalCycles">Number of Tidal Cycles</label>
+            <input id="tidalCycles" type="number" step="1" min="2" max="30" placeholder="e.g. 8" />
+          </div>
+          <div class="field">
+            <label class="label" for="tidalTime">Total Therapy Time (hr)</label>
+            <input id="tidalTime" type="number" step="0.25" min="2" max="24" placeholder="e.g. 9" />
+          </div>
+          <div class="field full">
+            <label class="label" for="tidalLastFill">Last Fill (mL) — optional</label>
+            <input id="tidalLastFill" type="number" step="50" min="0" max="3500" placeholder="e.g. 1500 (leave blank for dry day)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- PRESCRIPTION — CAPD -->
+      <div class="section-divider hidden" id="rxCapd">
+        <div class="section-label">Prescription · CAPD (Manual)</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="label" for="capdExchangeVol">Exchange Volume (mL)</label>
+            <input id="capdExchangeVol" type="number" step="50" min="500" max="3500" placeholder="e.g. 2000" />
+          </div>
+          <div class="field">
+            <label class="label" for="capdExchanges">Exchanges per Day</label>
+            <input id="capdExchanges" type="number" step="1" min="3" max="6" placeholder="e.g. 4" value="4" />
+          </div>
+          <div class="field full">
+            <label class="label" for="capdOvernightDwell">Long Overnight Dwell (hr)</label>
+            <input id="capdOvernightDwell" type="number" step="0.5" min="6" max="14" placeholder="e.g. 9" value="9" />
+          </div>
+        </div>
+      </div>
+
+      <!-- BAGS -->
+      <div class="section-divider"><div class="section-label">Solution Bags</div>
+        <div class="form-grid">
+          <div class="field full">
+            <label class="label" for="bagSize">Bag Size</label>
+            <select id="bagSize">
+              <option value="6000" selected>6 L (most common)</option>
+              <option value="5000">5 L</option>
+              <option value="3000">3 L</option>
+              <option value="2500">2.5 L</option>
+              <option value="2000">2 L</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label class="label">Number of Bags by Concentration (combine as ordered)</label>
+            <div class="bag-quant">
+              <div class="bag-quant-card yellow">
+                <div class="pct">1.5%</div>
+                <input id="bagQtyY" type="number" min="0" max="20" step="1" value="0" />
+                <div class="lbl">Yellow</div>
+              </div>
+              <div class="bag-quant-card green">
+                <div class="pct">2.5%</div>
+                <input id="bagQtyG" type="number" min="0" max="20" step="1" value="1" />
+                <div class="lbl">Green</div>
+              </div>
+              <div class="bag-quant-card red">
+                <div class="pct">4.25%</div>
+                <input id="bagQtyR" type="number" min="0" max="20" step="1" value="0" />
+                <div class="lbl">Red</div>
+              </div>
+              <div class="bag-quant-card purple">
+                <div class="pct">Ico</div>
+                <input id="bagQtyI" type="number" min="0" max="5" step="1" value="0" />
+                <div class="lbl">Purple</div>
+              </div>
+            </div>
+          </div>
+          <div class="field full hidden" id="lastFillSolutionWrap">
+            <label class="label" for="lastFillSolution">Last Fill Solution</label>
+            <select id="lastFillSolution">
+              <option value="combo" selected>Same as cycler bags (volume-weighted mix)</option>
+              <option value="1.5">1.5% (Yellow)</option>
+              <option value="2.5">2.5% (Green)</option>
+              <option value="4.25">4.25% (Red)</option>
+              <option value="ico">Icodextrin (Purple) — preferred for long dwell</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADVANCED -->
+      <div class="section-divider"><div class="section-label">Advanced (optional)</div>
+        <details>
+          <summary>Pediatric details · Machine · Custom dwell-time rates</summary>
+          <div class="form-grid" style="margin-top:8px">
+            <div class="field">
+              <label class="label" for="age">Age (years)</label>
+              <input id="age" type="number" step="1" min="0" max="120" placeholder="optional · for ped detection" />
+            </div>
+            <div class="field">
+              <label class="label">Height Unit</label>
+              <div class="inline-toggle">
+                <button class="toggle-btn active" type="button" id="heightMetricBtn">cm</button>
+                <button class="toggle-btn" type="button" id="heightEnglishBtn">ft + in</button>
+              </div>
+            </div>
+            <div class="field" id="heightCmWrap">
+              <label class="label" for="heightCm">Height (cm)</label>
+              <input id="heightCm" type="number" step="0.1" min="0" placeholder="optional · for BSA" />
+            </div>
+            <div class="field hidden" id="heightEnglishWrap">
+              <label class="label">Height (ft + in)</label>
+              <div class="sub-grid">
+                <input id="heightFt" type="number" step="1" min="0" placeholder="ft" />
+                <input id="heightIn" type="number" step="0.1" min="0" placeholder="in" />
+              </div>
+            </div>
+            <div class="field full">
+              <label class="label" for="machine">Cycler / Modality Hardware</label>
+              <select id="machine">
+                <option value="amia" selected>Touchscreen cycler · low-fill capable (≥ 60 mL)</option>
+                <option value="claria">Standard cycler · remote-monitoring capable (≥ 60 mL)</option>
+                <option value="homechoice">Legacy cycler · standard fill range (≥ 100 mL)</option>
+                <option value="manual">Manual (CAPD — no cycler)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="fillRate">Fill Rate (mL/min)</label>
+              <input id="fillRate" type="number" step="10" min="100" max="400" value="250" />
+            </div>
+            <div class="field">
+              <label class="label" for="drainRate">Drain Rate (mL/min)</label>
+              <input id="drainRate" type="number" step="10" min="80" max="300" value="175" />
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="note info"><strong>Estimates only — not an order.</strong> Independent educational tool, no manufacturer affiliation. All fills must match the patient's prescription and tolerance. Verify aseptic technique and exit-site status before connecting.</div>
+      </div>
+
+      <div class="calc-row">
+        <button class="btn btn-primary" id="calculateBtn" type="button">Calculate</button>
+        <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-title">Results</div>
+      <div class="panel-sub">Estimated therapy volume, weight-based fill safety, cycler-derived dwell time, bag plan, and read-back order summary.</div>
+      <div class="result-stack" id="results">
+        <div class="result-card">
+          <div class="result-kicker">Awaiting inputs</div>
+          <div class="result-value">—</div>
+          <div class="result-meta">Enter weight, modality, prescription and press Calculate.</div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <div class="foot">
+    <span>DART Tools · Peritoneal Dialysis</span>
+    <span>Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   Cycler dwell-time estimation (educational reference)
+   ────────────────────────────────────────────────────────────────────
+   Modern automated PD cyclers deliver fills under positive pressure
+   and drain under gravity + active suction. Typical clinical reference
+   values cited in apheresis / nephrology literature and operator
+   documentation:
+     • Fill rate:     ~200–300 mL/min (default 250)
+     • Drain rate:    ~150–200 mL/min (default 175)
+     • Initial drain: ~15 min (machine clears prior-fill residual)
+     • Drain padding: ~3 min per drain (minimum-drain threshold)
+   Each cycler terminates a drain when flow falls below ~75 mL/min
+   ("minimum drain"). Real values vary with catheter position and
+   patient anatomy; defaults can be overridden in Advanced. This tool
+   is independent and not affiliated with any device manufacturer.
+   ════════════════════════════════════════════════════════════════════ */
+const DEFAULTS = {
+  fillRate: 250,      // mL/min
+  drainRate: 175,     // mL/min
+  initialDrainMin: 15,
+  drainPaddingMin: 3,
+  manualExchangeMin: 25,   // CAPD: per manual exchange (drain + fill)
+};
+
+/* ── Cycler reference values (publicly available operator-manual specs) ── */
+const machines = {
+  'amia':       {label:'Touchscreen cycler (low-fill capable)',    minFillMl:60,  maxFillMl:3000, modes:['ccpd','nipd','tidal','ipd']},
+  'claria':     {label:'Standard cycler (remote-monitoring)',      minFillMl:60,  maxFillMl:3000, modes:['ccpd','nipd','tidal','ipd']},
+  'homechoice': {label:'Legacy cycler',                            minFillMl:100, maxFillMl:3000, modes:['ccpd','nipd','tidal','ipd']},
+  'manual':     {label:'Manual exchanges',                         minFillMl:500, maxFillMl:3000, modes:['capd']}
+};
+
+/* ── Solution metadata (dextrose strengths, generic color coding) ── */
+const solutionMeta = {
+  '1.5': {label:'1.5% Dextrose (Yellow)', dextrose:1.5,  color:'Yellow'},
+  '2.5': {label:'2.5% Dextrose (Green)',  dextrose:2.5,  color:'Green'},
+  '4.25':{label:'4.25% Dextrose (Red)',   dextrose:4.25, color:'Red'},
+  'ico': {label:'Icodextrin (Purple)',    dextrose:null, color:'Purple'}
+};
+
+/* ── Mode metadata ── */
+const modes = {
+  'ccpd':  {label:'CCPD · cycler + daytime dwell',  needsLastFill:true,  isTidal:false, isCapd:false, defaultMachine:'amia'},
+  'nipd':  {label:'NIPD · cycler only, dry day',    needsLastFill:false, isTidal:false, isCapd:false, defaultMachine:'amia'},
+  'tidal': {label:'Tidal · partial drain per cycle',needsLastFill:false, isTidal:true,  isCapd:false, defaultMachine:'amia'},
+  'ipd':   {label:'IPD · acute / inpatient',        needsLastFill:false, isTidal:false, isCapd:false, defaultMachine:'amia'},
+  'capd':  {label:'CAPD · manual exchanges',        needsLastFill:false, isTidal:false, isCapd:true,  defaultMachine:'manual'}
+};
+
+/* ── BSA (Mosteller) ── */
+const mostellerBSA = (cm, kg) => Math.sqrt((cm * kg) / 3600);
+
+/* ── Fill safety (adult mL/kg + pediatric mL/m² where BSA available) ── */
+function fillSafety(fillMl, weightKg, bsaM2, age){
+  const mlPerKg = fillMl / weightKg;
+  const mlPerM2 = bsaM2 ? (fillMl / bsaM2) : null;
+  const isPed = (Number.isFinite(age) && age < 18) || weightKg < 30;
+  let level='ok', label='Within target', color='#cdfaea', bg='rgba(126,240,210,.06)', border='rgba(126,240,210,.28)', detail;
+
+  if(isPed){
+    // ISPD pediatric: 800–1100 mL/m²; ceiling 1100–1400 mL/m²
+    const bsaText = mlPerM2 ? `${fmt(mlPerM2,0)} mL/m²` : `${fmt(mlPerKg,1)} mL/kg (no height → BSA n/a)`;
+    if(mlPerM2 && mlPerM2 > 1400){
+      level='danger'; label='Pediatric fill EXCEEDS safe upper limit';
+      detail=`<strong>${bsaText}</strong> exceeds the ISPD pediatric ceiling. Risk: intra-abdominal hypertension, hernia, leak, respiratory compromise. Reduce fill.`;
+      color='#ffb4b4'; bg='rgba(255,111,111,.10)'; border='rgba(255,111,111,.32)';
+    } else if(mlPerM2 && mlPerM2 > 1100){
+      level='warn'; label='Pediatric fill at upper boundary';
+      detail=`<strong>${bsaText}</strong> at the ISPD upper ceiling. Confirm abdominal tolerance and respiratory status.`;
+      color='#ffe8b6'; bg='rgba(255,205,112,.08)'; border='rgba(255,205,112,.32)';
+    } else if(mlPerM2 && mlPerM2 < 600){
+      level='warn'; label='Pediatric fill below initial target';
+      detail=`<strong>${bsaText}</strong> below typical 800–1100 mL/m² target. Acceptable for break-in; consider scaling up.`;
+      color='#ffe8b6'; bg='rgba(255,205,112,.08)'; border='rgba(255,205,112,.32)';
+    } else if(!mlPerM2 && mlPerKg > 45){
+      level='danger'; label='Pediatric fill EXCEEDS safe upper limit (by weight)';
+      detail=`<strong>${fmt(mlPerKg,1)} mL/kg</strong> exceeds 45 mL/kg pediatric weight ceiling. Add height for BSA-based check.`;
+      color='#ffb4b4'; bg='rgba(255,111,111,.10)'; border='rgba(255,111,111,.32)';
+    } else {
+      detail=`<strong>${bsaText}</strong>${mlPerM2 ? ` · also ${fmt(mlPerKg,1)} mL/kg` : ''} · within pediatric range.`;
+    }
+  } else {
+    // Adult: 30–40 mL/kg target; 40–45 warn; >45 danger
+    if(mlPerKg > 45){
+      level='danger'; label='Adult fill EXCEEDS safe upper limit';
+      detail=`<strong>${fmt(mlPerKg,1)} mL/kg</strong> exceeds 45 mL/kg. Risk: intra-abdominal hypertension, hernia, leak, hydrothorax, respiratory compromise.`;
+      color='#ffb4b4'; bg='rgba(255,111,111,.10)'; border='rgba(255,111,111,.32)';
+    } else if(mlPerKg > 40){
+      level='warn'; label='Adult fill at upper boundary';
+      detail=`<strong>${fmt(mlPerKg,1)} mL/kg</strong> at 40–45 mL/kg ceiling. Confirm patient tolerance.`;
+      color='#ffe8b6'; bg='rgba(255,205,112,.08)'; border='rgba(255,205,112,.32)';
+    } else if(mlPerKg < 25){
+      level='warn'; label='Adult fill below typical range';
+      detail=`<strong>${fmt(mlPerKg,1)} mL/kg</strong> below typical 30–40 mL/kg target. Acceptable for break-in; verify adequacy.`;
+      color='#ffe8b6'; bg='rgba(255,205,112,.08)'; border='rgba(255,205,112,.32)';
+    } else {
+      detail=`<strong>${fmt(mlPerKg,1)} mL/kg</strong> within adult target (30–40 mL/kg).${mlPerM2 ? ` BSA-normalized: ${fmt(mlPerM2,0)} mL/m².` : ''}`;
+    }
+  }
+  return {level, label, detail, color, bg, border, mlPerKg, mlPerM2, isPed};
+}
+
+/* ── Bag combination math ── */
+function computeBagPlan(bagSize, qty){
+  // qty = {y,g,r,i}
+  const totalDextroseBags = qty.y + qty.g + qty.r;     // exclude icodextrin from % mix
+  const totalDextroseVol = (qty.y + qty.g + qty.r) * bagSize;
+  const totalIcoVol = qty.i * bagSize;
+  const totalAllVol = totalDextroseVol + totalIcoVol;
+
+  let effectiveDextrose = null;
+  if(totalDextroseBags > 0){
+    effectiveDextrose = ((qty.y*1.5) + (qty.g*2.5) + (qty.r*4.25)) / totalDextroseBags;
+  }
+
+  // human-readable mix description
+  const parts = [];
+  if(qty.y) parts.push(`${qty.y}×${bagSize/1000} L Yellow 1.5%`);
+  if(qty.g) parts.push(`${qty.g}×${bagSize/1000} L Green 2.5%`);
+  if(qty.r) parts.push(`${qty.r}×${bagSize/1000} L Red 4.25%`);
+  if(qty.i) parts.push(`${qty.i}×${bagSize/1000} L Icodextrin (Purple)`);
+  const mixLabel = parts.length ? parts.join(' + ') : 'no bags selected';
+
+  return {
+    totalDextroseVol, totalIcoVol, totalAllVol,
+    effectiveDextrose, mixLabel, hasIco: qty.i>0, hasDextrose: totalDextroseBags>0
+  };
+}
+
+/* ── Baxter HomeChoice cycler dwell math ──
+   Returns total non-dwell minutes and per-cycle dwell minutes.
+   Layout per Baxter:
+     [Initial drain] + [Fill₁ + Dwell₁ + Drain₁] + ... + [Fillₙ + Dwellₙ + Drainₙ] + optional last-fill
+*/
+function cyclerDwell({fillMl, cycles, totalMin, lastFillMl, fillRate, drainRate, initialDrainMin, drainPaddingMin, modeKey}){
+  const fillPer  = fillMl / fillRate;
+  const drainPer = (fillMl / drainRate) + drainPaddingMin;
+  // For CCPD: n fills + (n-1) drains + initial drain + 1 last fill (last drain skipped — replaced by last fill)
+  // For NIPD/IPD: n fills + n drains + initial drain (no last fill, ends dry)
+  let drainsCount, lastFillTime = 0;
+  if(modeKey === 'ccpd'){
+    drainsCount = cycles - 1;
+    lastFillTime = (lastFillMl || 0) / fillRate;
+  } else {
+    drainsCount = cycles;
+  }
+  const totalFillTime  = cycles * fillPer + lastFillTime;
+  const totalDrainTime = drainsCount * drainPer + initialDrainMin;
+  const nonDwell = totalFillTime + totalDrainTime;
+  const totalDwell = Math.max(0, totalMin - nonDwell);
+  const dwellPer = totalDwell / cycles;
+  return {fillPer, drainPer, nonDwell, totalDwell, dwellPer, lastFillTime};
+}
+
+/* ── Tidal dwell math ──
+   Per cycle: drain (tidal%) + refill (tidal%)
+   Initial: fill full volume; Final: full drain (or last fill if used)
+*/
+function tidalDwell({initFillMl, tidalPct, cycles, totalMin, lastFillMl, fillRate, drainRate, drainPaddingMin}){
+  const tidalVol = (tidalPct/100) * initFillMl;
+  const initialFillTime = initFillMl / fillRate;
+  const tidalDrainTime = (tidalVol / drainRate) + drainPaddingMin;
+  const tidalRefillTime = tidalVol / fillRate;
+  // Cycles = number of dwell periods; between each, drain+refill
+  // Initial fill, then (cycles - 1) drain+refill exchanges to start each new dwell,
+  // then final full drain or last fill
+  const exchanges = cycles - 1;
+  const finalDrainTime = lastFillMl ? (lastFillMl / fillRate) : ((initFillMl / drainRate) + drainPaddingMin);
+  const nonDwell = initialFillTime + (exchanges * (tidalDrainTime + tidalRefillTime)) + finalDrainTime;
+  const totalDwell = Math.max(0, totalMin - nonDwell);
+  const dwellPer = totalDwell / cycles;
+  return {tidalVol, initialFillTime, tidalDrainTime, tidalRefillTime, finalDrainTime, nonDwell, totalDwell, dwellPer};
+}
+
+/* ── CAPD math ──
+   Manual exchanges: ~20–25 min each (drain + fill).
+   Dwell time per exchange = (24h − sum of exchange times) / exchanges,
+   with the overnight dwell typically longer than daytime dwells.
+*/
+function capdDwell({exchanges, overnightHr, manualMin}){
+  const totalDay = 24;
+  const exchangeMin = exchanges * manualMin;
+  const remainingHr = totalDay - (exchangeMin / 60);
+  const daytimeDwellsCount = exchanges - 1;   // n-1 daytime, 1 long overnight
+  const daytimeRemaining = Math.max(0, remainingHr - overnightHr);
+  const daytimeDwellHr = daytimeDwellsCount > 0 ? (daytimeRemaining / daytimeDwellsCount) : 0;
+  return {exchangeMin, daytimeDwellHr, overnightHr};
+}
+
+/* ── helpers ── */
+const state = {heightMode:'cm', weightMode:'kg', mode:'ccpd'};
+const $ = (id) => document.getElementById(id);
+const el = {
+  weightKg:$('weightKg'), weightLb:$('weightLb'),
+  weightKgWrap:$('weightKgWrap'), weightLbWrap:$('weightLbWrap'),
+  weightMetricBtn:$('weightMetricBtn'), weightEnglishBtn:$('weightEnglishBtn'),
+  heightCm:$('heightCm'), heightFt:$('heightFt'), heightIn:$('heightIn'),
+  heightCmWrap:$('heightCmWrap'), heightEnglishWrap:$('heightEnglishWrap'),
+  heightMetricBtn:$('heightMetricBtn'), heightEnglishBtn:$('heightEnglishBtn'),
+  age:$('age'),
+  machine:$('machine'),
+  fillVolume:$('fillVolume'), cycles:$('cycles'), totalTime:$('totalTime'), lastFillVolume:$('lastFillVolume'), lastFillWrap:$('lastFillWrap'),
+  tidalInitFill:$('tidalInitFill'), tidalPct:$('tidalPct'), tidalCycles:$('tidalCycles'), tidalTime:$('tidalTime'), tidalLastFill:$('tidalLastFill'),
+  capdExchangeVol:$('capdExchangeVol'), capdExchanges:$('capdExchanges'), capdOvernightDwell:$('capdOvernightDwell'),
+  bagSize:$('bagSize'), bagQtyY:$('bagQtyY'), bagQtyG:$('bagQtyG'), bagQtyR:$('bagQtyR'), bagQtyI:$('bagQtyI'),
+  lastFillSolution:$('lastFillSolution'), lastFillSolutionWrap:$('lastFillSolutionWrap'),
+  fillRate:$('fillRate'), drainRate:$('drainRate'),
+  rxCycler:$('rxCycler'), rxTidal:$('rxTidal'), rxCapd:$('rxCapd'),
+  results:$('results'), calculateBtn:$('calculateBtn'), resetBtn:$('resetBtn'),
+};
+
+function setActive(buttons, activeBtn){ buttons.forEach(b=>b.classList.remove('active')); activeBtn.classList.add('active'); }
+function fmt(n, d=1){ if(!Number.isFinite(n)) return '—'; return Number(n).toLocaleString(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}); }
+function fmtInt(n){ if(!Number.isFinite(n)) return '—'; return Math.round(Number(n)).toLocaleString(); }
+function fmtMin(m){ if(!Number.isFinite(m)) return '—'; const h=Math.floor(m/60), mn=Math.round(m-h*60); return h ? `${h} hr ${mn} min` : `${mn} min`; }
+function heightToCm(){ if(state.heightMode==='cm') return parseFloat(el.heightCm.value); const ft=parseFloat(el.heightFt.value||0); const inches=parseFloat(el.heightIn.value||0); return ((ft*12)+inches)*2.54; }
+function weightToKg(){ if(state.weightMode==='kg') return parseFloat(el.weightKg.value); return parseFloat(el.weightLb.value)*0.45359237; }
+function validatePositive(v, n){ if(!Number.isFinite(v) || v<=0) throw new Error(`Please enter a valid ${n}.`); }
+
+/* ── unit toggles ── */
+[el.weightMetricBtn, el.weightEnglishBtn].forEach(b=>b.addEventListener('click', e=>{
+  if(e.currentTarget===el.weightMetricBtn){ state.weightMode='kg'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn); el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden'); }
+  else { state.weightMode='lb'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightEnglishBtn); el.weightKgWrap.classList.add('hidden'); el.weightLbWrap.classList.remove('hidden'); }
+}));
+[el.heightMetricBtn, el.heightEnglishBtn].forEach(b=>b.addEventListener('click', e=>{
+  if(e.currentTarget===el.heightMetricBtn){ state.heightMode='cm'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightMetricBtn); el.heightCmWrap.classList.remove('hidden'); el.heightEnglishWrap.classList.add('hidden'); }
+  else { state.heightMode='english'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightEnglishBtn); el.heightCmWrap.classList.add('hidden'); el.heightEnglishWrap.classList.remove('hidden'); }
+}));
+
+/* ── mode radio ── */
+const modeBtns = document.querySelectorAll('.mode-btn');
+modeBtns.forEach(btn=>btn.addEventListener('click', ()=>{
+  modeBtns.forEach(b=>{b.classList.remove('active'); b.setAttribute('aria-checked','false');});
+  btn.classList.add('active'); btn.setAttribute('aria-checked','true');
+  state.mode = btn.dataset.mode;
+  applyModeVisibility();
+}));
+
+function applyModeVisibility(){
+  const m = modes[state.mode];
+  el.rxCycler.classList.toggle('hidden', m.isTidal || m.isCapd);
+  el.rxTidal.classList.toggle('hidden', !m.isTidal);
+  el.rxCapd.classList.toggle('hidden', !m.isCapd);
+  el.lastFillSolutionWrap.classList.toggle('hidden', !m.needsLastFill);
+  el.lastFillWrap?.classList.toggle('hidden', !m.needsLastFill);
+  // sync machine default per mode
+  if(m.defaultMachine && el.machine.value !== m.defaultMachine && state.mode==='capd'){
+    el.machine.value = 'manual';
+  } else if(state.mode !== 'capd' && el.machine.value === 'manual'){
+    el.machine.value = 'amia';
+  }
+}
+applyModeVisibility();
+
+/* ════════════════════════════════════════════════════════════════════
+   Calculate
+   ════════════════════════════════════════════════════════════════════ */
+function calculate(){
+  try{
+    const weightKg = weightToKg();
+    validatePositive(weightKg, 'weight');
+
+    const heightCm = heightToCm();
+    const bsaM2 = (Number.isFinite(heightCm) && heightCm>0) ? mostellerBSA(heightCm, weightKg) : null;
+    const age = parseFloat(el.age.value);
+
+    const machineKey = el.machine.value;
+    const machine = machines[machineKey];
+    const mode = modes[state.mode];
+    if(!machine.modes.includes(state.mode)){
+      throw new Error(`The ${machine.label} does not support ${mode.label}. Pick a different machine or modality.`);
+    }
+
+    // Bag plan first
+    const bagSize = parseInt(el.bagSize.value, 10);
+    const qty = {
+      y: parseInt(el.bagQtyY.value, 10) || 0,
+      g: parseInt(el.bagQtyG.value, 10) || 0,
+      r: parseInt(el.bagQtyR.value, 10) || 0,
+      i: parseInt(el.bagQtyI.value, 10) || 0
+    };
+    if(qty.y+qty.g+qty.r+qty.i === 0) throw new Error('Select at least one bag (yellow/green/red/icodextrin).');
+    const bagPlan = computeBagPlan(bagSize, qty);
+
+    // Rates (Baxter algorithm defaults — overridable)
+    const fillRate = parseFloat(el.fillRate.value) || DEFAULTS.fillRate;
+    const drainRate = parseFloat(el.drainRate.value) || DEFAULTS.drainRate;
+
+    // Modality-specific math
+    let fillMlForSafety, totalVolume, cycles, dwellInfo, structureLines, tidalInfo=null, capdInfo=null, lastFillUsedMl=0, lastFillSolKey=null;
+
+    if(mode.isCapd){
+      const exVol = parseFloat(el.capdExchangeVol.value);
+      const exCount = parseInt(el.capdExchanges.value, 10);
+      const overnightHr = parseFloat(el.capdOvernightDwell.value) || 9;
+      validatePositive(exVol, 'exchange volume');
+      if(!Number.isFinite(exCount) || exCount<=0) throw new Error('Enter exchanges per day.');
+      fillMlForSafety = exVol;
+      cycles = exCount;
+      totalVolume = exVol * exCount;
+      capdInfo = capdDwell({exchanges:exCount, overnightHr, manualMin:DEFAULTS.manualExchangeMin});
+      structureLines = [
+        `<strong>${exCount} manual exchanges/day × ${fmtInt(exVol)} mL</strong> = ${fmtInt(totalVolume)} mL daily`,
+        `Per-exchange manual time: ~${DEFAULTS.manualExchangeMin} min (drain + fill)`,
+        `Daytime dwell: ~${fmt(capdInfo.daytimeDwellHr,1)} hr each (${exCount-1} dwells)`,
+        `Overnight long dwell: ~${fmt(overnightHr,1)} hr`
+      ];
+
+    } else if(mode.isTidal){
+      const initFill = parseFloat(el.tidalInitFill.value);
+      const tidalPct = parseFloat(el.tidalPct.value);
+      const tCycles = parseInt(el.tidalCycles.value, 10);
+      const tTime = parseFloat(el.tidalTime.value);
+      const tLastFill = parseFloat(el.tidalLastFill.value) || 0;
+      validatePositive(initFill, 'initial fill volume');
+      validatePositive(tidalPct, 'tidal %');
+      if(!Number.isFinite(tCycles) || tCycles<=1) throw new Error('Tidal requires at least 2 cycles.');
+      validatePositive(tTime, 'total therapy time');
+      fillMlForSafety = initFill;
+      cycles = tCycles;
+      // Tidal effective fluid through cavity: initial fill + tidal × (cycles-1) drained/refilled + last fill
+      totalVolume = initFill + ((tidalPct/100) * initFill * (tCycles - 1)) + tLastFill;
+      lastFillUsedMl = tLastFill;
+      const totalMin = tTime * 60;
+      dwellInfo = tidalDwell({
+        initFillMl:initFill, tidalPct, cycles:tCycles, totalMin, lastFillMl:tLastFill,
+        fillRate, drainRate, drainPaddingMin:DEFAULTS.drainPaddingMin
+      });
+      tidalInfo = {tidalVol: dwellInfo.tidalVol, residual: initFill - dwellInfo.tidalVol, tidalPct};
+      structureLines = [
+        `<strong>Initial fill:</strong> ${fmtInt(initFill)} mL → fill time ≈ ${fmt(dwellInfo.initialFillTime,1)} min`,
+        `<strong>Tidal exchange:</strong> drain ${fmtInt(tidalInfo.tidalVol)} mL (${tidalPct}%) → refill ${fmtInt(tidalInfo.tidalVol)} mL · per-cycle exchange ≈ ${fmt(dwellInfo.tidalDrainTime + dwellInfo.tidalRefillTime,1)} min`,
+        `<strong>Residual retained in cavity:</strong> ${fmtInt(tidalInfo.residual)} mL (continuous diffusion)`,
+        `<strong>Final drain/last fill:</strong> ≈ ${fmt(dwellInfo.finalDrainTime,1)} min`,
+        `<strong>Net non-dwell:</strong> ${fmt(dwellInfo.nonDwell,0)} min · <strong>total dwell:</strong> ${fmt(dwellInfo.totalDwell,0)} min`,
+        `<strong>Dwell per cycle:</strong> ≈ ${fmtMin(dwellInfo.dwellPer)}`
+      ];
+      if(dwellInfo.totalDwell <= 0){
+        throw new Error(`Therapy time too short: fills/drains alone require ${fmt(dwellInfo.nonDwell,0)} min. Increase time or reduce cycles.`);
+      }
+
+    } else {
+      // CCPD / NIPD / IPD
+      const fill = parseFloat(el.fillVolume.value);
+      const c = parseInt(el.cycles.value, 10);
+      const t = parseFloat(el.totalTime.value);
+      const lastFill = mode.needsLastFill ? (parseFloat(el.lastFillVolume.value) || 0) : 0;
+      validatePositive(fill, 'fill volume per cycle');
+      if(!Number.isFinite(c) || c<=0) throw new Error('Enter number of cycles.');
+      validatePositive(t, 'total therapy time');
+      fillMlForSafety = fill;
+      cycles = c;
+      totalVolume = fill * c + lastFill;
+      lastFillUsedMl = lastFill;
+      const totalMin = t * 60;
+      dwellInfo = cyclerDwell({
+        fillMl:fill, cycles:c, totalMin, lastFillMl:lastFill,
+        fillRate, drainRate,
+        initialDrainMin:DEFAULTS.initialDrainMin, drainPaddingMin:DEFAULTS.drainPaddingMin,
+        modeKey: state.mode
+      });
+      structureLines = [
+        `<strong>Cycler total:</strong> ${fmtInt(fill)} mL × ${c} cycles = ${fmtInt(fill*c)} mL`,
+        lastFill > 0 ? `<strong>Last fill:</strong> ${fmtInt(lastFill)} mL` : `<strong>Last fill:</strong> none (dry day)`,
+        `<strong>Total therapy:</strong> ${fmtInt(totalVolume)} mL over ${fmt(t,1)} hr`,
+        `<strong>Per-cycle fill time:</strong> ≈ ${fmt(dwellInfo.fillPer,1)} min · <strong>per-cycle drain:</strong> ≈ ${fmt(dwellInfo.drainPer,1)} min`,
+        `<strong>Initial drain:</strong> ${DEFAULTS.initialDrainMin} min · <strong>net non-dwell:</strong> ${fmt(dwellInfo.nonDwell,0)} min`,
+        `<strong>Total dwell time:</strong> ${fmt(dwellInfo.totalDwell,0)} min · <strong>per-cycle dwell:</strong> ≈ ${fmtMin(dwellInfo.dwellPer)}`
+      ];
+      if(dwellInfo.totalDwell <= 0){
+        throw new Error(`Therapy time too short: fills/drains alone require ${fmt(dwellInfo.nonDwell,0)} min. Increase time or reduce cycles.`);
+      }
+    }
+
+    // Fill safety + machine limits
+    const fs = fillSafety(fillMlForSafety, weightKg, bsaM2, age);
+    let machineLimit = null;
+    if(!mode.isCapd){
+      if(fillMlForSafety < machine.minFillMl){
+        machineLimit = {color:'#ffb4b4', bg:'rgba(255,111,111,.10)', border:'rgba(255,111,111,.32)',
+          text:`Fill ${fillMlForSafety} mL is below the ${machine.label} minimum (${machine.minFillMl} mL).`};
+      } else if(fillMlForSafety > machine.maxFillMl){
+        machineLimit = {color:'#ffb4b4', bg:'rgba(255,111,111,.10)', border:'rgba(255,111,111,.32)',
+          text:`Fill ${fillMlForSafety} mL exceeds the ${machine.label} maximum (${machine.maxFillMl} mL).`};
+      }
+    }
+
+    // Bag supply check vs needed volume
+    const cyclerNeeded = mode.isCapd ? totalVolume : (totalVolume - lastFillUsedMl);
+    const lastFillKey = mode.needsLastFill ? el.lastFillSolution.value : null;
+    let lastFillFromIco = (lastFillKey === 'ico');
+    let lastFillFromCombo = (lastFillKey === 'combo');
+    // If last fill uses icodextrin, it comes from purple bags; cycler comes from dextrose bags
+    let dextroseNeeded = cyclerNeeded;
+    let icoNeeded = 0;
+    if(lastFillFromIco){
+      icoNeeded = lastFillUsedMl;
+    } else if(lastFillFromCombo){
+      dextroseNeeded += lastFillUsedMl; // included in combo
+    } else if(lastFillKey && ['1.5','2.5','4.25'].includes(lastFillKey)){
+      dextroseNeeded += lastFillUsedMl; // included in dextrose pool (single-bag last fill)
+    }
+
+    let supplyNote = null;
+    const dextroseShort = dextroseNeeded - bagPlan.totalDextroseVol;
+    const icoShort = icoNeeded - bagPlan.totalIcoVol;
+    if(dextroseShort > 0 || icoShort > 0){
+      const parts = [];
+      if(dextroseShort > 0) parts.push(`<strong>${fmtInt(dextroseShort)} mL</strong> short on dextrose bags (need ${fmtInt(dextroseNeeded)}, supplied ${fmtInt(bagPlan.totalDextroseVol)})`);
+      if(icoShort > 0)      parts.push(`<strong>${fmtInt(icoShort)} mL</strong> short on icodextrin (need ${fmtInt(icoNeeded)}, supplied ${fmtInt(bagPlan.totalIcoVol)})`);
+      supplyNote = {kind:'warning', text:`Insufficient bag supply: ${parts.join(' · ')}.`};
+    } else {
+      const excess = (bagPlan.totalDextroseVol - dextroseNeeded) + (bagPlan.totalIcoVol - icoNeeded);
+      supplyNote = {kind:'info', text:`Bag supply OK · ${fmtInt(bagPlan.totalAllVol)} mL provided / ${fmtInt(dextroseNeeded + icoNeeded)} mL needed · ${fmtInt(excess)} mL spare.`};
+    }
+
+    // Icodextrin long-dwell advisor
+    let icoNote = null;
+    if(mode.needsLastFill && lastFillUsedMl > 0){
+      // approximate daytime dwell
+      const totalTime = parseFloat(el.totalTime.value) || 9;
+      const dayHr = Math.max(0, 24 - totalTime);
+      if(dayHr >= 8 && !lastFillFromIco && !(lastFillFromCombo && bagPlan.hasIco)){
+        icoNote = `Last-fill dwell ≈ <strong>${fmt(dayHr,1)} hr</strong>. Consider <strong>Icodextrin (Purple)</strong> for sustained UF over long dwells — dextrose UF collapses after ~4 hr.`;
+      } else if(lastFillFromIco || (lastFillFromCombo && bagPlan.hasIco)){
+        icoNote = `Icodextrin selected for the long dwell — appropriate. Limit to <strong>one exchange per 24 hr</strong>; may falsely elevate finger-stick glucose readings.`;
+      }
+    }
+
+    renderResults({
+      weightKg, heightCm, bsaM2, age,
+      machine, mode,
+      fillMlForSafety, cycles, totalVolume, lastFillUsedMl,
+      structureLines, tidalInfo, capdInfo, dwellInfo,
+      fs, machineLimit, bagPlan, supplyNote, icoNote,
+      bagSize, qty, lastFillSolKey:lastFillKey, fillRate, drainRate
+    });
+
+  } catch(err){
+    el.results.innerHTML = `<div class="result-card" style="border-color:rgba(255,111,111,.3);background:rgba(255,111,111,.06)"><div class="result-kicker" style="color:#ffb4b4">Error</div><div class="result-value" style="font-size:18px">${err.message}</div></div>`;
+  }
+}
+
+/* ── Render ── */
+function renderResults(r){
+  const m = r.mode;
+  const fsBlock = `
+    <div class="result-card" style="border-color:${r.fs.border};background:${r.fs.bg}">
+      <div class="result-kicker" style="color:${r.fs.color}">Fill safety · ${r.fs.label}</div>
+      <div class="result-meta" style="color:${r.fs.color}">${r.fs.detail}</div>
+      ${r.machineLimit ? `<div class="note" style="color:${r.machineLimit.color};background:${r.machineLimit.bg};border-color:${r.machineLimit.border};margin-top:6px">${r.machineLimit.text}</div>` : ''}
+    </div>`;
+
+  const structureBlock = `
+    <div class="result-card">
+      <div class="result-kicker">${m.isCapd ? 'CAPD structure' : (m.isTidal ? 'Tidal cycle math' : 'Cycler math')}</div>
+      <div class="result-meta">
+        ${r.structureLines.map(s=>`<div class="calc-line">${s}</div>`).join('')}
+      </div>
+    </div>`;
+
+  const tidalDetailBlock = m.isTidal ? `
+    <div class="result-card">
+      <div class="result-kicker">Tidal advantage</div>
+      <div class="result-meta">Cavity is never empty → diffusion continues during partial drain. Patients with drain pain or slow drainers tolerate Tidal better than full-drain CCPD. Tidal % between 40–80% is typical; higher % → more cleared volume per cycle but longer non-dwell.</div>
+    </div>` : '';
+
+  const capdDetailBlock = m.isCapd ? `
+    <div class="result-card">
+      <div class="result-kicker">CAPD execution notes</div>
+      <div class="result-meta">
+        <div class="calc-line">No cycler — patient performs manual exchanges with twin-bag system.</div>
+        <div class="calc-line">Standard 4 daily exchanges: ~breakfast, ~lunch, ~dinner, ~bedtime. Long dwell overnight.</div>
+        <div class="calc-line">Maintain strict aseptic technique at each connection: mask, handwash, sterile field, flush-before-fill.</div>
+      </div>
+    </div>` : '';
+
+  const bagMixLine = r.bagPlan.hasDextrose
+    ? `Effective dextrose: <strong>${fmt(r.bagPlan.effectiveDextrose,2)}%</strong> across ${fmtInt(r.bagPlan.totalDextroseVol)} mL`
+    : `No dextrose bags selected`;
+  const bagBlock = `
+    <div class="result-card">
+      <div class="result-kicker">Bag plan</div>
+      <div class="result-meta">
+        <div class="calc-line">${r.bagPlan.mixLabel}</div>
+        <div class="calc-line">${bagMixLine}${r.bagPlan.hasIco ? ` · <strong>${fmtInt(r.bagPlan.totalIcoVol)} mL</strong> Icodextrin` : ''}</div>
+        <div class="calc-line">Total fluid supplied: <strong>${fmtInt(r.bagPlan.totalAllVol)} mL</strong></div>
+      </div>
+      ${r.supplyNote ? `<div class="note ${r.supplyNote.kind === 'warning' ? 'warning' : 'info'}" style="margin-top:6px">${r.supplyNote.text}</div>` : ''}
+      ${r.icoNote ? `<div class="note info" style="margin-top:6px">${r.icoNote}</div>` : ''}
+    </div>`;
+
+  const orderRows = [];
+  orderRows.push(`<div class="lbl">Patient</div><div class="val">${fmt(r.weightKg,1)} kg${r.bsaM2 ? ` · ${fmt(r.heightCm,0)} cm · BSA ${fmt(r.bsaM2,2)} m²` : ''}${Number.isFinite(r.age) ? ` · ${r.age} yr` : ''}</div>`);
+  orderRows.push(`<div class="lbl">Modality</div><div class="val">${m.label}</div>`);
+  if(!m.isCapd) orderRows.push(`<div class="lbl">Machine</div><div class="val">${r.machine.label}</div>`);
+  orderRows.push(`<div class="lbl">Bags</div><div class="val">${r.bagPlan.mixLabel}${r.bagPlan.hasDextrose ? ` (≈ ${fmt(r.bagPlan.effectiveDextrose,2)}% effective)` : ''}</div>`);
+  if(m.isCapd){
+    orderRows.push(`<div class="lbl">Schedule</div><div class="val">${r.cycles} manual exchanges/day × ${fmtInt(r.fillMlForSafety)} mL</div>`);
+    orderRows.push(`<div class="lbl">Overnight dwell</div><div class="val">${fmt(r.capdInfo.overnightHr,1)} hr</div>`);
+  } else if(m.isTidal){
+    orderRows.push(`<div class="lbl">Initial fill</div><div class="val">${fmtInt(r.fillMlForSafety)} mL</div>`);
+    orderRows.push(`<div class="lbl">Tidal</div><div class="val">${r.tidalInfo.tidalPct}% drained/refilled (${fmtInt(r.tidalInfo.tidalVol)} mL exchange, ${fmtInt(r.tidalInfo.residual)} mL residual)</div>`);
+    orderRows.push(`<div class="lbl">Cycles</div><div class="val">${r.cycles}</div>`);
+    orderRows.push(`<div class="lbl">Dwell/cycle</div><div class="val">≈ ${fmtMin(r.dwellInfo.dwellPer)}</div>`);
+  } else {
+    orderRows.push(`<div class="lbl">Fill / cycles</div><div class="val">${fmtInt(r.fillMlForSafety)} mL × ${r.cycles}</div>`);
+    if(r.lastFillUsedMl>0) orderRows.push(`<div class="lbl">Last fill</div><div class="val">${fmtInt(r.lastFillUsedMl)} mL · ${r.lastFillSolKey === 'combo' ? 'same as cycler' : (solutionMeta[r.lastFillSolKey]?.label || 'specified')}</div>`);
+    orderRows.push(`<div class="lbl">Therapy time</div><div class="val">${fmt(parseFloat(el.totalTime.value),1)} hr</div>`);
+    orderRows.push(`<div class="lbl">Dwell/cycle</div><div class="val">≈ ${fmtMin(r.dwellInfo.dwellPer)}</div>`);
+  }
+  orderRows.push(`<div class="lbl">Total volume</div><div class="val">${fmtInt(r.totalVolume)} mL</div>`);
+
+  el.results.innerHTML = `
+    <div class="result-card hero">
+      <div class="result-kicker">Total Therapy Volume</div>
+      <div class="result-value">${fmtInt(r.totalVolume)}<span class="unit">mL</span></div>
+      <div class="result-meta">${m.label}${m.isCapd ? '' : ` · ${r.machine.label}`}</div>
+    </div>
+    ${fsBlock}
+    ${structureBlock}
+    ${tidalDetailBlock}
+    ${capdDetailBlock}
+    ${bagBlock}
+    <div class="result-card">
+      <div class="result-kicker">Read-back order summary</div>
+      <div class="order-grid">${orderRows.join('')}</div>
+    </div>
+  `;
+}
+
+/* ── reset ── */
+function reset(){
+  ['weightKg','weightLb','heightCm','heightFt','heightIn','age',
+   'fillVolume','cycles','totalTime','lastFillVolume',
+   'tidalInitFill','tidalCycles','tidalTime','tidalLastFill',
+   'capdExchangeVol'].forEach(k=>{ if(el[k]) el[k].value=''; });
+  el.tidalPct.value=50;
+  el.capdExchanges.value=4;
+  el.capdOvernightDwell.value=9;
+  el.machine.value='amia';
+  el.lastFillSolution.value='combo';
+  el.bagSize.value='6000';
+  el.bagQtyY.value=0; el.bagQtyG.value=1; el.bagQtyR.value=0; el.bagQtyI.value=0;
+  el.fillRate.value=DEFAULTS.fillRate;
+  el.drainRate.value=DEFAULTS.drainRate;
+  state.mode='ccpd';
+  modeBtns.forEach((b,i)=>{b.classList.toggle('active', b.dataset.mode==='ccpd'); b.setAttribute('aria-checked', b.dataset.mode==='ccpd'?'true':'false');});
+  applyModeVisibility();
+  el.results.innerHTML = `<div class="result-card"><div class="result-kicker">Awaiting inputs</div><div class="result-value">—</div><div class="result-meta">Enter weight, modality, prescription and press Calculate.</div></div>`;
+}
+
+el.calculateBtn.addEventListener('click', calculate);
+el.resetBtn.addEventListener('click', reset);
+</script>
+</body>
+</html>

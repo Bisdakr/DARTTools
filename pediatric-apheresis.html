@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pediatric Apheresis Modifications — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary-bright:#a5cdff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(97,168,255,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(97,168,255,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--primary-bright);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#dceeff 0%,#61a8ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(97,168,255,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(97,168,255,.4);color:var(--text);background:rgba(97,168,255,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(97,168,255,.24);background:linear-gradient(135deg,rgba(97,168,255,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(97,168,255,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--primary-bright);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(97,168,255,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(97,168,255,.08);border-color:var(--primary-bright)}.callout-key .callout-label{color:var(--primary-bright)}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-clinical{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-clinical .callout-label{color:#7ef0d2}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cce2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.step-list{list-style:none;padding:0;margin:18px 0;counter-reset:stepnum}
+.step-list li{counter-increment:stepnum;position:relative;padding:14px 14px 14px 56px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;line-height:1.6;color:#d6e0ee}
+.step-list li::before{content:counter(stepnum);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(97,168,255,.30),rgba(126,240,210,.10));color:var(--primary-bright);display:grid;place-items:center;font-weight:900;font-size:13px;border:1px solid rgba(97,168,255,.40)}
+.step-list li strong{color:#fff;display:inline}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.tbv-band{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:18px 0}
+.tbv-card{padding:16px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:4px solid var(--primary-bright)}
+.tbv-card-age{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--primary-bright);font-weight:800;margin-bottom:4px}
+.tbv-card-tbv{font-size:28px;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;letter-spacing:-.02em}
+.tbv-card-unit{font-size:11px;color:var(--muted);font-weight:700}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:var(--primary-bright);display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🧸</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Universal Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Universal Reference · Pediatric Apheresis Modifications</div>
+      <div class="head-title"><span class="accent">Pediatric Apheresis</span></div>
+      <div class="head-sub">Sizing, ECV thresholds, blood prime decision-making, pediatric TBV bands, sedation coordination, neonatal CRRT, FACT-JACIE pediatric requirements, family support, and modality-specific pediatric notes for TPE, RBCx, HPC-A, leukapheresis, ECP, HD, PD, CRRT.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#principles">01 · Principles</a>
+  <a class="sec-pill" href="#tbv">02 · TBV Bands</a>
+  <a class="sec-pill" href="#ecv">03 · ECV Thresholds</a>
+  <a class="sec-pill" href="#prime">04 · Blood Prime</a>
+  <a class="sec-pill" href="#access">05 · Vascular Access</a>
+  <a class="sec-pill" href="#sedation">06 · Sedation &amp; PICU</a>
+  <a class="sec-pill" href="#neonatal">07 · Neonatal / CARPEDIEM</a>
+  <a class="sec-pill" href="#modality">08 · Modality-Specific</a>
+  <a class="sec-pill" href="#family">09 · Family Support</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — Small Patients, Big Stakes</div>
+  <div class="hero-tldr-text">
+    Pediatric apheresis introduces a series of physical and physiological constraints that demand careful calculation and team coordination. The single most important parameter is <strong>extracorporeal volume (ECV)</strong> as a fraction of total blood volume — when circuit + warmer exceeds <strong>10–15% of TBV</strong>, blood priming is generally indicated. TBV is age-banded (90 mL/kg neonate, 80 mL/kg infant, 70 mL/kg child, 65 mL/kg adolescent). Sedation, PICU coordination, child-life support, and family-centered care are integral. FACT-JACIE accreditation requires pediatric-specific protocols for any pediatric collection program.
+  </div>
+</div>
+
+<section class="sec" id="principles">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Core Pediatric Principles</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Always calculate TBV first.</strong> Use age-appropriate band (see Section 2).</li>
+      <li><strong>Calculate ECV.</strong> Sum of circuit volume + warmer + access tubing. Spectra Optia disposable ~185 mL; warmer ~50 mL; CRRT circuit 60–150 mL depending on size; Therakos CELLEX ~240 mL.</li>
+      <li><strong>ECV as % TBV is the key decision metric.</strong> &gt; 10–15% → blood prime; &gt; 20% → potentially life-threatening without prime.</li>
+      <li><strong>Slow ramp-up of inlet flow.</strong> Reduces hemodynamic perturbation in small patients.</li>
+      <li><strong>Hemodynamic monitoring is more intensive</strong> than in adults — arterial line common; continuous SpO₂; warming.</li>
+      <li><strong>Replacement fluid choice</strong> — Albumin vs. plasma vs. albumin/plasma blend depends on indication and bleeding/coagulation risk.</li>
+      <li><strong>Citrate tolerance is lower</strong> — Pediatric patients more prone to hypocalcemia; reduce inlet rate, calcium chloride infusion via second line, monitor ionized calcium more frequently.</li>
+      <li><strong>Temperature management</strong> — Small patients lose heat quickly; warmer, blankets, ambient temperature.</li>
+      <li><strong>Pediatric intensivist / specialist team involvement</strong> for any complex pediatric procedure.</li>
+      <li><strong>FACT-JACIE pediatric program standards</strong> apply when collecting stem cells from pediatric donors / recipients.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="tbv">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Pediatric Total Blood Volume Bands</div></div></div>
+  <div class="prose">
+    <div class="tbv-band">
+      <div class="tbv-card"><div class="tbv-card-age">Preterm Neonate</div><div class="tbv-card-tbv">100</div><div class="tbv-card-unit">mL / kg</div></div>
+      <div class="tbv-card"><div class="tbv-card-age">Term Neonate (0–4 wk)</div><div class="tbv-card-tbv">90</div><div class="tbv-card-unit">mL / kg</div></div>
+      <div class="tbv-card"><div class="tbv-card-age">Infant (1–12 mo)</div><div class="tbv-card-tbv">80</div><div class="tbv-card-unit">mL / kg</div></div>
+      <div class="tbv-card"><div class="tbv-card-age">Child (1–10 yr)</div><div class="tbv-card-tbv">70</div><div class="tbv-card-unit">mL / kg</div></div>
+      <div class="tbv-card"><div class="tbv-card-age">Adolescent / Adult</div><div class="tbv-card-tbv">65</div><div class="tbv-card-unit">mL / kg</div></div>
+    </div>
+    <p><strong>Example:</strong> A 12 kg toddler has TBV ≈ 12 × 70 = 840 mL. A Spectra Optia circuit + warmer = 235 mL. ECV/TBV ratio = 235/840 = 28% → blood prime indicated.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Use Actual Body Weight</span>For obese patients, use ideal body weight or adjusted body weight per institutional protocol — using actual weight overestimates TBV in obesity. For lean patients, actual weight is appropriate. Pediatric Boyd / Nadler-equivalent formulas are also accepted.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="ecv">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">ECV / TBV Decision Thresholds</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>ECV / TBV</th><th>Decision</th><th>Rationale</th></tr></thead>
+      <tbody>
+        <tr><td><strong>&lt; 10%</strong></td><td>Saline prime acceptable; standard procedure</td><td>Hemodynamic perturbation minimal; transient dilution well-tolerated.</td></tr>
+        <tr><td><strong>10–15%</strong></td><td>Consider blood prime in patients with cardiopulmonary instability, anemia (Hb &lt; 8), or per institutional policy</td><td>Borderline; clinical condition determines need.</td></tr>
+        <tr><td><strong>&gt; 15%</strong></td><td>Blood prime indicated</td><td>Saline prime would cause acute dilutional anemia; clinically significant volume shift.</td></tr>
+        <tr><td><strong>&gt; 20%</strong></td><td>Mandatory blood prime; consider PICU monitoring</td><td>Risk of severe hypotension, hemodynamic collapse, hypoxemia without prime.</td></tr>
+        <tr><td><strong>&gt; 30%</strong></td><td>Reconsider modality; consult pediatric intensivist; mandatory blood prime; high-acuity monitoring</td><td>Extreme circuit:patient ratio; usually neonates / small infants; CARPEDIEM may be alternative for CRRT.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Calculating ECV Correctly</span>ECV = disposable kit volume + warmer + return-line dead space. For Spectra Optia TPE/RBCx: ~185 mL + 50 mL warmer = ~235 mL. For Therakos CELLEX: ~240 mL. For CRRT (Prismaflex M60 set): ~93 mL. Verify against IFU for your specific kit and warmer.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="prime">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Blood Prime Procedure</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Calculate prime volume.</strong> Equal to ECV. Typically 1 unit RBC = ~250–300 mL; partial unit for smaller circuits.</li>
+      <li><strong>Order blood product.</strong> Leukoreduced, irradiated (if immunocompromised), CMV-safe per institutional policy. Type-and-crossmatch.</li>
+      <li><strong>Verify product</strong> per institutional blood administration check (2 RN verification).</li>
+      <li><strong>Prime the circuit with the RBC product</strong> per device IFU. Spectra Optia has a specific blood-prime workflow.</li>
+      <li><strong>Calcium and electrolyte considerations:</strong> Stored blood is high in K+, citrate, glucose; low in calcium. Buffer the prime per institutional pediatric protocol (e.g., calcium addition, washed RBC for hyperkalemia risk).</li>
+      <li><strong>Warmer ON</strong> — Cold prime exacerbates hypothermia.</li>
+      <li><strong>Slow inlet ramp-up.</strong></li>
+      <li><strong>Monitor:</strong> ionized calcium, K+, glucose, hematocrit, SpO₂, BP, HR.</li>
+      <li><strong>Rinseback strategy</strong> at end of procedure — May give back the blood prime to the patient if hemoglobin transfusion is also desired; otherwise discard per protocol.</li>
+    </ol>
+    <div class="callout callout-clinical"><span class="callout-icon">🧪</span><div class="callout-body"><span class="callout-label">Washed vs. Unwashed Blood Prime</span>For very small patients or those at hyperkalemia risk (renal failure, hemolysis-prone), use <strong>washed RBC</strong> for prime — removes accumulated K+, citrate, and supernatant. Adds processing time; coordinate with blood bank.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Vascular Access in Children</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Peripheral access:</strong> Often inadequate for apheresis; small veins, low flow.</li>
+      <li><strong>Central catheter sizing:</strong> Match catheter diameter to patient size — 6.5–8 Fr neonates; 8 Fr infants; 10 Fr children; 11.5–13.5 Fr adolescents.</li>
+      <li><strong>Catheter type:</strong> Non-tunneled for short courses; tunneled cuffed for longer; port less ideal due to flow limitations for apheresis.</li>
+      <li><strong>Site selection:</strong> Internal jugular preferred; femoral for short-term acute use; subclavian for stenosis-avoiding (especially future HD access patients).</li>
+      <li><strong>Ultrasound guidance mandatory</strong> for pediatric central access.</li>
+      <li><strong>Sedation / general anesthesia</strong> for insertion in younger children.</li>
+      <li><strong>Catheter care:</strong> Same CLABSI prevention principles; daily necessity review especially important.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="sedation">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Sedation &amp; PICU Coordination</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Coordinate with pediatric anesthesia / sedation team</strong> for procedures requiring sedation.</li>
+      <li><strong>Sedation choices:</strong> Minimal sedation for cooperative older children; moderate sedation (midazolam, ketamine) for school-age; general anesthesia for younger children, especially when prolonged immobility required.</li>
+      <li><strong>Fasting requirements</strong> per anesthesia (NPO 6 hr solids, 2 hr clear liquids).</li>
+      <li><strong>PICU setting</strong> for blood prime procedures, neonatal apheresis, high ECV ratio, or compromised patient.</li>
+      <li><strong>Continuous monitoring</strong> per pediatric ICU standards: ECG, SpO₂, BP, end-tidal CO₂ for sedated.</li>
+      <li><strong>Anesthesia recovery</strong> per institutional pediatric protocol.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="neonatal">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Neonatal Considerations &amp; CARPEDIEM</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Standard CRRT circuits often unsuitable</strong> for neonates &lt; 8 kg due to ECV / TBV ratio &gt; 30%.</li>
+      <li><strong>CARPEDIEM</strong> (Cardio-Renal Pediatric Dialysis Emergency Machine) — small-volume CRRT device specifically designed for infants (1–10 kg); ECV ~30 mL; FDA-approved for pediatric use in the US.</li>
+      <li><strong>NIDUS</strong> — Newcastle Infant Dialysis and Ultrafiltration System; another small-patient option (UK).</li>
+      <li><strong>Aquadex</strong> — Slow continuous ultrafiltration; useful for fluid overload without solute clearance need.</li>
+      <li><strong>Neonatal apheresis (TPE, exchange transfusion):</strong> Specialized; coordinated with neonatology; usually in NICU.</li>
+      <li><strong>RBCx for severe neonatal jaundice / hemolytic disease</strong> — Single-volume or two-volume exchange transfusion per OB / neonatology.</li>
+      <li><strong>Temperature regulation paramount</strong> — Warmer, isolette, swaddling.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="modality">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Modality-Specific Pediatric Notes</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Modality</th><th>Pediatric-Specific</th></tr></thead>
+      <tbody>
+        <tr><td><strong>TPE</strong></td><td>Most common indications: TTP, HUS (atypical), neuromyologic disease (GBS, MG, NMOSD), severe sickle cell crisis with neurological sequelae, hyperviscosity. Replacement: albumin standard; FFP for TTP / coagulopathy. Citrate vigilance.</td></tr>
+        <tr><td><strong>RBCx</strong></td><td>Sickle cell — acute chest, stroke prevention, priapism, surgery preparation. Pediatric Hb S target &lt; 30% (often more stringent than adult). Calculate FCR carefully for pediatric weights.</td></tr>
+        <tr><td><strong>HPC-A (Stem Cell Collection)</strong></td><td>Mobilization with G-CSF (filgrastim 10–16 μg/kg/day × 4–5 d). Goal CD34+ cells/kg recipient weight. Adolescent donor / sibling donor protocols; consent considerations; FACT-JACIE pediatric program standards.</td></tr>
+        <tr><td><strong>Leukapheresis</strong></td><td>Hyperleukocytic AML / ALL with leukostasis: WBC &gt; 100k with symptoms. CMNC procedure on Optia. Premature infants rarely candidates.</td></tr>
+        <tr><td><strong>ECP (Therakos)</strong></td><td>Pediatric GVHD; offline preferred; CELLEX adapted for pediatric volumes. Methoxsalen pediatric dosing per weight.</td></tr>
+        <tr><td><strong>HD</strong></td><td>Pediatric-specific dialyzers (smaller surface area, lower priming volume); pediatric BFR (3–5 mL/kg/min); KDIGO pediatric guidelines. AVF possible in adolescents; catheter in younger.</td></tr>
+        <tr><td><strong>PD</strong></td><td>Often preferred for infants and small children: home-based, no vascular access, less hemodynamic perturbation. ISPD pediatric guideline. Cycler dwell and fill volumes scaled to BSA. PD catheter placement by pediatric surgery.</td></tr>
+        <tr><td><strong>CRRT</strong></td><td>Pediatric circuits (Prismaflex HF20); CARPEDIEM for &lt; 10 kg. Blood prime required for most pediatric circuits. CARPEDIEM ECV ~30 mL.</td></tr>
+        <tr><td><strong>LDL Apheresis</strong></td><td>HoFH pediatric protocols; start as early as age 5–8 yr per pediatric lipidology. Lower volumes; child-friendly setting; family education.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="family">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Family-Centered Care &amp; Child Life</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Family presence:</strong> Allow / encourage during procedures per institutional family-centered care policy.</li>
+      <li><strong>Child life specialist</strong> involvement: preparation, distraction, coping strategies, post-procedure debriefing.</li>
+      <li><strong>Age-appropriate communication</strong> — Concrete language for younger children; honest discussion of sensations.</li>
+      <li><strong>Consent / assent:</strong> Parental consent + age-appropriate assent from the child (typically formal assent from age 7+).</li>
+      <li><strong>School / activity considerations</strong> — Coordinate with school nurse; minimize disruption; consider home / community resources.</li>
+      <li><strong>Long-term support:</strong> Pediatric chronic disease patients need ongoing psychosocial support; refer to chronic disease support services.</li>
+      <li><strong>Sibling support:</strong> Often overlooked; offer child-life resources.</li>
+    </ul>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Transition to Adult Care</span>Adolescents with chronic apheresis / dialysis needs require structured transition to adult services typically beginning at age 14–16. Coordinate with adult nephrology / hematology / specialty team well in advance of transfer.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>Connelly-Smith L, et al. <strong>Guidelines on the Use of Therapeutic Apheresis in Clinical Practice: The Ninth Special Issue.</strong> J Clin Apher 2023 (pediatric considerations).</li>
+    <li>Kim HC, et al. <strong>Therapeutic Apheresis in Pediatric Patients.</strong> J Clin Apher.</li>
+    <li>FACT-JACIE. <strong>International Standards for Hematopoietic Cellular Therapy Product Collection, Processing, and Administration</strong> (current edition) — pediatric program requirements.</li>
+    <li>ISPD. <strong>Pediatric Peritoneal Dialysis: A Consensus Statement.</strong></li>
+    <li>KDIGO / KDOQI. <strong>Pediatric Hemodialysis Clinical Practice Guidelines.</strong></li>
+    <li>Ronco C, et al. <strong>Continuous Renal Replacement Therapy in Neonates and Small Infants: Development and First-In-Human Use of a Miniaturised Machine (CARPEDIEM).</strong> Lancet.</li>
+    <li>National Heart, Lung, and Blood Institute. <strong>Evidence-Based Management of Sickle Cell Disease</strong> — pediatric RBCx recommendations.</li>
+    <li>Goldstein SL, et al. <strong>Pediatric AKI and CRRT.</strong></li>
+    <li>American Academy of Pediatrics. <strong>Family-Centered Care Recommendations.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Pediatric Apheresis Reference</span>
+  <span>Educational reference · Coordinate with pediatric intensivist, hematology / nephrology, and child life · Verify against institutional protocols · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

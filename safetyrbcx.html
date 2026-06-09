@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RBCx Safety Considerations — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,143,182,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,143,182,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(255,143,182,.22),rgba(126,240,210,.10));border-color:rgba(255,143,182,.4);color:#ffd1e2}
+.chip-calc:hover{border-color:rgba(255,143,182,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffe1ec 0%,#ff8fb6 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,143,182,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,143,182,.4);color:var(--text);background:rgba(255,143,182,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,143,182,.24);background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,143,182,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--pink);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:28px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#ff8fb6,#7ef0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,143,182,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#ffd1e2;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-watch{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-watch .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,143,182,.10);color:#ffd1e2;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,143,182,.15),rgba(126,240,210,.10));border:1px solid rgba(255,143,182,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#ffd1e2}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--primary));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(255,143,182,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,143,182,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,143,182,.15);color:#ffb2cc;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🛡️</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Safety Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="rbcx.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Safety Reference · Red Blood Cell Exchange</div>
+      <div class="head-title"><span class="accent">RBCx Safety Considerations</span></div>
+      <div class="head-sub">The transfusion, hyperviscosity, alloimmunization, and access risks of red cell exchange — how to recognize, prevent, and respond. Compiled from ASFA 2023, AABB Standards, and current SCD treatment guidelines.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#overview">01 · Risk Overview</a>
+  <a class="sec-pill" href="#transfusion">02 · Transfusion Reactions</a>
+  <a class="sec-pill" href="#allo">03 · Alloimmunization</a>
+  <a class="sec-pill" href="#viscosity">04 · Hyperviscosity</a>
+  <a class="sec-pill" href="#iron">05 · Iron Management</a>
+  <a class="sec-pill" href="#citrate">06 · Citrate</a>
+  <a class="sec-pill" href="#access">07 · Vascular Access</a>
+  <a class="sec-pill" href="#peds">08 · Pediatric</a>
+  <a class="sec-pill" href="#emergency">09 · Emergency Response</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The safety story in one paragraph</div>
+  <div class="hero-tldr-text">
+    RBCx safety is dominated by <strong>transfusion-medicine risks</strong>: acute and delayed hemolytic transfusion reactions, allergic / anaphylactic reactions, TRALI and TACO, alloimmunization, and infectious risk (low but non-zero). For chronic SCD exchanges, <strong>alloimmunization remains the single largest cumulative complication</strong>, mitigated by extended phenotype matching (C, E, K minimum; full Rh/Kell/Duffy/Kidd/MNS phenotype preferred). Hyperviscosity from over-shooting target Hct is a real risk — target Hct should not exceed ~30% post-exchange to keep viscosity in safe range. Citrate toxicity is less prominent than in TPE because the cellular return is volume-matched but still occurs. Vascular access and iron management round out the picture.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">≤ 30%</div><div class="stat-label">Target post-exchange Hct (viscosity safety)</div></div>
+    <div class="stat"><div class="stat-num">~25%</div><div class="stat-label">Alloimmunization rate without extended matching</div></div>
+    <div class="stat"><div class="stat-num">&lt; 5%</div><div class="stat-label">Alloimmunization with extended matching</div></div>
+    <div class="stat"><div class="stat-num">~30%</div><div class="stat-label">Target HbS post-exchange in SCD</div></div>
+  </div>
+</div>
+
+<section class="sec" id="overview">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">The Major Risk Profile</div><div class="sec-subtitle">Transfusion + apheresis risks combined</div></div></div>
+  <div class="prose">
+    <p>RBCx carries the safety burden of <strong>both apheresis</strong> (vascular access, citrate, hemodynamic shift) <strong>and transfusion</strong> (reaction, alloimmunization, infection, iron, immunomodulation). The overall safety profile is favorable when blood-bank coordination, extended phenotype matching, and standard apheresis monitoring are in place.</p>
+    <table class="compare-table">
+      <thead><tr><th>Adverse event</th><th>Approximate rate</th><th>Severity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mild allergic / urticarial</strong></td><td>1–3% per session</td><td>Mild</td></tr>
+        <tr><td><strong>Febrile non-hemolytic</strong></td><td>0.5–1% per session</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Acute hemolytic reaction (ABO mismatch)</strong></td><td>&lt; 1 per 50,000 with modern checks</td><td>Severe / fatal</td></tr>
+        <tr><td><strong>Delayed hemolytic reaction</strong></td><td>Variable, higher with frequent transfusion</td><td>Moderate–severe</td></tr>
+        <tr><td><strong>Alloimmunization</strong> (long-term, chronic exchanges)</td><td>5–25% cumulative depending on matching strategy</td><td>Variable; complicates future transfusions</td></tr>
+        <tr><td><strong>TRALI</strong></td><td>~1 per 5,000–10,000 units</td><td>Severe / life-threatening</td></tr>
+        <tr><td><strong>TACO</strong> (circulatory overload)</td><td>~1–8% depending on patient risk factors</td><td>Moderate–severe</td></tr>
+        <tr><td><strong>Hyperviscosity</strong> (over-target post-exchange Hct)</td><td>Procedural error — preventable</td><td>Severe / stroke risk</td></tr>
+        <tr><td><strong>Citrate symptoms</strong></td><td>10–30% (mild, less than TPE)</td><td>Mild</td></tr>
+        <tr><td><strong>Vascular access complication</strong></td><td>1–3% per insertion</td><td>Mild–severe</td></tr>
+        <tr><td><strong>Iron overload</strong> (chronic recipients)</td><td>Reduced vs simple transfusion, but still possible</td><td>Long-term</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="transfusion">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Transfusion Reactions</div><div class="sec-subtitle">Acute &amp; delayed — recognition, response, prevention</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Reaction</th><th>Presentation</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Acute hemolytic</strong> (ABO mismatch)</td><td>Fever, chills, flank/back pain, hemoglobinuria, hypotension, DIC</td><td>STOP immediately · maintain IV access with NS · DIC labs · supportive · report to blood bank</td></tr>
+        <tr><td><strong>Febrile non-hemolytic</strong></td><td>Temp ↑ &gt; 1°C, chills, no hemodynamic instability</td><td>Slow rate · antipyretic · monitor · consider pre-medication for future</td></tr>
+        <tr><td><strong>Allergic (mild)</strong></td><td>Urticaria, pruritus, no respiratory involvement</td><td>Pause · diphenhydramine · resume slowly</td></tr>
+        <tr><td><strong>Anaphylaxis</strong></td><td>Hypotension, bronchospasm, angioedema, GI symptoms</td><td>STOP · IM epinephrine · full code response</td></tr>
+        <tr><td><strong>TRALI</strong></td><td>Hypoxemia + bilateral infiltrates within 6 hr · no volume overload</td><td>Stop · respiratory support · report to blood bank · use washed/HLA-matched in future</td></tr>
+        <tr><td><strong>TACO</strong></td><td>Hypertension, JVD, dyspnea, pulmonary edema · volume overload</td><td>Slow/stop · diuresis · supportive · review fluid balance protocol</td></tr>
+        <tr><td><strong>Delayed hemolytic</strong></td><td>Hgb drop 3–10 days after, jaundice, mild fever</td><td>Direct Coombs · antibody panel · report to blood bank · update antibody record</td></tr>
+        <tr><td><strong>Hyperhemolysis</strong> (rare, SCD)</td><td>Severe Hgb drop below pre-transfusion baseline · life-threatening</td><td>Stop transfusion · IVIG + steroids · supportive · transfusion only if life-threatening</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The 15-minute window</span>The first 15 minutes of any blood product administration is the highest-risk period. <strong>Stay at the bedside</strong>, monitor vital signs every 5 min × 3, then every 15 min for the duration. Most acute reactions present in this window.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="allo">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Alloimmunization Prevention</div><div class="sec-subtitle">Extended phenotype matching — the single biggest impact</div></div></div>
+  <div class="prose">
+    <p>Patients on chronic RBCx (especially SCD) are at high risk of alloimmunization because they receive donor red cells frequently. Each new alloantibody narrows the pool of compatible donors and increases the risk of future delayed hemolytic reactions and difficult crossmatches.</p>
+    <table class="compare-table">
+      <thead><tr><th>Matching strategy</th><th>Alloimmunization risk</th><th>When to use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ABO + RhD only</strong></td><td>15–25% cumulative</td><td>Acute, single-event transfusion</td></tr>
+        <tr><td><strong>ABO + RhD + C, E, K</strong></td><td>~10%</td><td>Minimum standard for chronic SCD transfusion</td></tr>
+        <tr><td><strong>Full Rh/Kell/Duffy/Kidd/MNS phenotype</strong></td><td>&lt; 5%</td><td>Preferred for chronic SCD exchanges</td></tr>
+        <tr><td><strong>Molecular RH genotyping</strong></td><td>Lowest available</td><td>Patients with multiple antibodies or known variant Rh</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Document the antibody history</span>Every patient on chronic RBCx should have a <strong>comprehensive antibody record</strong> in the blood bank database. Coordinate with the institutional transfusion service to ensure matching strategies are explicit in the order set. Verify pre-procedure that any new antibodies haven't been detected since the last transfusion.</div></div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Hyperhemolysis syndrome</span>An uncommon but life-threatening SCD complication: post-transfusion Hgb drops <em>below</em> pre-transfusion baseline. Both donor and recipient cells are destroyed. Treatment is <strong>IVIG + corticosteroids</strong> and avoiding further transfusion unless life-threatening. Document and flag the chart prominently.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="viscosity">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Hyperviscosity Risk — The Post-Exchange Hct Ceiling</div><div class="sec-subtitle">Why ≤ 30% target matters</div></div></div>
+  <div class="prose">
+    <p>Whole blood viscosity rises exponentially above Hct ~35%. In SCD patients with already abnormal rheology, over-shooting the post-exchange Hct can paradoxically <strong>increase stroke risk and tissue hypoxia</strong> — the opposite of the intended therapeutic effect.</p>
+    <table class="compare-table">
+      <thead><tr><th>Post-exchange Hct</th><th>Viscosity</th><th>Clinical risk</th></tr></thead>
+      <tbody>
+        <tr><td>25%</td><td>Low</td><td>Safe; may be sub-therapeutic in some indications</td></tr>
+        <tr><td>28–30%</td><td>Moderate (target)</td><td>Therapeutic; viscosity acceptable</td></tr>
+        <tr><td>32–35%</td><td>Increasing</td><td>Caution; risk of hyperviscosity in SCD</td></tr>
+        <tr><td>&gt; 35%</td><td>High</td><td>Hyperviscosity risk — stroke, organ hypoperfusion</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">SCD-specific viscosity warning</span>Post-exchange Hct in SCD should typically <strong>not exceed 30%</strong>. The combination of dense, dehydrated sickle cells (especially if HbS is still &gt; 30%) with a high Hct creates a hyperviscous state that increases — not decreases — stroke risk.</div></div>
+    <p>Verify the target Hct in the calculator output, and confirm against the prescribed end-Hct before initiating the procedure. Check post-procedure Hct on a finger-stick or stat lab before discharge.</p>
+  </div>
+</section>
+
+<section class="sec" id="iron">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Iron Management — RBCx vs Simple Transfusion</div><div class="sec-subtitle">The major rationale for chronic exchange over chronic transfusion</div></div></div>
+  <div class="prose">
+    <p>A simple transfusion delivers iron without removing any. Chronic simple-transfusion patients (e.g., monthly transfusions for SCD) develop iron overload requiring lifelong chelation therapy. RBCx <strong>removes RBCs as it gives them</strong>, with net iron balance close to zero per session.</p>
+    <table class="compare-table">
+      <thead><tr><th>Modality</th><th>Iron balance per session</th><th>Long-term iron status</th></tr></thead>
+      <tbody>
+        <tr><td>Simple transfusion (1 unit PRBC)</td><td>+200 mg iron</td><td>Iron overload &gt; 1–2 years requires chelation</td></tr>
+        <tr><td>RBCx (volume-matched)</td><td>~0 mg net</td><td>Stable; minimal/no chelation needed</td></tr>
+        <tr><td>Partial RBCx (depletion exchange)</td><td>Slightly negative</td><td>May reduce ferritin in iron-overloaded patients</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Ferritin trending</span>For chronic RBCx patients, monitor <strong>ferritin every 3–6 months</strong>. Drift upward suggests inadequate exchange efficiency (cellular recirculation, low post-Hct) or sub-clinical inflammation. Drift downward in iron-overloaded patients is the desired effect.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="citrate">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Citrate Toxicity</div><div class="sec-subtitle">Less prominent than TPE but still present</div></div></div>
+  <div class="prose">
+    <p>Citrate is used as anticoagulant for the apheresis circuit. Because the cellular return matches the donor cells given, the citrate load per session is generally <strong>less than TPE</strong>, but symptoms can still occur — particularly in pediatric patients and high-volume exchanges.</p>
+    <ul class="check-list">
+      <li><strong>Screen every 15 minutes:</strong> perioral numbness, tingling, muscle cramping, "metallic taste".</li>
+      <li><strong>Prophylactic calcium:</strong> per institutional protocol; commonly oral calcium pre-procedure or IV calcium gluconate drip during the run.</li>
+      <li><strong>Modify if symptomatic:</strong> loosen AC ratio, slow return rate, add or escalate calcium supplementation.</li>
+      <li><strong>Severe symptoms (tetany, arrhythmia):</strong> stop the procedure, IV calcium gluconate 1–2 g over 10–15 min, cardiac monitoring.</li>
+    </ul>
+    <p>The full citrate management framework is the same as TPE — see the TPE safety page for detailed pathophysiology and the symptom progression cascade.</p>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Vascular Access Safety</div><div class="sec-subtitle">Higher flow rates than TPE; access matters</div></div></div>
+  <div class="prose">
+    <p>RBCx typically requires higher flow rates than TPE (often 70–100 mL/min for full exchanges). This pushes the access requirement toward central or AV-fistula-quality access; small peripheral lines often cannot sustain the flow.</p>
+    <table class="compare-table">
+      <thead><tr><th>Access type</th><th>RBCx suitability</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Two large-bore peripheral (16–17 g)</td><td>Acceptable for smaller exchanges</td><td>Adult ~70 mL/min often achievable; check patency frequently</td></tr>
+        <tr><td>Tunneled apheresis catheter</td><td>Standard for chronic RBCx</td><td>Strict sterile technique; flush protocol; periodic re-evaluation</td></tr>
+        <tr><td>AV fistula (chronic SCD)</td><td>Long-term option</td><td>Cannulation training; rotate sites; protect from infiltration</td></tr>
+        <tr><td>Acute central line (IJ)</td><td>Emergency / inpatient</td><td>Pneumothorax screening; chest film post-insertion</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">SCD-specific access concerns</span>Patients with SCD often have <strong>difficult peripheral access</strong> from cumulative vasculopathy. Long-term venous access (tunneled catheter or AV fistula) should be discussed early in the chronic-exchange relationship. CLABSI prevention is critical.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Pediatric Safety</div><div class="sec-subtitle">ECV, prime, smaller volumes, slower starts</div></div></div>
+  <div class="prose">
+    <p>Pediatric RBCx is the most common chronic apheresis indication in pediatrics (most for SCD). Three priorities dominate:</p>
+    <ul class="check-list">
+      <li><strong>ECV ceiling 10% TBV</strong> (vs 15% adult) — blood prime if ECV exceeds this threshold</li>
+      <li><strong>Volume-matched blood prime</strong> standard at most institutions for ECV &gt; 15% TBV</li>
+      <li><strong>Pediatric TBV formulas</strong>: ≤ 5 kg → 90 mL/kg · 5.1–15 kg → 80 mL/kg · 15.1–25 kg → 70 mL/kg · &gt; 25 kg → Nadler</li>
+      <li><strong>Citrate sensitivity</strong> higher; aggressive monitoring and prophylactic calcium</li>
+      <li><strong>Slow-start protocol</strong> reduces ECV-shift hypotension</li>
+      <li><strong>Sedation needs</strong> for younger children; coordinate with anesthesia / PICU</li>
+      <li><strong>Long-term venous access planning</strong> — chronic exchange relationship requires durable access strategy</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="emergency">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Emergency Response</div><div class="sec-subtitle">When something goes wrong</div></div></div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Suspected Acute Hemolytic Reaction (ABO mismatch)</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP the procedure.</strong> Disconnect from the circuit; do not return circuit contents.</li>
+      <li><strong>Maintain IV access</strong> with normal saline at TKO.</li>
+      <li><strong>Activate code response</strong>; notify physician and blood bank immediately.</li>
+      <li><strong>Recheck ID</strong> on patient + all blood products against the order.</li>
+      <li><strong>Send labs:</strong> direct Coombs, post-transfusion CBC, haptoglobin, LDH, bilirubin, urine for hemoglobin, repeat type & screen.</li>
+      <li><strong>Send all blood components</strong> back to blood bank for investigation.</li>
+      <li><strong>Supportive care:</strong> IV fluids for hemodynamic support, monitor for DIC, treat hyperkalemia/AKI.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Anaphylaxis</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP procedure</strong>; maintain access.</li>
+      <li><strong>IM epinephrine 0.3–0.5 mg</strong> (0.01 mg/kg pediatric) in lateral thigh.</li>
+      <li><strong>Airway / oxygenation</strong>; 100% O₂ via non-rebreather if hypoxic.</li>
+      <li><strong>IV crystalloid bolus</strong> for hypotension.</li>
+      <li><strong>Antihistamines + corticosteroids</strong> per institutional anaphylaxis protocol.</li>
+      <li><strong>Document and report</strong> to blood bank.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Hyperhemolysis (SCD, late-onset Hgb drop below baseline)</div>
+    <ol class="emergency-steps">
+      <li><strong>Stop further transfusion</strong> unless life-threatening.</li>
+      <li><strong>IVIG 1–2 g/kg + IV methylprednisolone</strong> per protocol.</li>
+      <li><strong>Hematology consult</strong> urgent.</li>
+      <li><strong>Supportive care</strong>; consider erythropoietin to stimulate endogenous production.</li>
+      <li><strong>Flag the chart</strong> prominently for future transfusion planning.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan an RBC Exchange?</div>
+    <div class="cta-sub">Open the RBCx Calculator for TBV, FCR target, PRBC volume, and post-exchange Hct estimates — with the safety thresholds covered here baked into the result interpretation.</div>
+  </div>
+  <a class="cta-btn" href="rbcx.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Primary safety literature and society guidance</div></div></div>
+  <ol class="ref-list">
+    <li>Connors JM, et al. <strong>ASFA Guidelines on the Use of Therapeutic Apheresis — 9th Special Issue.</strong> J Clin Apher 2023.</li>
+    <li>AABB. <strong>Standards for Blood Banks and Transfusion Services</strong> (current edition).</li>
+    <li>Chou ST, et al. <strong>American Society of Hematology 2020 guidelines for sickle cell disease: transfusion support.</strong> Blood Adv.</li>
+    <li>Linder GE, Chou ST. <strong>Red cell transfusion and alloimmunization in sickle cell disease.</strong> Haematologica.</li>
+    <li>Win N. <strong>Hyperhemolysis syndrome in sickle cell disease.</strong> Br J Haematol.</li>
+    <li>Kim HC. <strong>Red cell exchange: special focus on sickle cell disease.</strong> Hematology Am Soc Hematol Educ Program.</li>
+    <li>Yawn BP, et al. <strong>Management of sickle cell disease: summary of the 2014 evidence-based report by NHLBI.</strong> JAMA.</li>
+    <li>FDA / national hemovigilance. <strong>TRALI risk-reduction strategies.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · RBCx Safety Considerations</span>
+  <span>Educational reference · Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+</div>
+</div></body></html>

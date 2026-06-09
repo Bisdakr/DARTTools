@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CLABSI Prevention — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,143,182,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,143,182,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffe1ec 0%,#ff8fb6 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,143,182,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,143,182,.4);color:var(--text);background:rgba(255,143,182,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,143,182,.24);background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,143,182,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--pink);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:28px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#ff8fb6,#7ef0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,143,182,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-watch{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-watch .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,143,182,.10);color:#ffd1e2;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.step-list{list-style:none;padding:0;margin:18px 0;counter-reset:stepnum}
+.step-list li{counter-increment:stepnum;position:relative;padding:14px 14px 14px 56px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;line-height:1.6;color:#d6e0ee}
+.step-list li::before{content:counter(stepnum);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(255,143,182,.30),rgba(126,240,210,.10));color:#ffd1e2;display:grid;place-items:center;font-weight:900;font-size:13px;border:1px solid rgba(255,143,182,.40)}
+.step-list li strong{color:#fff;display:inline}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.danger-list li::before{content:"⊘";color:var(--danger)}
+.ppe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:18px 0}
+.ppe-card{padding:18px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:3px solid var(--pink)}
+.ppe-card-icon{font-size:28px;line-height:1;margin-bottom:8px}
+.ppe-card-title{font-size:14px;color:#fff;font-weight:900;margin-bottom:6px}
+.ppe-card-detail{font-size:12.5px;color:#cdd6e2;line-height:1.55}
+.bundle-card{margin:20px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.04));border:2px solid rgba(126,240,210,.30)}
+.bundle-card-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#9be8d0;font-weight:900;margin-bottom:14px}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,143,182,.15),rgba(126,240,210,.10));border:1px solid rgba(255,143,182,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#ffd1e2}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--primary));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(255,143,182,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,143,182,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,143,182,.15);color:#ffb2cc;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🦠</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Universal Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Universal Reference · Cross-Modality Infection Prevention</div>
+      <div class="head-title"><span class="accent">CLABSI Prevention</span></div>
+      <div class="head-sub">A unified central line-associated bloodstream infection prevention reference applicable to every DART modality that uses a central venous catheter: TPE, RBCx, HPC-A, WBC Depletion, LDL Apheresis, ECP, Hemodialysis, CRRT. Hand hygiene, PPE, sterile barrier, hub disinfection, dressing care, daily necessity assessment.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#why">01 · Why CLABSI Prevention Matters</a>
+  <a class="sec-pill" href="#handwashing">02 · Hand Hygiene</a>
+  <a class="sec-pill" href="#ppe">03 · PPE Selection</a>
+  <a class="sec-pill" href="#insertion">04 · Insertion Bundle</a>
+  <a class="sec-pill" href="#access">05 · Hub Access Technique</a>
+  <a class="sec-pill" href="#dressing">06 · Dressing &amp; Site Care</a>
+  <a class="sec-pill" href="#necessity">07 · Daily Necessity Review</a>
+  <a class="sec-pill" href="#bundle">08 · Maintenance Bundle</a>
+  <a class="sec-pill" href="#recognition">09 · Recognition &amp; Reporting</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — Universal Prevention</div>
+  <div class="hero-tldr-text">
+    CLABSI is preventable. The CDC and IDSA frameworks have demonstrated that bundled interventions — proper hand hygiene, full sterile barrier at insertion, chlorhexidine prep with adequate dry time, hub disinfection at every access, sterile dressing care, and daily assessment of catheter need — reduce CLABSI rates by 50–70% when implemented reliably. This reference applies to <strong>every DART modality that uses a central venous catheter</strong>: TPE, RBCx, HPC-A, leukapheresis, LDL apheresis, ECP, HD, CRRT. The most important nursing intervention is the one that doesn't appear in any procedure manual — <strong>active advocacy for catheter removal when it is no longer needed</strong>.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">&lt; 1</div><div class="stat-label">CLABSI per 1,000 line-days (CDC target)</div></div>
+    <div class="stat"><div class="stat-num">50–70%</div><div class="stat-label">Reduction with bundle compliance</div></div>
+    <div class="stat"><div class="stat-num">5 sec</div><div class="stat-label">Min hub disinfection scrub time</div></div>
+    <div class="stat"><div class="stat-num">≥ 30 sec</div><div class="stat-label">Chlorhexidine dry time</div></div>
+  </div>
+</div>
+
+<section class="sec" id="why">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Why CLABSI Prevention Matters</div><div class="sec-subtitle">The patient, the institution, and the nursing accountability</div></div></div>
+  <div class="prose">
+    <p>CLABSI (central line-associated bloodstream infection) is a serious, preventable hospital-acquired infection with significant patient and institutional impact:</p>
+    <ul class="check-list">
+      <li><strong>Mortality:</strong> CLABSI is associated with attributable mortality of 12–25% in critically ill patients.</li>
+      <li><strong>Length of stay:</strong> Each CLABSI extends hospitalization by an average of 7–14 days.</li>
+      <li><strong>Cost:</strong> Each CLABSI episode adds approximately $46,000 to the cost of care (CDC estimate).</li>
+      <li><strong>Catheter loss:</strong> CLABSI often requires catheter removal, complicating ongoing therapy and requiring re-insertion at a different site.</li>
+      <li><strong>Reporting:</strong> CMS publicly reports CLABSI rates and ties them to reimbursement (Value-Based Purchasing, HAC Reduction Program); these are tracked publicly on Hospital Compare.</li>
+      <li><strong>Cross-modality risk:</strong> DART patients often have catheters for prolonged periods (chronic HD/PD, chronic ECP, repeated apheresis). The longer the dwell, the higher the cumulative risk.</li>
+    </ul>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The Bundle Is the Floor, Not the Ceiling</span>The CDC bundle is the <em>minimum</em> standard. High-performing units track sub-bundle compliance (e.g., chlorhexidine dry time, hub scrub seconds) and use audit-feedback cycles to drive continuous improvement. Zero CLABSI is the institutional aspiration; rates below the CDC benchmark are achievable.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="handwashing">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Hand Hygiene — The Foundation</div><div class="sec-subtitle">CDC 6-step technique, indications, audit</div></div></div>
+  <div class="prose">
+    <p>Hand hygiene is the single most important intervention to prevent healthcare-associated infections. The WHO "5 Moments" and CDC indications cover every patient encounter.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">The 5 Moments for Hand Hygiene (WHO)</h4>
+    <ol class="step-list">
+      <li><strong>Before touching the patient</strong> — Including before any patient contact, even pulling the curtain back.</li>
+      <li><strong>Before a clean / aseptic procedure</strong> — Before any catheter access, before sterile dressing change, before medication administration.</li>
+      <li><strong>After body fluid exposure risk</strong> — After contact with blood, secretions, mucous membranes, or non-intact skin.</li>
+      <li><strong>After touching the patient</strong> — When leaving the bedside, even if no apparent contamination.</li>
+      <li><strong>After touching patient surroundings</strong> — Bed rails, IV pole, dialysis machine, monitor, chart, anything in the patient zone.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Technique — Alcohol-Based Hand Rub (ABHR)</h4>
+    <ol class="step-list">
+      <li><strong>Apply enough ABHR</strong> to cover all surfaces of both hands.</li>
+      <li><strong>Rub palms together.</strong></li>
+      <li><strong>Right palm over left dorsum with interlaced fingers; vice versa.</strong></li>
+      <li><strong>Palm to palm, fingers interlaced.</strong></li>
+      <li><strong>Backs of fingers to opposing palms with fingers interlocked.</strong></li>
+      <li><strong>Rotational rubbing of left thumb in right palm; vice versa.</strong></li>
+      <li><strong>Rotational rubbing back and forth, fingers in palm.</strong></li>
+      <li><strong>Allow hands to dry fully</strong> — at least 20–30 seconds.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Soap &amp; Water — When Required</h4>
+    <ul class="check-list">
+      <li><strong>Visibly soiled hands</strong> — ABHR not sufficient; use soap and water.</li>
+      <li><strong>After caring for a patient with C. difficile</strong> or norovirus — alcohol does not kill C. diff spores; mechanical washing required.</li>
+      <li><strong>Before eating, after restroom use</strong> — Routine hygiene.</li>
+      <li><strong>Technique:</strong> Wet hands, apply soap, vigorous friction all surfaces ≥ 20 seconds, rinse thoroughly, dry with single-use towel, use towel to turn off faucet.</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Bare Below the Elbows (Where Adopted)</span>Many institutions and most ICUs / dialysis units adopt the "Bare Below the Elbows" practice — no long sleeves, rings (other than plain band), bracelets, watches, or artificial nails during direct patient care. These items harbor pathogens and impede effective hand hygiene. Verify your institution's policy.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="ppe">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">PPE Selection — Match the Task</div><div class="sec-subtitle">Gloves, gown, mask, eye protection, N95</div></div></div>
+  <div class="prose">
+    <p>PPE selection is task-based. The principle is: anticipate the exposure, select PPE to prevent it, don and doff in the correct sequence.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Standard PPE Inventory</h4>
+    <div class="ppe-grid">
+      <div class="ppe-card"><div class="ppe-card-icon">🧤</div><div class="ppe-card-title">Gloves</div><div class="ppe-card-detail">Required for any catheter contact, blood, body fluids, mucous membranes, non-intact skin. Change between patients and between tasks on same patient. Sterile gloves for sterile procedures.</div></div>
+      <div class="ppe-card"><div class="ppe-card-icon">😷</div><div class="ppe-card-title">Surgical Mask</div><div class="ppe-card-detail">Required for sterile catheter access, central line insertion / dressing change, and droplet precautions. Both patient and provider mask during catheter connection in apheresis / dialysis.</div></div>
+      <div class="ppe-card"><div class="ppe-card-icon">🥽</div><div class="ppe-card-title">Eye Protection</div><div class="ppe-card-detail">Required whenever blood or body fluid splash is possible — initial catheter connection, disconnection, dressing change with active bleeding, emergency procedures. Goggles or face shield.</div></div>
+      <div class="ppe-card"><div class="ppe-card-icon">🥼</div><div class="ppe-card-title">Gown</div><div class="ppe-card-detail">Required if splash anticipated, contact precautions, sterile dressing change, or per institutional policy. Sterile gown for central line insertion. Fluid-resistant for splash risk.</div></div>
+      <div class="ppe-card"><div class="ppe-card-icon">🛡️</div><div class="ppe-card-title">N95 Respirator</div><div class="ppe-card-detail">Required for airborne precautions (TB, measles, varicella, COVID-19 per institutional policy). Fit-tested annually. Not a substitute for surgical mask in droplet precautions.</div></div>
+      <div class="ppe-card"><div class="ppe-card-icon">👕</div><div class="ppe-card-title">Cap</div><div class="ppe-card-detail">Required for sterile procedures (full sterile barrier at central line insertion). Covers all hair.</div></div>
+    </div>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">PPE by Task — Quick Reference</h4>
+    <table class="compare-table">
+      <thead><tr><th>Task</th><th>Minimum PPE</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Central line insertion (sterile)</strong></td><td>Full sterile barrier: cap, mask, sterile gown, sterile gloves, large sterile drape. Patient masked. Hand hygiene + chlorhexidine prep.</td></tr>
+        <tr><td><strong>Catheter hub access</strong> (apheresis, HD, CRRT)</td><td>Hand hygiene, mask (patient + provider), sterile gloves, eye protection if splash possible.</td></tr>
+        <tr><td><strong>Dressing change</strong></td><td>Hand hygiene, mask (patient + provider), sterile gloves, fluid-resistant gown if drainage present, eye protection if splash anticipated.</td></tr>
+        <tr><td><strong>Routine catheter inspection</strong> (no manipulation)</td><td>Hand hygiene, gloves.</td></tr>
+        <tr><td><strong>Apheresis procedure initiation</strong></td><td>Hand hygiene, mask, sterile gloves at the connection step, eye protection. Gown if splash anticipated or per institutional policy.</td></tr>
+        <tr><td><strong>Disconnection / rinseback completion</strong></td><td>Hand hygiene, mask, gloves, eye protection.</td></tr>
+        <tr><td><strong>Patient cleanup / linen change</strong></td><td>Gloves; gown if soiled linen.</td></tr>
+        <tr><td><strong>Contact precautions patient (MRSA, VRE, C. diff)</strong></td><td>Gloves + gown for any patient or environment contact. Soap-and-water hand hygiene for C. diff (alcohol ineffective).</td></tr>
+        <tr><td><strong>Droplet precautions (influenza, RSV)</strong></td><td>Surgical mask within 3–6 feet of patient. Plus standard precautions.</td></tr>
+        <tr><td><strong>Airborne precautions (TB, COVID-19, measles)</strong></td><td>N95 respirator (fit-tested), negative-pressure room, eye protection, gown, gloves.</td></tr>
+      </tbody>
+    </table>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Don and Doff Sequence (CDC)</h4>
+    <p><strong>Don (put on):</strong> 1. Gown → 2. Mask/respirator → 3. Goggles/face shield → 4. Gloves (over gown cuffs).</p>
+    <p><strong>Doff (remove):</strong> 1. Gloves → 2. Goggles/face shield (handle by headband or earpieces) → 3. Gown (peel from inside) → 4. Mask/respirator (handle by straps). <strong>Hand hygiene after each step.</strong></p>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">PPE Failure Points</span>Most PPE-related exposures occur during <strong>doffing</strong>, not donning. Contaminated outer surfaces of gloves and gown are the highest risk. Doff slowly, in the correct order, with hand hygiene between each step. Practice with infection prevention until automatic.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="insertion">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Central Line Insertion Bundle</div><div class="sec-subtitle">The non-negotiables at the point of insertion</div></div></div>
+  <div class="prose">
+    <p>The CDC central line insertion bundle has demonstrated CLABSI reductions of 50–70% when implemented reliably. Every element matters.</p>
+    <div class="bundle-card">
+      <div class="bundle-card-title">CDC Insertion Bundle (verified at each insertion)</div>
+      <ul class="check-list">
+        <li><strong>Hand hygiene</strong> with ABHR or soap/water before donning sterile attire.</li>
+        <li><strong>Maximum sterile barrier precautions</strong> — full body sterile drape on patient; cap, mask, sterile gown, sterile gloves on inserter; cap and mask on all in the procedure area; assistants gowned and gloved sterile.</li>
+        <li><strong>Chlorhexidine 2% in 70% alcohol skin prep</strong> with appropriate scrub (typically 30 seconds for non-greasy site, 2 minutes for greasy site) and <strong>≥ 30 second dry time</strong> before puncture.</li>
+        <li><strong>Optimal site selection</strong> — Subclavian preferred for CLABSI prevention; femoral avoided when possible; ultrasound guidance reduces complications.</li>
+        <li><strong>Daily review of catheter necessity</strong> — Begins at insertion as a documented expectation.</li>
+        <li><strong>Insertion checklist with stop-the-line authority</strong> — Any team member can halt the procedure if bundle elements are missed.</li>
+      </ul>
+    </div>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Chlorhexidine Dry Time</span>The single most commonly skipped element. Chlorhexidine kills via slow, residual action — wiping it off before it dries cuts efficacy by &gt; 80%. <strong>Watch the prep dry before puncturing.</strong> Set a 30-second timer if needed.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Hub Access Technique — "Scrub the Hub"</div><div class="sec-subtitle">Every connection, every time</div></div></div>
+  <div class="prose">
+    <p>Every catheter hub access is a potential infection entry point. The CDC's "scrub the hub" guidance is built around the chlorhexidine/alcohol contact time and friction needed to disinfect the connector surface.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Standard Hub Access Sequence</h4>
+    <ol class="step-list">
+      <li><strong>Hand hygiene.</strong> Per Section 02.</li>
+      <li><strong>Don mask (both patient and provider for apheresis/HD catheter access).</strong></li>
+      <li><strong>Don sterile gloves.</strong></li>
+      <li><strong>Vigorously scrub the hub / needleless connector</strong> with an alcoholic chlorhexidine (preferred) or 70% alcohol pad for <strong>at least 5 seconds</strong> using friction. Cover the top and threaded sides of the connector.</li>
+      <li><strong>Allow to dry fully</strong> — at least 5 seconds; do not wipe off.</li>
+      <li><strong>Connect or aspirate.</strong> Use sterile saline syringe or apheresis/HD line per protocol.</li>
+      <li><strong>Repeat scrub for every subsequent access</strong> — even if scrubbing the same connector minutes apart, re-scrub before each access.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Common Errors</h4>
+    <ul class="check-list warn-list">
+      <li><strong>Insufficient scrub time</strong> — Most providers scrub for &lt; 3 seconds when audited; the standard is ≥ 5 seconds with friction.</li>
+      <li><strong>Wiping without friction</strong> — Friction is what disrupts biofilm; gentle wiping is insufficient.</li>
+      <li><strong>Not allowing to dry</strong> — Same principle as skin chlorhexidine — residual action requires drying.</li>
+      <li><strong>Skipping the scrub for "quick" accesses</strong> — Every access requires the scrub, including saline flushes and blood draws.</li>
+      <li><strong>Re-using alcohol pads</strong> — Single-use only.</li>
+    </ul>
+    <div class="callout callout-watch"><span class="callout-icon">👁</span><div class="callout-body"><span class="callout-label">Disinfection Caps</span>Passive disinfection caps (e.g., SwabCap, Curos) that contain isopropyl alcohol can be applied to needleless connectors when not in active use. They eliminate the need for active scrub before next access (per manufacturer instructions — typically 1 minute contact time), but only when the cap has been in place continuously. Replace after each access.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="dressing">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Dressing &amp; Site Care</div><div class="sec-subtitle">Inspection, change schedule, CHG-impregnated dressings</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Daily exit-site inspection</strong> — Look for erythema, swelling, drainage, tenderness; palpate gently. Document.</li>
+      <li><strong>Dressing change schedule</strong> — Per institutional policy. Typical: transparent semi-permeable membrane (TSM) dressing every 7 days; gauze dressing every 48 hours or sooner if soiled/loose. CHG-impregnated dressing 7 days.</li>
+      <li><strong>Dressing change procedure</strong> — Hand hygiene, mask (patient and provider), sterile gloves and field. Remove old dressing carefully (avoid catheter dislodgement). Inspect site. Chlorhexidine prep with friction and ≥ 30-second dry time. Apply new dressing per manufacturer.</li>
+      <li><strong>Chlorhexidine-impregnated dressing</strong> for adults with catheters expected to dwell ≥ 5 days, per CDC. Reduces CLABSI further beyond standard dressing.</li>
+      <li><strong>Bathing</strong> — Chlorhexidine bathing daily for ICU patients with central catheters (CDC recommendation; reduces MRSA and CLABSI). Cover the dressing during bathing for skin-contact precautions; do not soak dressings.</li>
+    </ol>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">When Dressing Comes Loose or Wet</span>A loose, lifted, or soiled dressing is no longer protective. Change immediately — do not "wait for the scheduled change" — even if changed in the last 24 hours.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="necessity">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Daily Necessity Review — The Most Important Element</div><div class="sec-subtitle">"Can we remove this catheter today?"</div></div></div>
+  <div class="prose">
+    <p>Every CLABSI is a catheter that should have been removed. The single most powerful CLABSI prevention measure is shortening dwell time. The expectation in every unit running central catheters: <strong>at every shift handoff, every patient with a central line is asked, "Is the line still needed?"</strong></p>
+    <ul class="check-list">
+      <li><strong>Document the daily assessment</strong> in the procedure record or daily nursing note.</li>
+      <li><strong>SBAR to the primary team</strong> if a catheter is no longer needed: <em>"This catheter has been in for X days. The plan is [transition/recovery]. What is needed before removal?"</em></li>
+      <li><strong>Modality-specific transition criteria:</strong>
+        <ul style="margin:6px 0 0 22px;list-style:disc">
+          <li><strong>HD:</strong> AVF maturation reliable; renal recovery off HD; switch to PD planned.</li>
+          <li><strong>PD:</strong> Catheter no longer used (transplant, switch to HD); EPS resolved.</li>
+          <li><strong>CRRT:</strong> Renal recovery; transition to IHD; comfort care.</li>
+          <li><strong>Apheresis (TPE/RBCx/HPC-A/WBCx):</strong> Course complete; bridge to alternate access; goal achieved.</li>
+          <li><strong>ECP:</strong> Course taper complete; transition to alternate care.</li>
+          <li><strong>LDL Apheresis:</strong> AVF or alternate access in use.</li>
+        </ul>
+      </li>
+      <li><strong>End-of-life / comfort care</strong> — Catheter removal may be part of comfort transition; coordinate with palliative care.</li>
+      <li><strong>Track median dwell time</strong> as a unit-level QI metric.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="bundle">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Maintenance Bundle — Cross-Modality Summary</div><div class="sec-subtitle">The continuous nursing responsibilities</div></div></div>
+  <div class="prose">
+    <div class="bundle-card">
+      <div class="bundle-card-title">CDC Maintenance Bundle</div>
+      <ul class="check-list">
+        <li><strong>Hand hygiene</strong> per the 5 Moments.</li>
+        <li><strong>Hub disinfection</strong> with ≥ 5-second alcoholic chlorhexidine scrub before every access.</li>
+        <li><strong>Sterile gloves and mask</strong> for any catheter access.</li>
+        <li><strong>Dressing change</strong> per schedule; immediately if loose or soiled.</li>
+        <li><strong>Chlorhexidine-impregnated dressing</strong> for catheters &gt; 5 days dwell.</li>
+        <li><strong>Daily chlorhexidine bathing</strong> for ICU patients with central catheters.</li>
+        <li><strong>Daily necessity review</strong> with advocacy for removal.</li>
+        <li><strong>Catheter site clearly visible</strong> for inspection; do not over-bandage.</li>
+        <li><strong>No medication infusions through dialysis/apheresis catheters</strong> unless absolutely necessary and per institutional policy.</li>
+        <li><strong>Audit and feedback</strong> — Track bundle compliance; share results with staff monthly.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="recognition">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Recognition &amp; Reporting</div><div class="sec-subtitle">When CLABSI is suspected and what happens next</div></div></div>
+  <div class="prose">
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Clinical Recognition</h4>
+    <ul class="check-list warn-list">
+      <li><strong>Fever or rigors during/after a procedure</strong> in a catheter patient.</li>
+      <li><strong>Hypotension or unexplained hemodynamic change.</strong></li>
+      <li><strong>New leukocytosis.</strong></li>
+      <li><strong>Exit-site erythema, drainage, tenderness.</strong></li>
+      <li><strong>Tunnel infection signs:</strong> erythema and tenderness along the tunnel tract.</li>
+      <li><strong>Catheter dysfunction</strong> (declining flows, increasing pressures) may signal fibrin sheath with secondary infection.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Initial Workup</h4>
+    <ol class="step-list">
+      <li><strong>Blood cultures × 2:</strong> One peripheral, one (or one per lumen) through the catheter, sent simultaneously. Note differential time-to-positivity.</li>
+      <li><strong>Empiric IV antibiotics</strong> per institutional protocol (vancomycin + Gram-negative coverage typical).</li>
+      <li><strong>Notify physician and infectious disease consultation</strong> per institutional CLABSI protocol.</li>
+      <li><strong>Continue or remove catheter</strong> per IDSA / institutional criteria (see treatment-specific SOPs — HD, CRRT).</li>
+      <li><strong>Document NHSN CLABSI event</strong> per CDC surveillance protocol.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">NHSN Reporting Criteria (Simplified)</h4>
+    <ul class="check-list">
+      <li><strong>Laboratory-confirmed bloodstream infection (LCBI)</strong> meeting CDC NHSN definitions.</li>
+      <li><strong>Patient had a central line in place &gt; 2 calendar days</strong> at the time of infection (or removed &lt; 24 hours before).</li>
+      <li><strong>No other primary source of infection identified.</strong></li>
+      <li><strong>Reported by infection preventionist</strong> per institutional process; tied to publicly reported metrics.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Post-Event Review</h4>
+    <ul class="check-list">
+      <li><strong>Root-cause analysis</strong> — Insertion bundle compliance, hub access technique, dressing care, dwell time. Identify modifiable factors.</li>
+      <li><strong>Education / re-training</strong> for individual or unit if patterns emerge.</li>
+      <li><strong>Cluster surveillance</strong> — Multiple CLABSIs in close proximity escalate to infection prevention for unit-level review.</li>
+      <li><strong>Closing the loop</strong> with quality / safety committees.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Apply this reference at the bedside</div>
+    <div class="cta-sub">This CLABSI prevention guide applies across every DART modality. Click into any treatment for procedure-specific catheter and CLABSI guidance integrated with its SOP.</div>
+  </div>
+  <a class="cta-btn" href="index.html">← Back to Tool Directory</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>O'Grady NP, et al. <strong>Guidelines for the Prevention of Intravascular Catheter-Related Infections.</strong> Clin Infect Dis 2011 (current CDC revision).</li>
+    <li>Mermel LA, et al. <strong>Clinical Practice Guidelines for the Diagnosis and Management of Intravascular Catheter-Related Infection: 2009 Update by the Infectious Diseases Society of America (IDSA).</strong></li>
+    <li>CDC NHSN. <strong>Bloodstream Infection Event (Central Line-Associated Bloodstream Infection [CLABSI]) Protocol</strong> (current version).</li>
+    <li>WHO. <strong>Five Moments for Hand Hygiene.</strong></li>
+    <li>CDC. <strong>Guideline for Hand Hygiene in Health-Care Settings.</strong> MMWR Recomm Rep.</li>
+    <li>Pronovost P, et al. <strong>An Intervention to Decrease Catheter-Related Bloodstream Infections in the ICU.</strong> N Engl J Med (Keystone study).</li>
+    <li>CDC. <strong>Recommendations for Preventing Transmission of Infections Among Chronic Hemodialysis Patients.</strong></li>
+    <li>CMS. <strong>Hospital-Acquired Condition (HAC) Reduction Program</strong> and Value-Based Purchasing measures.</li>
+    <li>Hospital Compare. <strong>Public reporting of CLABSI rates by facility.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · CLABSI Prevention Universal Reference</span>
+  <span>Educational reference · Verify against institutional infection prevention policy and current CDC guidance · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

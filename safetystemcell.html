@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HPC-A Safety Considerations — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,143,182,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,143,182,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(255,143,182,.22),rgba(126,240,210,.10));border-color:rgba(255,143,182,.4);color:#ffd1e2}
+.chip-calc:hover{border-color:rgba(255,143,182,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffe1ec 0%,#ff8fb6 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,143,182,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,143,182,.4);color:var(--text);background:rgba(255,143,182,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,143,182,.24);background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,143,182,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--pink);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:28px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#ff8fb6,#7ef0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,143,182,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#ffd1e2;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-watch{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-watch .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,143,182,.10);color:#ffd1e2;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,143,182,.15),rgba(126,240,210,.10));border:1px solid rgba(255,143,182,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#ffd1e2}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--primary));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(255,143,182,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,143,182,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,143,182,.15);color:#ffb2cc;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🛡️</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Safety Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="stem-cell-collection.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Safety Reference · HPC-A / Stem Cell Collection</div>
+      <div class="head-title"><span class="accent">HPC-A Safety Considerations</span></div>
+      <div class="head-sub">Mobilization adverse events, vascular access, citrate management, donor-specific considerations, and the SCD-specific G-CSF caveat. Compiled from ASH, ASTCT, ASFA, and current gene-therapy collection protocols.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#overview">01 · Risk Overview</a>
+  <a class="sec-pill" href="#mobilization">02 · Mobilization Risks</a>
+  <a class="sec-pill" href="#scd">03 · SCD G-CSF Warning</a>
+  <a class="sec-pill" href="#splenic">04 · Splenic Rupture</a>
+  <a class="sec-pill" href="#citrate">05 · Citrate</a>
+  <a class="sec-pill" href="#access">06 · Vascular Access</a>
+  <a class="sec-pill" href="#donor">07 · Donor vs Patient</a>
+  <a class="sec-pill" href="#peds">08 · Pediatric</a>
+  <a class="sec-pill" href="#emergency">09 · Emergency Response</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The safety story in one paragraph</div>
+  <div class="hero-tldr-text">
+    HPC-A collection safety has two domains: <strong>mobilization-related risks</strong> (G-CSF bone pain, splenic rupture, the absolute SCD contraindication to G-CSF) and <strong>apheresis-related risks</strong> (citrate, vascular access, hemodynamic shift). For autologous patients, prior chemotherapy and underlying disease shape risk. For healthy related donors, the calculus is different — donor safety is paramount and the only acceptable adverse-event rate is essentially zero. The single most dangerous error is administering G-CSF to a sickle-cell patient — <strong>G-CSF can precipitate vaso-occlusive crisis and death in SCD</strong>. Plerixafor monotherapy is the safe alternative.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">~80%</div><div class="stat-label">G-CSF recipients experience bone pain</div></div>
+    <div class="stat"><div class="stat-num">1 in 5–10k</div><div class="stat-label">Splenic rupture (very rare)</div></div>
+    <div class="stat"><div class="stat-num">ABSOLUTE</div><div class="stat-label">G-CSF contraindication in SCD</div></div>
+    <div class="stat"><div class="stat-num">~20%</div><div class="stat-label">Citrate symptom rate</div></div>
+  </div>
+</div>
+
+<section class="sec" id="overview">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">The Major Risk Profile</div><div class="sec-subtitle">Mobilization + apheresis combined</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Adverse event</th><th>Approximate rate</th><th>Severity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>G-CSF bone pain</strong></td><td>70–90%</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>G-CSF headache, fatigue, nausea</strong></td><td>20–40%</td><td>Mild</td></tr>
+        <tr><td><strong>Vaso-occlusive crisis (in SCD given G-CSF)</strong></td><td>High — fatal cases reported</td><td>Catastrophic · ABSOLUTE CONTRAINDICATION</td></tr>
+        <tr><td><strong>Splenic enlargement / rupture</strong></td><td>~1 in 5–10,000</td><td>Life-threatening</td></tr>
+        <tr><td><strong>Plerixafor reactions</strong></td><td>Mild GI, injection site</td><td>Mild</td></tr>
+        <tr><td><strong>Citrate symptoms</strong></td><td>15–30%</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Vascular access complication</strong></td><td>1–3%</td><td>Mild–severe</td></tr>
+        <tr><td><strong>Hemodynamic instability</strong></td><td>2–5%</td><td>Variable</td></tr>
+        <tr><td><strong>Thrombocytopenia</strong> (post-procedure platelet drop)</td><td>20–40% drop common after large-volume collection</td><td>Mild–moderate</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="mobilization">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Mobilization Adverse Events</div><div class="sec-subtitle">G-CSF bone pain, headache, splenomegaly</div></div></div>
+  <div class="prose">
+    <p>G-CSF (filgrastim, lenograstim, biosimilars) and plerixafor are the workhorse mobilization agents. Each has its own adverse-event profile.</p>
+    <table class="compare-table">
+      <thead><tr><th>Agent</th><th>Common side effects</th><th>Rare / serious</th></tr></thead>
+      <tbody>
+        <tr><td><strong>G-CSF</strong></td><td>Bone pain (~80%), headache, fatigue, nausea, elevated WBC, alkaline phosphatase rise, LDH rise</td><td>Splenic rupture, capillary leak syndrome, allergic reaction, lung injury</td></tr>
+        <tr><td><strong>Plerixafor</strong></td><td>Injection-site reaction, GI symptoms (nausea, diarrhea), fatigue, dizziness</td><td>Allergic reactions; theoretical splenic enlargement</td></tr>
+        <tr><td><strong>Combination (G-CSF + plerixafor)</strong></td><td>Additive bone pain; somewhat more GI</td><td>Same as individual agents</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Bone pain management</span>Acetaminophen first-line; NSAIDs if not contraindicated; opioids reserved for severe pain. The pain is mediated by G-CSF receptor signaling in marrow — typically peaks 24–48 hr after the third or fourth dose. Patients should be counseled in advance.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="scd">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">SCD — The Absolute G-CSF Contraindication</div><div class="sec-subtitle">Why plerixafor monotherapy is the only safe path</div></div></div>
+  <div class="prose">
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">CATASTROPHIC if given to SCD patient</span><strong>G-CSF is absolutely contraindicated in sickle cell disease.</strong> Multiple fatal cases have been reported. G-CSF causes leukocyte activation, increased adhesion, and rapid mobilization that precipitates severe vaso-occlusive crisis, acute chest syndrome, and death. <strong>Never give G-CSF to a patient with HbSS, HbSβ-thal, or HbSC disease.</strong></div></div>
+    <p>For SCD patients undergoing autologous CD34 collection (e.g., for lentiviral gene therapy), <strong>plerixafor monotherapy at 0.24 mg/kg SQ</strong> approximately 6 hours pre-collection is the standard safe approach. Pre-procedure RBC exchange to bring HbS &lt; 30% is often performed.</p>
+    <ul class="check-list warn-list">
+      <li><strong>Verify SCD status</strong> in every patient list before any G-CSF order. Confirm Hgb electrophoresis on file.</li>
+      <li><strong>Tag the medication record</strong> with a G-CSF allergy/contraindication flag in patients with SCD.</li>
+      <li><strong>Pre-collection exchange</strong> may be needed for adequate HbS reduction.</li>
+      <li><strong>Pre-collection IV hydration</strong> to maintain hemodilution and reduce VOC risk.</li>
+      <li><strong>Avoid sustained higher-Hct states</strong> post-exchange (target Hct ≤ 30%).</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="splenic">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Splenic Rupture — Rare but Catastrophic</div><div class="sec-subtitle">Recognition, prevention, response</div></div></div>
+  <div class="prose">
+    <p>Spontaneous splenic rupture is a rare but well-documented complication of G-CSF mobilization. It occurs in approximately <strong>1 per 5,000–10,000 cases</strong> but is potentially fatal.</p>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Red flag symptoms</span>Left upper quadrant or left shoulder pain (Kehr sign), abdominal pain, hypotension, syncope. Any acute abdominal pain during or shortly after G-CSF mobilization should be evaluated urgently.</div></div>
+    <ul class="check-list">
+      <li><strong>Patient counseling pre-mobilization:</strong> "If you develop severe left upper quadrant pain, left shoulder pain, light-headedness, or rapid heart rate, go to the ED immediately."</li>
+      <li><strong>Avoid contact sports / heavy lifting</strong> during mobilization and for 1–2 weeks after.</li>
+      <li><strong>Splenomegaly screening</strong> not required routinely but consider in patients with high baseline spleen size (post-splenectomy patients excluded from this risk).</li>
+      <li><strong>Response to suspected rupture:</strong> emergent CT, hemoglobin / lactate / type & cross, surgical consult, hemodynamic resuscitation.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="citrate">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Citrate Management</div><div class="sec-subtitle">Higher AC ratio = lower symptom rate; AIR safety cap</div></div></div>
+  <div class="prose">
+    <p>HPC-A collection commonly runs at AC ratios of <strong>1:12 (standard)</strong> down to <strong>1:8 (tight, for high-cell-density products)</strong>. Tighter ratios increase citrate delivery rate and citrate symptom risk; instruments cap inlet flow to maintain AIR ≤ 1.2 mL/min/L TBV.</p>
+    <table class="compare-table">
+      <thead><tr><th>AC ratio</th><th>Citrate load</th><th>Typical use</th></tr></thead>
+      <tbody>
+        <tr><td>1:13 to 1:14</td><td>Lowest</td><td>Patients with citrate intolerance, hepatic dysfunction</td></tr>
+        <tr><td>1:12</td><td>Standard</td><td>Most CMNC collections</td></tr>
+        <tr><td>1:10</td><td>Moderate-high</td><td>If clumping at standard ratio</td></tr>
+        <tr><td>1:8</td><td>High</td><td>SCD/TDT gene-therapy collections; expect more symptoms</td></tr>
+        <tr><td>1:6</td><td>Very high</td><td>Rare; symptomatic management aggressive</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-watch"><span class="callout-icon">👁</span><div class="callout-body"><span class="callout-label">Calcium drip protocol</span>Many institutions run a prophylactic calcium gluconate IV drip for HPC-A collections, particularly for tight AC ratios. Verify the institutional calcium replacement protocol before each procedure.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Vascular Access</div><div class="sec-subtitle">Central catheter standard for most autologous collections</div></div></div>
+  <div class="prose">
+    <p>Most HPC-A collections require <strong>central venous access</strong> due to flow rate requirements (typically 60–80 mL/min adult). Healthy related donors are often peripherally accessed if antecubital veins are adequate.</p>
+    <ul class="check-list">
+      <li><strong>Central catheter (apheresis-quality):</strong> ≥ 10 Fr for adult; ultrasound-guided placement; chest film if not IJ</li>
+      <li><strong>Peripheral (donors):</strong> two large-bore (16–17 g) antecubital lines; warm packs and tourniquet; check patency every 30 min</li>
+      <li><strong>CLABSI prevention:</strong> strict sterile technique at every connection; dedicated apheresis nurse; hand hygiene</li>
+      <li><strong>Catheter removal timing:</strong> immediately after final collection day to minimize dwell-related infection risk</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="donor">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Donor vs Autologous Patient</div><div class="sec-subtitle">Different risk calculus, different consent</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Consideration</th><th>Autologous patient</th><th>Healthy related donor</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Risk tolerance</strong></td><td>Higher (already disease burden)</td><td>Essentially zero (must "do no harm")</td></tr>
+        <tr><td><strong>Pre-collection workup</strong></td><td>Disease-specific labs, imaging</td><td>Comprehensive health screen, infectious disease panel, cardiology if indicated</td></tr>
+        <tr><td><strong>Mobilization</strong></td><td>G-CSF ± plerixafor (avoid G-CSF in SCD)</td><td>G-CSF usually safe; plerixafor reserved for poor mobilizers</td></tr>
+        <tr><td><strong>Informed consent</strong></td><td>Full discussion of disease + procedure risk</td><td>Detailed consent emphasizing volunteer nature, full risk disclosure</td></tr>
+        <tr><td><strong>Post-collection follow-up</strong></td><td>Continues with treating team</td><td>Long-term donor health registry participation encouraged</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Donor advocacy</span>Many centers have a separate donor-advocate role to ensure the donor's interests are protected independent of the recipient's needs. The collection center must support donor withdrawal at any time, even mid-procedure.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Pediatric Considerations</div><div class="sec-subtitle">ECV ceiling, sedation, calcium</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>ECV ceiling 10% TBV</strong> — blood prime if exceeded</li>
+      <li><strong>Pediatric TBV formulas</strong> (≤ 5 kg → 90 mL/kg · 5.1–15 kg → 80 mL/kg · 15.1–25 kg → 70 mL/kg)</li>
+      <li><strong>Procedural sedation</strong> often required for younger children — coordinate with anesthesia / PICU</li>
+      <li><strong>Aggressive citrate monitoring</strong> + prophylactic calcium</li>
+      <li><strong>Central access</strong> required for most pediatric collections</li>
+      <li><strong>G-CSF dosing</strong> typically 10 mcg/kg/day; plerixafor 0.24 mg/kg SQ</li>
+      <li><strong>Family / caregiver support</strong> — multi-day mobilization + collection is stressful; coordinate with child life</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="emergency">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Emergency Response</div><div class="sec-subtitle">When something goes wrong</div></div></div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Suspected Splenic Rupture</div>
+    <ol class="emergency-steps">
+      <li><strong>Recognize:</strong> severe LUQ pain, left shoulder pain (Kehr sign), hypotension, syncope, abdominal distension.</li>
+      <li><strong>Activate code response;</strong> emergent CT abdomen with IV contrast.</li>
+      <li><strong>IV access, large bore;</strong> type and crossmatch, hemoglobin, lactate.</li>
+      <li><strong>Resuscitation</strong> with crystalloid and blood products as needed.</li>
+      <li><strong>Surgical consult</strong> urgent for possible splenectomy or embolization.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Vaso-Occlusive Crisis in SCD Patient (post G-CSF error)</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP any further G-CSF.</strong> Document the error.</li>
+      <li><strong>IV hydration + oxygen + pain management</strong> per institutional VOC protocol.</li>
+      <li><strong>Consider emergent exchange transfusion</strong> if severe (acute chest syndrome, severe pain crisis).</li>
+      <li><strong>Hematology consult urgent.</strong></li>
+      <li><strong>Report to safety event system</strong> as a serious adverse drug event.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Severe Hypocalcemic Symptoms</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP procedure</strong> or slow inlet.</li>
+      <li><strong>IV calcium gluconate 1–2 g</strong> over 10–15 min.</li>
+      <li><strong>Continuous cardiac monitoring;</strong> watch for QT prolongation.</li>
+      <li><strong>Loosen AC ratio</strong> and resume only when symptom-free.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a CMNC collection?</div>
+    <div class="cta-sub">Open the HPC-A Calculator for CD34 yield, days to target, AC ratio, AIR safety, and full collection planning — with the safety thresholds covered here baked into the result interpretation.</div>
+  </div>
+  <a class="cta-btn" href="stem-cell-collection.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div></div></div>
+  <ol class="ref-list">
+    <li>Connors JM, et al. <strong>ASFA Guidelines on the Use of Therapeutic Apheresis — 9th Special Issue.</strong> J Clin Apher 2023.</li>
+    <li>Worel N, Buser AS, et al. <strong>Suitability criteria for adult related haematopoietic progenitor cell donors.</strong> Vox Sang.</li>
+    <li>Fitzhugh CD, et al. <strong>Granulocyte colony stimulating factor in sickle cell disease — a contraindication.</strong> Cytotherapy.</li>
+    <li>Esposito MR, et al. <strong>Plerixafor-based mobilization for HSCT in sickle cell disease.</strong> Bone Marrow Transplant.</li>
+    <li>Worel N, et al. <strong>Suitability criteria for unrelated PBSC donors.</strong> WMDA.</li>
+    <li>ASTCT. <strong>Guidelines for unrelated and related donor health screening.</strong></li>
+    <li>O'Malley DP. <strong>Spontaneous splenic rupture in G-CSF mobilization — a review.</strong></li>
+    <li>FACT-JACIE. <strong>International Standards for Cellular Therapy.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · HPC-A Safety Considerations</span>
+  <span>Educational reference · Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+</div>
+</div></body></html>

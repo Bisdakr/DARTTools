@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LDL Apheresis Safety Considerations — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,143,182,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,143,182,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(255,143,182,.22),rgba(126,240,210,.10));border-color:rgba(255,143,182,.4);color:#ffd1e2}
+.chip-calc:hover{border-color:rgba(255,143,182,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffe1ec 0%,#ff8fb6 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,143,182,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,143,182,.4);color:var(--text);background:rgba(255,143,182,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,143,182,.24);background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,143,182,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--pink);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:28px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#ff8fb6,#7ef0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,143,182,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#ffd1e2;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-watch{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-watch .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,143,182,.10);color:#ffd1e2;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,143,182,.15),rgba(126,240,210,.10));border:1px solid rgba(255,143,182,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#ffd1e2}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--primary));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(255,143,182,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,143,182,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,143,182,.15);color:#ffb2cc;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🛡️</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Safety Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="ldl-apheresis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Safety Reference · LDL / Lipoprotein Apheresis</div>
+      <div class="head-title"><span class="accent">LDL Apheresis Safety</span></div>
+      <div class="head-sub">The ACE-inhibitor bradykinin reaction, heparin bleeding risk, hypotension, and long-term safety of chronic lipoprotein apheresis. Compiled from AHA 2023, ESC FH guidelines, and current dextran-sulfate column safety literature.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#overview">01 · Risk Overview</a>
+  <a class="sec-pill" href="#acei">02 · ACE-I CRITICAL</a>
+  <a class="sec-pill" href="#heparin">03 · Heparin</a>
+  <a class="sec-pill" href="#hypotension">04 · Hypotension</a>
+  <a class="sec-pill" href="#access">05 · Vascular Access</a>
+  <a class="sec-pill" href="#chronic">06 · Long-Term Safety</a>
+  <a class="sec-pill" href="#peds">07 · Pediatric (FSGS)</a>
+  <a class="sec-pill" href="#emergency">08 · Emergency Response</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The safety story in one paragraph</div>
+  <div class="hero-tldr-text">
+    LDL apheresis is generally well-tolerated for chronic use. The dominant safety issue is the <strong>ACE-inhibitor bradykinin reaction</strong> — dextran-sulfate and polyacrylate columns generate bradykinin during plasma adsorption, and concurrent ACE-i can produce severe hypotension, flushing, and anaphylactoid reactions, occasionally fatal. The institutional rule is <strong>hold ACE-i ≥ 24 hr pre-procedure</strong>; many centers convert chronic patients from ACE-i to ARB entirely. Other risks are typical apheresis: hypotension, heparin-related bleeding (heparin is the anticoagulant, not citrate), and vascular access complications. Long-term safety over decades of use has been favorable.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">≥ 24 hr</div><div class="stat-label">ACE-i hold pre-procedure</div></div>
+    <div class="stat"><div class="stat-num">~3–5%</div><div class="stat-label">Hypotension rate per session</div></div>
+    <div class="stat"><div class="stat-num">25 U/kg</div><div class="stat-label">Heparin load (typical)</div></div>
+    <div class="stat"><div class="stat-num">&lt; 1%</div><div class="stat-label">Serious adverse events</div></div>
+  </div>
+</div>
+
+<section class="sec" id="overview">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">The Major Risk Profile</div><div class="sec-subtitle">Chronic procedure, well-tolerated, ACE-i is the dominant risk</div></div></div>
+  <div class="prose">
+    <p>LDL apheresis has the longest continuous-use safety record of any therapeutic apheresis modality — patients have been on the same dextran-sulfate columns for decades. Acute and chronic safety profiles are well-characterized.</p>
+    <table class="compare-table">
+      <thead><tr><th>Adverse event</th><th>Approximate rate</th><th>Severity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ACE-i bradykinin reaction</strong> (if not held)</td><td>Up to 50% if ACE-i continued · CRITICAL</td><td>Severe / fatal</td></tr>
+        <tr><td><strong>Hypotension (without ACE-i interaction)</strong></td><td>3–5%</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Heparin-related bleeding</strong></td><td>&lt; 1% with appropriate dosing</td><td>Variable</td></tr>
+        <tr><td><strong>HIT (heparin-induced thrombocytopenia)</strong></td><td>Rare</td><td>Severe</td></tr>
+        <tr><td><strong>Allergic / urticarial reaction</strong></td><td>&lt; 1%</td><td>Mild</td></tr>
+        <tr><td><strong>Vascular access complication</strong></td><td>1–3%</td><td>Variable</td></tr>
+        <tr><td><strong>Iron deficiency anemia</strong> (cumulative blood loss)</td><td>Long-term concern</td><td>Mild</td></tr>
+        <tr><td><strong>Vitamin / mineral deficiency</strong> (long-term)</td><td>Rare with monitoring</td><td>Mild</td></tr>
+        <tr><td><strong>Lipoprotein rebound</strong></td><td>Universal — built into the schedule</td><td>Variable</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="acei">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">ACE Inhibitors — The Critical Drug Interaction</div><div class="sec-subtitle">Bradykinin generation + ACE blockade = severe reactions</div></div></div>
+  <div class="prose">
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">FATAL REACTIONS HAVE BEEN REPORTED</span>Dextran-sulfate and polyacrylate columns <strong>generate bradykinin</strong> from plasma kininogen during adsorption. In a patient on an ACE inhibitor (which blocks bradykinin degradation), bradykinin accumulates and causes severe hypotension, facial flushing, dyspnea, GI symptoms, and anaphylactoid reactions. Fatal cases reported.</div></div>
+    <p>The mechanism is mechanical and chemical, not allergic. Reactions occur even in patients who tolerate the column without ACE-i. Recovery requires discontinuation of the procedure, supportive care, and ongoing ACE-i avoidance.</p>
+    <table class="compare-table">
+      <thead><tr><th>Class</th><th>Risk with LDL apheresis</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ACE inhibitors</strong> (lisinopril, enalapril, ramipril, etc.)</td><td>HIGH — well-documented severe reactions</td><td>Hold ≥ 24 hr pre-procedure; switch to ARB preferred for chronic</td></tr>
+        <tr><td><strong>ARBs</strong> (losartan, valsartan, irbesartan, etc.)</td><td>Safe — do not block bradykinin metabolism</td><td>Acceptable for chronic LDL apheresis patients</td></tr>
+        <tr><td><strong>Aliskiren</strong> (direct renin inhibitor)</td><td>Some bradykinin concern reported</td><td>Caution; verify with cardiology</td></tr>
+        <tr><td><strong>Sacubitril-valsartan</strong> (ARNI)</td><td>Theoretical concern (neprilysin inhibition)</td><td>Caution; coordinate with cardiology</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The verification protocol</span>Pre-procedure: <strong>explicitly verify ACE-i status with the patient</strong> (not just chart review — patients may have started ACE-i since last visit). Confirm the last dose was &gt; 24 hr ago. Document the verification. The calculator displays a red banner when ACE-i is flagged.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="heparin">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Heparin Anticoagulation</div><div class="sec-subtitle">The anticoagulant of choice — bleeding and HIT considerations</div></div></div>
+  <div class="prose">
+    <p>Unlike most apheresis modalities, LDL apheresis uses <strong>heparin</strong> (not citrate) as the anticoagulant. Typical dosing: <strong>25 U/kg IV load + 25 U/kg/hr maintenance</strong> during the procedure, titrated to ACT (target ~200-250 sec).</p>
+    <ul class="check-list">
+      <li><strong>Pre-procedure labs:</strong> CBC with platelets, baseline coagulation profile</li>
+      <li><strong>Bleeding-risk patients:</strong> recent surgery, active GI bleed, intracranial pathology → discuss with physician before proceeding; consider reduced heparin dose or postpone</li>
+      <li><strong>HIT screening:</strong> baseline platelet count; any drop &gt; 50% from baseline during chronic therapy should trigger HIT testing</li>
+      <li><strong>Reversal:</strong> protamine sulfate available bedside if heparin must be reversed</li>
+      <li><strong>Post-procedure:</strong> watch for bruising at access sites; instruct patient on bleeding precautions for 4–6 hr</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">HIT in chronic LDL patients</span>Heparin-induced thrombocytopenia (HIT) is a delayed immune reaction. Chronic LDL apheresis patients have repeated heparin exposure, raising the cumulative risk. Any unexplained platelet drop, new thrombosis, or skin necrosis at injection site should trigger immediate HIT workup (4Ts score, anti-PF4 antibody).</div></div>
+  </div>
+</section>
+
+<section class="sec" id="hypotension">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Hypotension</div><div class="sec-subtitle">Less frequent than TPE; volume-related and bradykinin-related</div></div></div>
+  <div class="prose">
+    <p>Without the ACE-i interaction, LDL apheresis hypotension rates are modest (3-5%). The plasma separation step and column passage both contribute to mild volume shifts; isovolemic replacement is built in.</p>
+    <ul class="check-list">
+      <li><strong>Baseline BP, HR, weight</strong> pre-procedure</li>
+      <li><strong>BP every 15 min</strong> during run, more frequently if borderline</li>
+      <li><strong>Pre-warm the patient's room/extremity</strong> to reduce peripheral vasoconstriction</li>
+      <li><strong>Slow start</strong> for the first 50-100 mL processed</li>
+      <li><strong>If hypotension:</strong> stop or slow inlet, Trendelenburg, IV bolus, identify cause (especially rule out bradykinin reaction)</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Vascular Access</div><div class="sec-subtitle">Long-term access strategy for chronic patients</div></div></div>
+  <div class="prose">
+    <p>Most LDL apheresis is chronic (every 1-2 weeks for life). Long-term venous access requires planning.</p>
+    <table class="compare-table">
+      <thead><tr><th>Access type</th><th>Use case</th><th>Considerations</th></tr></thead>
+      <tbody>
+        <tr><td>Two large-bore peripheral (16-17 g)</td><td>Many chronic patients</td><td>Vein preservation; rotate sites; avoid repeated trauma to dominant arm</td></tr>
+        <tr><td>AV fistula</td><td>Long-term option for difficult access</td><td>Surgical creation; maturation time; cannulation training</td></tr>
+        <tr><td>Tunneled apheresis catheter</td><td>When peripheral access fails</td><td>CLABSI risk; lifestyle limitations</td></tr>
+        <tr><td>Implantable port (apheresis-rated)</td><td>Selected long-term patients</td><td>Specialized; not all institutions use</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Vein preservation strategy</span>For young patients starting chronic LDL apheresis (HoFH children), <strong>protect the non-dominant arm</strong> for future AV fistula creation. Avoid PICCs, peripheral IVs in that arm, and BP cuffs on the access side. Discuss long-term vascular planning early.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="chronic">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Long-Term Safety</div><div class="sec-subtitle">Decades of data — favorable but monitoring needed</div></div></div>
+  <div class="prose">
+    <p>LDL apheresis has been performed for over 40 years. Cumulative safety experience is favorable, but specific long-term considerations apply.</p>
+    <ul class="check-list">
+      <li><strong>Iron deficiency anemia:</strong> small cumulative blood loss with each session; iron supplementation may be needed; monitor ferritin and CBC every 6 months</li>
+      <li><strong>Lipoprotein rebound:</strong> universal — LDL recovers to ~80% baseline by 1 week; schedule (typically biweekly) accounts for this</li>
+      <li><strong>Concurrent statin / PCSK9 inhibitor therapy:</strong> standard of care; not interfered with by apheresis</li>
+      <li><strong>Vitamin / mineral surveillance:</strong> annual fat-soluble vitamins (A, D, E, K) and electrolyte panel; supplementation per deficiency</li>
+      <li><strong>Bone density:</strong> long-term apheresis may affect bone metabolism; DEXA per cardiology / endocrinology recommendation</li>
+      <li><strong>Cardiovascular outcomes:</strong> chronic apheresis reduces MACE in FH; benefit-risk strongly favors continued therapy</li>
+      <li><strong>Pregnancy:</strong> continued LDL apheresis during pregnancy is safe; coordinate with high-risk obstetrics</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Pediatric Safety (HoFH and FSGS)</div><div class="sec-subtitle">Children and FSGS-specific considerations</div></div></div>
+  <div class="prose">
+    <p>Children with homozygous FH may start LDL apheresis as young as <strong>5 years old</strong>. The recurrent FSGS post-transplant indication also involves pediatric patients.</p>
+    <ul class="check-list">
+      <li><strong>ECV ceiling 10% TBV</strong> — central access often needed in smaller children</li>
+      <li><strong>Pediatric heparin dosing:</strong> weight-based 25 U/kg load + 25 U/kg/hr maintenance, with ACT monitoring</li>
+      <li><strong>Procedural sedation</strong> may be required for younger children — coordinate with anesthesia</li>
+      <li><strong>School / activity integration:</strong> schedule sessions to minimize school disruption; long-term family support</li>
+      <li><strong>Vein preservation</strong> for future AV fistula creation</li>
+      <li><strong>Same ACE-i rule</strong> — verify and hold</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="emergency">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Emergency Response</div><div class="sec-subtitle">When something goes wrong</div></div></div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Bradykinin Reaction (ACE-i + Column)</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP the procedure immediately.</strong> Disconnect from circuit; do not return circuit contents.</li>
+      <li><strong>Activate code response;</strong> get crash cart.</li>
+      <li><strong>Trendelenburg position;</strong> 100% O₂.</li>
+      <li><strong>IV crystalloid bolus</strong> for hypotension.</li>
+      <li><strong>IM epinephrine 0.3-0.5 mg</strong> if anaphylactoid features.</li>
+      <li><strong>Document the ACE-i status:</strong> what was the last dose, when was it taken, was ACE-i held per protocol?</li>
+      <li><strong>Permanent ACE-i avoidance going forward:</strong> coordinate with cardiology for ARB substitution.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Heparin Bleeding Emergency</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP heparin infusion;</strong> stop procedure.</li>
+      <li><strong>Protamine sulfate</strong> 1 mg per 100 U heparin given in past 30 min (max 50 mg per dose).</li>
+      <li><strong>Apply direct pressure</strong> to bleeding site.</li>
+      <li><strong>Send PTT, CBC, type & cross;</strong> transfuse as needed.</li>
+      <li><strong>Investigate bleeding source.</strong></li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Suspected HIT (Heparin-Induced Thrombocytopenia)</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP all heparin</strong> — including catheter flushes.</li>
+      <li><strong>Calculate 4Ts score;</strong> send anti-PF4 antibody.</li>
+      <li><strong>Switch to non-heparin anticoagulant</strong> (argatroban, bivalirudin) for any therapeutic anticoagulation needs.</li>
+      <li><strong>Flag the chart prominently;</strong> heparin allergy/contraindication forever.</li>
+      <li><strong>Future LDL apheresis</strong> requires alternative anticoagulation strategy or different modality.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan an LDL apheresis?</div>
+    <div class="cta-sub">Open the LDL Apheresis Calculator for plasma volume, heparin dose, ACE-i flag, and priming reference — with the safety thresholds covered here baked into the result interpretation.</div>
+  </div>
+  <a class="cta-btn" href="ldl-apheresis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div></div></div>
+  <ol class="ref-list">
+    <li>Cuchel M, et al. <strong>2023 ESC Guidelines on homozygous familial hypercholesterolemia.</strong> Eur Heart J.</li>
+    <li>AHA 2023 Scientific Statement on Lipoprotein Apheresis.</li>
+    <li>Connors JM, et al. <strong>ASFA Guidelines on the Use of Therapeutic Apheresis — 9th Special Issue.</strong> J Clin Apher 2023.</li>
+    <li>Schwartz GG, et al. <strong>Lipoprotein apheresis cardiovascular outcomes.</strong> JACC.</li>
+    <li>Endotext. <strong>Lipoprotein Apheresis.</strong> NCBI Bookshelf NBK425700.</li>
+    <li>Greinacher A. <strong>Heparin-induced thrombocytopenia.</strong> N Engl J Med.</li>
+    <li>Bambauer R, et al. <strong>LDL-apheresis: technical and clinical aspects.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · LDL Apheresis Safety Considerations</span>
+  <span>Educational reference · Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+</div>
+</div></body></html>

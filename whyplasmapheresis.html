@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why Plasmapheresis? — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b11; --card:#111a27; --card2:#0f1722;
+  --border:rgba(149,173,205,.14); --border-strong:rgba(122,162,255,.28);
+  --text:#e9f0fa; --muted:#96a7bf;
+  --primary:#61a8ff; --primary2:#3b82f6; --accent:#7ef0d2;
+  --gold:#cfa95f; --warn:#ffcd70; --danger:#ff6f6f;
+  --purple:#b389ff; --pink:#ff8fb6;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --nav-bg:rgba(7,11,17,.82); --grid:rgba(255,255,255,.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top, rgba(97,168,255,.10), transparent 30%),radial-gradient(circle at 80% 20%, rgba(126,240,210,.08), transparent 24%),linear-gradient(180deg, var(--bg), #05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom, rgba(0,0,0,.35), transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px, calc(100% - 28px));margin:0 auto}
+
+/* ── nav ─── */
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(126,240,210,.22),rgba(97,168,255,.14));border-color:rgba(126,240,210,.4);color:#cdfaea}
+.chip-calc:hover{border-color:rgba(126,240,210,.65);color:#fff;transform:translateY(-1px)}
+
+/* ── head with comet ─── */
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 50 C 180 0, 380 -8, 600 30 C 820 70, 1020 60, 1340 18');offset-rotate:auto;opacity:0;animation:cometRun 3.6s cubic-bezier(0.42,0.04,0.58,0.98) 0.4s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+
+/* ── section nav (sticky pills) ─── */
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+
+/* ── hero TL;DR ─── */
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.22);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.06));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#7ef0d2,#61a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+
+/* ── section ─── */
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#cdfaea;font-style:italic}
+
+/* ── callouts ─── */
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}
+.callout-key .callout-label{color:#7ef0d2}
+.callout-history{background:rgba(207,169,95,.08);border-color:var(--gold)}
+.callout-history .callout-label{color:#cfa95f}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}
+.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}
+.callout-warn .callout-label{color:#ffcd70}
+.callout-research{background:rgba(179,137,255,.08);border-color:var(--purple)}
+.callout-research .callout-label{color:#b389ff}
+.callout-mind{background:rgba(255,143,182,.08);border-color:var(--pink)}
+.callout-mind .callout-label{color:#ff8fb6}
+
+/* ── pull quote ─── */
+.pull-quote{margin:36px 0;padding:24px 0;border-top:2px solid rgba(126,240,210,.3);border-bottom:2px solid rgba(126,240,210,.3);position:relative}
+.pull-quote-text{font-family:'Source Serif 4',serif;font-size:24px;line-height:1.4;color:#eaf3ff;font-weight:400;font-style:italic;letter-spacing:-.01em}
+.pull-quote-text::before{content:'"';font-size:50px;color:rgba(126,240,210,.4);line-height:0;margin-right:8px;vertical-align:-12px}
+.pull-quote-attr{margin-top:14px;font-size:12.5px;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+
+/* ── comparison table ─── */
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cfe2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+
+/* ── timeline ─── */
+.timeline{margin:24px 0;border-left:2px solid rgba(126,240,210,.3);padding-left:24px}
+.tl-item{margin-bottom:22px;position:relative}
+.tl-item::before{content:"";position:absolute;left:-32px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(126,240,210,.15)}
+.tl-year{font-size:13px;font-weight:900;color:var(--accent);letter-spacing:.05em;margin-bottom:2px}
+.tl-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px}
+.tl-desc{font-size:13.5px;color:var(--muted);line-height:1.6}
+
+/* ── category card ─── */
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.cat-card{padding:16px;border-radius:13px;border:1px solid;background:rgba(255,255,255,.02)}
+.cat-card.cat1{border-color:rgba(126,240,210,.35);background:linear-gradient(180deg,rgba(126,240,210,.08),rgba(126,240,210,.02))}
+.cat-card.cat2{border-color:rgba(97,168,255,.32);background:linear-gradient(180deg,rgba(97,168,255,.07),rgba(97,168,255,.02))}
+.cat-card.cat3{border-color:rgba(255,205,112,.32);background:linear-gradient(180deg,rgba(255,205,112,.06),rgba(255,205,112,.02))}
+.cat-card.cat4{border-color:rgba(255,111,111,.35);background:linear-gradient(180deg,rgba(255,111,111,.07),rgba(255,111,111,.02))}
+.cat-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-bottom:6px}
+.cat-card.cat1 .cat-label{color:#7ef0d2}
+.cat-card.cat2 .cat-label{color:#99c9ff}
+.cat-card.cat3 .cat-label{color:#ffcd70}
+.cat-card.cat4 .cat-label{color:#ff8f8f}
+.cat-title{font-size:15px;font-weight:900;color:#fff;margin-bottom:6px}
+.cat-desc{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* ── disease pill grid ─── */
+.disease-grid{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.disease-pill{padding:5px 11px;border-radius:99px;font-size:11.5px;font-weight:700;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted)}
+.disease-pill.cat1{border-color:rgba(126,240,210,.3);color:#9be8d0;background:rgba(126,240,210,.06)}
+.disease-pill.cat2{border-color:rgba(97,168,255,.3);color:#9bc4ff;background:rgba(97,168,255,.06)}
+.disease-pill.cat3{border-color:rgba(255,205,112,.3);color:#ffd9a3;background:rgba(255,205,112,.05)}
+
+/* ── back-to-calc CTA ─── */
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(97,168,255,.15),rgba(126,240,210,.10));border:1px solid rgba(97,168,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#cfe2ff}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(59,130,246,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,.45)}
+
+/* ── references ─── */
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:#9bc4ff;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.ref-list a{color:#9bc4ff;text-decoration:underline;text-decoration-color:rgba(155,196,255,.4)}
+
+/* ── footer ─── */
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+
+@media (max-width:780px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .cat-grid{grid-template-columns:1fr}
+  .sec-header{flex-direction:column;gap:4px}
+  .sec-num{font-size:38px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">D</div>
+      <div>
+        <div class="brand-title">DART Tools</div>
+        <div class="brand-sub">Educational Reference</div>
+      </div>
+    </a>
+    <div class="nav-right">
+      <a class="chip chip-calc" href="plasmapheresis.html">🧮 Open Calculator</a>
+      <a class="chip chip-home" href="index.html">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle"       style="--x:11%;--y:25%;--delay:0.80s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:1.05s"></div>
+      <div class="twinkle"       style="--x:28%;--y:8%; --delay:1.30s"></div>
+      <div class="twinkle tiny"  style="--x:34%;--y:12%;--delay:1.50s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.70s"></div>
+      <div class="twinkle"       style="--x:51%;--y:30%;--delay:1.95s"></div>
+      <div class="twinkle tiny"  style="--x:58%;--y:42%;--delay:2.15s"></div>
+      <div class="twinkle small" style="--x:65%;--y:50%;--delay:2.35s"></div>
+      <div class="twinkle"       style="--x:74%;--y:52%;--delay:2.60s"></div>
+      <div class="twinkle small" style="--x:82%;--y:40%;--delay:2.85s"></div>
+      <div class="twinkle tiny"  style="--x:89%;--y:25%;--delay:3.05s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Education · Therapeutic Plasma Exchange</div>
+      <div class="head-title"><span class="accent">Why Plasmapheresis?</span></div>
+      <div class="head-sub">From civil-war-era plasma fractionation to anti-NMDA encephalitis: a deep but readable guide to the science, the diseases, and the parameter choices behind every Optia TPE run.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-nav">
+  <div class="container">
+    <div class="section-nav-inner">
+      <a class="sec-pill" href="#mechanism">01 · How It Works</a>
+      <a class="sec-pill" href="#optia">02 · The Optia</a>
+      <a class="sec-pill" href="#history">03 · History</a>
+      <a class="sec-pill" href="#diseases">04 · Diseases</a>
+      <a class="sec-pill" href="#asfa">05 · ASFA System</a>
+      <a class="sec-pill" href="#pve">06 · Why PVE</a>
+      <a class="sec-pill" href="#ac">07 · Citrate &amp; AC</a>
+      <a class="sec-pill" href="#replacement">08 · Albumin vs FFP</a>
+      <a class="sec-pill" href="#complications">09 · Complications</a>
+      <a class="sec-pill" href="#peds">10 · Pediatrics</a>
+      <a class="sec-pill" href="#breakthroughs">11 · 2024–2025</a>
+      <a class="sec-pill" href="#future">12 · The Future</a>
+      <a class="sec-pill" href="#refs">References</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO TL;DR -->
+  <div class="hero-card">
+    <div class="hero-tldr-label">TL;DR — The 60-second version</div>
+    <div class="hero-tldr-text">
+      Therapeutic plasma exchange (TPE) is a <strong>plumbing solution to an immunology problem</strong>. Pathogenic antibodies, immune complexes, paraproteins, and toxins live in the plasma compartment. The Optia draws blood from the patient, spins it in a centrifuge to peel plasma off the cells, sends that plasma to a waste bag, and gives the patient back the cells <em>plus</em> a replacement fluid (albumin, FFP, or both). One pass through removes most of the patient's plasma volume — the immune mediators with it. Repeat over days, and you can pull a patient out of a TTP crisis, a Guillain-Barré paralysis, or a kidney-transplant rejection. It's been doing this since the 1950s, and the <strong>2023 ASFA guidelines now recognize 77 diseases with 119 indications</strong>.
+    </div>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-num accent">77</div>
+        <div class="stat-label">Diseases recognized · ASFA 2023 (9th ed.)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">20</div>
+        <div class="stat-label">Category I (first-line) indications</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">~95%</div>
+        <div class="stat-label">Mortality reduction in TTP since plasma exchange</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1.0–1.5×</div>
+        <div class="stat-label">Plasma volumes exchanged per session</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 01 — Mechanism -->
+  <section class="sec" id="mechanism">
+    <div class="sec-header">
+      <div class="sec-num">01</div>
+      <div>
+        <div class="sec-title">How It Actually Works</div>
+        <div class="sec-subtitle">A centrifuge, two pumps, and a basic law of physics</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Whole blood is a colloidal suspension: dense red cells (Hct ≈ 35–45%) suspended in a watery plasma (the other 55–65%). Spin it fast enough, and these two phases separate by density — RBCs at the bottom, plasma on top. That's the whole secret. Everything else is engineering.</p>
+
+      <p>In a TPE procedure, the Optia draws blood from a venous catheter into a tubing circuit at <strong>60–100 mL/min</strong>. The blood enters a continuous-flow centrifuge channel where it accelerates around a curved track. RBCs and WBCs (the dense fraction) pack to the outside; plasma (the light fraction) accumulates toward the inside. A plasma collection port skims off the plasma layer and routes it to a waste bag. The cells come back to the patient through the return line, alongside a <strong>replacement fluid</strong> (5% albumin, fresh frozen plasma, or a mixture) hung on the machine.</p>
+
+      <div class="callout callout-key">
+        <span class="callout-icon">🔑</span>
+        <div class="callout-body">
+          <span class="callout-label">Key concept</span>
+          The therapeutic effect comes from <strong>removing solutes</strong> that live in plasma — pathogenic IgG, IgM, immune complexes, paraproteins, monoclonal light chains, anti-GBM antibodies, vWF multimers in TTP, free thyroid hormone in thyroid storm, copper-albumin complexes in Wilson disease. The replacement fluid keeps the patient's intravascular volume and oncotic pressure stable; it doesn't have to do the cleaning.
+        </div>
+      </div>
+
+      <p>The volume removed is what defines "intensity" of exchange. A <strong>1.0 plasma volume exchange (PVE)</strong> removes roughly 60% of intravascular IgG and similar fractions of other plasma proteins (math: 1 − 1/e). A <strong>1.5 PVE</strong> pushes that to about 78%. There are diminishing returns past 1.5× — you're processing a lot of blood for incrementally smaller removal, and re-equilibration from the extravascular pool refills what you took out within hours.</p>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body">
+          <span class="callout-label">The math behind PVE</span>
+          The Optia targets <strong>Plasma Removed = TBV × (1 − Hct) × PVE</strong>. For a 70 kg patient with Hct 35%: TBV ≈ 5 L → plasma volume ≈ 3.25 L → at 1.2 PVE, plasma removed ≈ 3.9 L. The replacement bag is slightly smaller than that (more in §06).
+        </div>
+      </div>
+
+      <p>What makes apheresis <em>therapeutic</em> isn't just removal. By giving back albumin (no antibodies), FFP (clotting factors + ADAMTS13), or a split, you can correct the deficit the underlying disease created. TTP gets ADAMTS13 back in the form of FFP. ALF patients get clotting factors. Patients with hyperviscosity get a less viscous plasma to live in.</p>
+    </div>
+  </section>
+
+  <!-- 02 — The Optia -->
+  <section class="sec" id="optia">
+    <div class="sec-header">
+      <div class="sec-num">02</div>
+      <div>
+        <div class="sec-title">The Optia in 60 Seconds</div>
+        <div class="sec-subtitle">What's actually happening inside the machine</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The <strong>Spectra Optia Apheresis System</strong> (Terumo BCT) is what most US apheresis centers use today. It's the successor to the COBE Spectra, which itself replaced the Haemonetics V50 — each generation faster, smarter, more automated. The Optia's centrifuge isn't a bowl; it's a single-use sealed channel with a translucent window that lets an optical sensor read the position of the cell-plasma interface in real time. The machine actively steers the interface to keep plasma extraction clean — that's why the operator can mostly let it run while watching the patient.</p>
+
+      <p>Three pumps run the show:</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr><th>Pump</th><th>Role</th><th>Typical rate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Inlet</strong></td><td>Draws whole blood + AC from patient into the centrifuge</td><td>50–100 mL/min adult</td></tr>
+          <tr><td><strong>AC</strong></td><td>Infuses ACD-A citrate into the blood line</td><td>Inlet flow ÷ ratio (e.g., 70 ÷ 10 = 7 mL/min)</td></tr>
+          <tr><td><strong>Plasma</strong></td><td>Extracts plasma waste from the centrifuge</td><td>~50–80 mL/min (varies with Hct)</td></tr>
+          <tr><td><strong>Replacement</strong></td><td>Returns albumin/FFP to the patient</td><td>~30–60 mL/min</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-research">
+        <span class="callout-icon">🔬</span>
+        <div class="callout-body">
+          <span class="callout-label">What's in the circuit</span>
+          The Optia's TPE tubing set holds about <strong>185 mL of fluid</strong>, plus another <strong>50 mL in the warmer line</strong>. That 235 mL extracorporeal volume (ECV) matters: in a pediatric patient under 25 kg, that 235 mL might be 20% of total blood volume — which is why the DART calculator surfaces a prime-decision banner (NS prime, albumin prime, or diluted PRBC prime) based on ECV/TBV %.
+        </div>
+      </div>
+
+      <p>The machine also continuously monitors <strong>AC Infusion Rate (AIR)</strong>, expressed in mL/min/L of patient TBV. The default cap is 1.2 mL/min/L TBV — above that, the patient's ionized calcium drops too fast and citrate toxicity (perioral tingling, then carpopedal spasm, eventually arrhythmia) becomes likely. Tighten the AC ratio (from 12:1 to 8:1), and the Optia automatically reduces inlet flow to stay under the AIR cap. That's why your throughput goes down when you go from a standard 10:1 ratio to a Bluebird-gene-therapy 8:1.</p>
+    </div>
+  </section>
+
+  <!-- 03 — History -->
+  <section class="sec" id="history">
+    <div class="sec-header">
+      <div class="sec-num">03</div>
+      <div>
+        <div class="sec-title">A Short History</div>
+        <div class="sec-subtitle">From WWII plasma fractionation to modern automated apheresis</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Plasma exchange has a longer history than most clinicians realize. The intellectual roots go back to the 1940s and a Harvard biochemist named Edwin J. Cohn.</p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">1944 · Cohn fractionation</div>
+          <div class="tl-title">The Cohn ethanol fractionation method is published</div>
+          <div class="tl-desc">Wartime need for stable blood-derived therapeutics (albumin, immunoglobulin, fibrinogen) drives the development of cold ethanol precipitation. The methodology that creates "5% albumin" in your replacement bag today was developed during World War II.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1959 · First therapeutic plasmapheresis</div>
+          <div class="tl-title">Schwab and Fahey treat Waldenström macroglobulinemia hyperviscosity</div>
+          <div class="tl-desc">The first deliberate use of plasma exchange to treat human disease. Crude manual technique — phlebotomy, plasma separation, return of red cells — but it worked.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1970s · Continuous-flow centrifuges</div>
+          <div class="tl-title">Haemonetics, IBM 2997, Cobe Spectra arrive</div>
+          <div class="tl-desc">Continuous-flow apheresis replaces manual exchanges. Procedures shrink from hours to a couple of hours; plasma volumes become predictable.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1976–1991 · ASFA forms; first guidelines</div>
+          <div class="tl-title">American Society for Apheresis founded (1976); first category guidelines published 1986</div>
+          <div class="tl-desc">The 4-category system (I = first-line through IV = ineffective/harmful) becomes the gold standard for indication decision-making.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2010s · Spectra Optia replaces COBE</div>
+          <div class="tl-title">Software-driven interface management, automated TPE, RBCx, MNC, ECP protocols on one platform</div>
+          <div class="tl-desc">Terumo BCT acquires CaridianBCT, consolidates the Optia. Apheresis becomes a software discipline as much as a hardware one.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2023 · ASFA 9th Special Issue</div>
+          <div class="tl-title">77 diseases · 119 indications · updated category &amp; grade for each</div>
+          <div class="tl-desc">The current authoritative classification. Notable shifts: anti-NMDA encephalitis upgraded to Category I; aHUS with anti-FH antibody Cat I; FSGS recurrence post-transplant Cat I; CAR-T-cell collection cycle integration; gene therapy collection workflows codified.</div>
+        </div>
+      </div>
+
+      <div class="pull-quote">
+        <div class="pull-quote-text">If you can identify the molecule, and that molecule lives in plasma, you have a candidate for plasma exchange.</div>
+        <div class="pull-quote-attr">— Loose paraphrase of the modern apheresis ethos</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 — Diseases -->
+  <section class="sec" id="diseases">
+    <div class="sec-header">
+      <div class="sec-num">04</div>
+      <div>
+        <div class="sec-title">Diseases We Treat</div>
+        <div class="sec-subtitle">Organized by ASFA 2023 category and clinical system</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The 2023 ASFA guidelines cover a broad sweep of immune, hematologic, neurologic, renal, hepatic, and metabolic diseases. Here's a digestible mental map.</p>
+
+      <h3 style="margin:24px 0 12px;font-size:18px;color:#fff">Hematologic emergencies</h3>
+      <div class="disease-grid">
+        <span class="disease-pill cat1">TTP (Cat I, 1A)</span>
+        <span class="disease-pill cat1">Hyperviscosity — Waldenström (Cat I)</span>
+        <span class="disease-pill cat1">Hyperviscosity — MM (Cat I)</span>
+        <span class="disease-pill cat1">Cryoglobulinemia, severe (Cat I)</span>
+        <span class="disease-pill cat3">Sickle Cell — selected (Cat III)</span>
+      </div>
+
+      <h3 style="margin:24px 0 12px;font-size:18px;color:#fff">Neurologic disease</h3>
+      <div class="disease-grid">
+        <span class="disease-pill cat1">Guillain-Barré / AIDP (Cat I)</span>
+        <span class="disease-pill cat1">CIDP (Cat I)</span>
+        <span class="disease-pill cat1">Myasthenia Gravis crisis (Cat I)</span>
+        <span class="disease-pill cat1">Anti-NMDA receptor encephalitis (Cat I)</span>
+        <span class="disease-pill cat2">NMOSD relapse (Cat II)</span>
+        <span class="disease-pill cat2">MS acute relapse (Cat II)</span>
+        <span class="disease-pill cat2">VGKC / LGI1 encephalitis (Cat II)</span>
+        <span class="disease-pill cat2">ADEM (Cat II)</span>
+        <span class="disease-pill cat2">Hashimoto encephalopathy (Cat II)</span>
+      </div>
+
+      <h3 style="margin:24px 0 12px;font-size:18px;color:#fff">Renal &amp; transplant</h3>
+      <div class="disease-grid">
+        <span class="disease-pill cat1">Anti-GBM (DAH or dialysis-independent) (Cat I)</span>
+        <span class="disease-pill cat1">FSGS recurrence post-kidney tx (Cat I)</span>
+        <span class="disease-pill cat1">aHUS, anti-Factor H antibody (Cat I)</span>
+        <span class="disease-pill cat1">Kidney AMR (Cat I)</span>
+        <span class="disease-pill cat1">Kidney ABO-incompatible desensitization (Cat I)</span>
+        <span class="disease-pill cat1">Liver ABO-incompatible desensitization (Cat I)</span>
+      </div>
+
+      <h3 style="margin:24px 0 12px;font-size:18px;color:#fff">Rheumatologic &amp; metabolic</h3>
+      <div class="disease-grid">
+        <span class="disease-pill cat1">Catastrophic APS (CAPS) (Cat I)</span>
+        <span class="disease-pill cat1">Wilson disease, fulminant (Cat I)</span>
+        <span class="disease-pill cat2">SLE, severe (Cat II)</span>
+        <span class="disease-pill cat2">Thyroid storm (Cat II)</span>
+        <span class="disease-pill cat3">ANCA vasculitis (Cat III)</span>
+        <span class="disease-pill cat3">Hypertriglyceridemic pancreatitis (Cat III)</span>
+        <span class="disease-pill cat3">Acute Liver Failure (Cat III)</span>
+      </div>
+
+      <div class="callout callout-mind">
+        <span class="callout-icon">💭</span>
+        <div class="callout-body">
+          <span class="callout-label">A pattern you'll notice</span>
+          The strongest evidence (Category I) clusters in diseases where <strong>a single, well-defined molecule</strong> drives the pathology: ADAMTS13 inhibitor in TTP, anti-AChR in MG, anti-GBM in Goodpasture, anti-NMDA-R in NMDA encephalitis, anti-FH in aHUS. When the target is murky (SLE-broad, ANCA-broad), evidence weakens and ASFA drops to II or III.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 — ASFA -->
+  <section class="sec" id="asfa">
+    <div class="sec-header">
+      <div class="sec-num">05</div>
+      <div>
+        <div class="sec-title">The ASFA Category System</div>
+        <div class="sec-subtitle">Four buckets, two axes</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Every ASFA indication has two labels: a <strong>Category</strong> (I–IV) and a <strong>Grade</strong> (1A through 2C). Together they tell you the strength of recommendation and the quality of evidence behind it.</p>
+
+      <div class="cat-grid">
+        <div class="cat-card cat1">
+          <div class="cat-label">Category I</div>
+          <div class="cat-title">First-line therapy</div>
+          <div class="cat-desc">Apheresis is accepted as primary treatment, either standalone or as part of a multi-modal regimen. Strong evidence base.</div>
+        </div>
+        <div class="cat-card cat2">
+          <div class="cat-label">Category II</div>
+          <div class="cat-title">Second-line therapy</div>
+          <div class="cat-desc">Apheresis is accepted as second-line, either standalone or with other modalities. Evidence supportive but not first-line.</div>
+        </div>
+        <div class="cat-card cat3">
+          <div class="cat-label">Category III</div>
+          <div class="cat-title">Individualized</div>
+          <div class="cat-desc">Optimum role of apheresis is not established. Decision-making should be individualized — patient-by-patient.</div>
+        </div>
+        <div class="cat-card cat4">
+          <div class="cat-label">Category IV</div>
+          <div class="cat-title">Ineffective or harmful</div>
+          <div class="cat-desc">Published evidence demonstrates or suggests apheresis is ineffective or harmful. IRB review recommended if used.</div>
+        </div>
+      </div>
+
+      <p>Grading uses the GRADE methodology: <strong>1 = strong recommendation</strong>, <strong>2 = weak recommendation</strong>; <strong>A = high-quality evidence</strong>, <strong>B = moderate</strong>, <strong>C = low</strong>. So <em>1A</em> is the strongest possible recommendation (TTP); <em>2C</em> is a weak recommendation based on low-quality evidence (most Cat III indications).</p>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <div class="callout-body">
+          <span class="callout-label">A category is not a free pass</span>
+          A Cat I indication means TPE is well-established for that disease, not that TPE is appropriate for <em>every patient</em> with that disease. The treating physician still needs to assess the individual: is the antibody-driven pathology the active problem? Is the patient stable enough? What's the goal — bridge to definitive therapy, or rescue from crisis?
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 — PVE -->
+  <section class="sec" id="pve">
+    <div class="sec-header">
+      <div class="sec-num">06</div>
+      <div>
+        <div class="sec-title">Why 1.0 vs 1.2 vs 1.5 PVE?</div>
+        <div class="sec-subtitle">The arithmetic of antibody removal</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>This is one of the most common parameter questions, and the answer is satisfyingly mathematical.</p>
+
+      <p>Plasma exchange is a <strong>first-order kinetic process</strong>. If you removed plasma <em>without</em> simultaneous replacement, you'd extract everything in linear fashion. But replacement happens in real time — fresh albumin or FFP is going in as patient plasma is going out — so the patient's remaining target molecule concentration follows an exponential decay:</p>
+
+      <div class="callout callout-key">
+        <span class="callout-icon">📐</span>
+        <div class="callout-body">
+          <span class="callout-label">The formula</span>
+          <strong>Fraction of target remaining</strong> = e<sup>−PVE</sup><br><br>
+          <strong>1.0 PVE</strong> → 1/e ≈ <strong>0.37 remaining</strong> = 63% removed<br>
+          <strong>1.2 PVE</strong> → e<sup>−1.2</sup> ≈ <strong>0.30 remaining</strong> = 70% removed<br>
+          <strong>1.5 PVE</strong> → e<sup>−1.5</sup> ≈ <strong>0.22 remaining</strong> = 78% removed<br>
+          <strong>2.0 PVE</strong> → e<sup>−2.0</sup> ≈ <strong>0.14 remaining</strong> = 86% removed
+        </div>
+      </div>
+
+      <p>Look at the diminishing returns. Going from 1.0 → 1.5 PVE removes another 15%, but you're processing 50% more blood. Going from 1.5 → 2.0 only buys you another 8%, and the procedure takes significantly longer. That's why <strong>1.0–1.5 PVE is the clinical sweet spot</strong>, and 2.0+ is reserved for special situations (e.g., very-large-molecule disease where extravascular pool is small).</p>
+
+      <p>There's a second reason. Once you remove circulating antibody, the extravascular pool (lymph, interstitium) starts re-equilibrating with the depleted intravascular pool. Within hours, antibody flows back from tissue to blood. A single session removing 78% (1.5 PVE) doesn't mean the patient's total body antibody pool dropped 78% — the intravascular concentration drops 78%, then partially refills overnight. This is why TPE is rarely done as a single session: <strong>course of 5–7 sessions every other day</strong> is the most common prescription.</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr><th>Indication</th><th>Typical PVE</th><th>Rationale</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>TTP (mild)</td><td>1.0–1.5</td><td>Daily exchanges until platelets recover; modest per-session intensity preferred</td></tr>
+          <tr><td>TTP (severe / neuro)</td><td>1.5</td><td>Maximize ADAMTS13 replenishment and inhibitor removal</td></tr>
+          <tr><td>Hyperviscosity</td><td>1.0–1.5</td><td>Rapid symptomatic relief — viscosity drops nonlinearly</td></tr>
+          <tr><td>Anti-GBM / RPGN</td><td>1.0–1.5</td><td>Daily course × 14 days typical</td></tr>
+          <tr><td>Wilson, fulminant</td><td>1.5–2.0</td><td>Maximal copper removal; bridge to transplant</td></tr>
+          <tr><td>Drug overdose (highly protein-bound)</td><td>1.5–2.0</td><td>Driven by toxicokinetics; one or two large exchanges</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 07 — AC -->
+  <section class="sec" id="ac">
+    <div class="sec-header">
+      <div class="sec-num">07</div>
+      <div>
+        <div class="sec-title">Citrate, AC Ratio, and That AIR Number</div>
+        <div class="sec-subtitle">Why we trade calcium for non-clotted blood</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The Optia uses <strong>ACD-A (Acid-Citrate-Dextrose, Formula A)</strong> as its anticoagulant. ACD-A is mostly water, dextrose, and citrate (sodium citrate + citric acid). Citrate works by <strong>chelating calcium</strong> — and since calcium is a required cofactor for the coagulation cascade, no calcium = no clotting.</p>
+
+      <p>Beautiful design, except the citrate also enters the patient's circulation. Inside the patient, citrate is rapidly metabolized by the liver (and to a lesser extent kidney, muscle) into bicarbonate within minutes — but <em>while it's circulating</em>, it's chelating the patient's own calcium too. That's where <strong>citrate toxicity</strong> comes from: perioral tingling, then carpopedal spasm, then arrhythmia at the extreme.</p>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body">
+          <span class="callout-label">AC Ratio explained</span>
+          The "Inlet:AC = 10:1" ratio displayed on the Optia means <strong>1 mL of ACD-A is added for every 10 mL of total inlet flow</strong>. So if the inlet pump is at 70 mL/min, the AC pump is at 7 mL/min. Tighter ratios (8:1, 6:1) mean more AC per unit of blood — more anticoagulation, but also more citrate exposure.
+        </div>
+      </div>
+
+      <p>The Optia continuously displays <strong>AIR (AC Infusion Rate)</strong> in mL/min per liter of patient TBV. This is the citrate dose-rate. The machine caps AIR at <strong>1.2 mL/min/L TBV</strong> by hard ceiling — operator can't override. Above that, citrate symptoms are statistically inevitable.</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr><th>AIR (mL/min/L TBV)</th><th>Citrate effect</th><th>Symptoms</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>&lt; 0.8</td><td>~10–15% iCa drop</td><td>Uncommon</td></tr>
+          <tr><td>0.8–1.0</td><td>~15–25% iCa drop</td><td>Mild perioral tingling possible</td></tr>
+          <tr><td>1.0–1.2</td><td>~20–35% iCa drop</td><td>Tingling, cramping, sometimes nausea</td></tr>
+          <tr><td>&gt; 1.2</td><td>Machine cap reached</td><td>Inlet flow auto-reduced</td></tr>
+        </tbody>
+      </table>
+
+      <p>So when you change AC ratio from 12:1 to 8:1 (e.g., for a Bluebird gene-therapy collection), the Optia must reduce inlet flow to stay under AIR 1.2 — and your <strong>total processing time goes up</strong>, and total blood processed goes <em>down</em> for the same run duration. There's no free lunch.</p>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <div class="callout-body">
+          <span class="callout-label">Citrate counterintuitively</span>
+          More AC ≠ more "safety." The dose-limiting issue isn't clotting risk (the machine has plenty of AC headroom); it's <strong>patient calcium</strong>. Standard 10:1 with prophylactic calcium gluconate infusion is the typical adult TPE setup.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 — Replacement -->
+  <section class="sec" id="replacement">
+    <div class="sec-header">
+      <div class="sec-num">08</div>
+      <div>
+        <div class="sec-title">Albumin vs FFP — How to Choose</div>
+        <div class="sec-subtitle">The replacement fluid carries clinical weight, not just volume</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Replacement fluid isn't a passive volume swap. It actively modulates what you give back to the patient. Three choices:</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr><th>Fluid</th><th>What it gives</th><th>What it doesn't</th><th>When you'd use it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>5% Albumin</strong></td>
+            <td>Volume + oncotic pressure</td>
+            <td>No clotting factors, no immunoglobulins, no enzymes (e.g., ADAMTS13)</td>
+            <td>Default for most TPE indications — clean, no infectious risk, no transfusion reactions</td>
+          </tr>
+          <tr>
+            <td><strong>FFP (Fresh Frozen Plasma)</strong></td>
+            <td>Volume + oncotic + clotting factors + ADAMTS13 + complement + everything else</td>
+            <td>Carries transfusion risk (TRALI, TACO, allergic, ABO compatibility needed)</td>
+            <td>TTP (essential — replenishes ADAMTS13), Acute Liver Failure (clotting factors), anti-FH aHUS (Factor H), CAPS with bleeding</td>
+          </tr>
+          <tr>
+            <td><strong>Albumin + FFP split</strong></td>
+            <td>Most albumin volume + some FFP-supplied clotting factors</td>
+            <td>Partial of either</td>
+            <td>Long courses where you want to limit FFP exposure but maintain coag factors (e.g., daily TPE for prolonged GBS course)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">🩸</span>
+        <div class="callout-body">
+          <span class="callout-label">TTP is a non-negotiable FFP case</span>
+          The pathology of TTP is <strong>ADAMTS13 deficiency</strong>. The enzyme cleaves ultra-large vWF multimers; without it, microthrombi form everywhere. Albumin replacement removes the inhibitor but doesn't replenish the enzyme — the patient stays in crisis. <strong>FFP</strong> supplies functional ADAMTS13. This is why the DART calculator auto-switches to FFP when you select TTP, and shows a red warning if you try to override with albumin.
+        </div>
+      </div>
+
+      <p>Other FFP-required indications: <strong>anti-Factor H aHUS</strong> (FFP provides functional Factor H), <strong>acute liver failure</strong> (provides factors II, V, VII, IX, X, fibrinogen, ADAMTS13), and some <strong>CAPS</strong> cases when coagulopathy or DIC is active.</p>
+    </div>
+  </section>
+
+  <!-- 09 — Complications -->
+  <section class="sec" id="complications">
+    <div class="sec-header">
+      <div class="sec-num">09</div>
+      <div>
+        <div class="sec-title">Complications — What to Watch For</div>
+        <div class="sec-subtitle">The nursing-eye view of TPE risk</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Adverse events occur in roughly <strong>5–15% of TPE sessions</strong>, most of them mild. Severe events are rare (≪1%). The mental model:</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr><th>Complication</th><th>Mechanism</th><th>Frequency</th><th>Nursing response</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Citrate toxicity</strong></td><td>Citrate chelates ionized Ca²⁺</td><td>Most common (~5–10%)</td><td>Slow inlet, IV calcium gluconate, oral calcium, antacid</td></tr>
+          <tr><td><strong>Hypotension</strong></td><td>Volume shifts, vasovagal, AC effects</td><td>2–5%</td><td>Trendelenburg, fluid bolus, hold UF, slow flow</td></tr>
+          <tr><td><strong>Allergic / urticarial</strong></td><td>FFP / albumin proteins</td><td>1–3%</td><td>Pause replacement, antihistamine, steroid if severe</td></tr>
+          <tr><td><strong>Anaphylaxis</strong></td><td>FFP &gt; albumin; ACE-i + dextran-sulfate</td><td>&lt; 0.5%</td><td>Stop, epi, fluids, code if needed</td></tr>
+          <tr><td><strong>Vascular access</strong></td><td>Catheter dysfunction, infection, thrombosis</td><td>Variable</td><td>Check patency, flush, escalate to access team</td></tr>
+          <tr><td><strong>TRALI / TACO (FFP)</strong></td><td>FFP-related lung injury / overload</td><td>Rare</td><td>Pulmonary support, diuretics if TACO, ICU if TRALI</td></tr>
+          <tr><td><strong>Coagulopathy</strong></td><td>Long albumin runs deplete coagulation factors</td><td>Subclinical common, clinical rare</td><td>Trend PT/aPTT/fibrinogen; switch to FFP if bleeding</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">💉</span>
+        <div class="callout-body">
+          <span class="callout-label">The calcium gluconate calculation</span>
+          The institutional rule is 400 mg of calcium gluconate per 500 mL of replacement (= 0.8 mg/mL replacement). For a typical 2.5 L replacement TPE: 2500 × 0.8 = 2000 mg of calcium gluconate, or 20 mL of the standard 10% solution. Usually given as a slow infusion piggyback or in divided IV pushes throughout the procedure.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 — Peds -->
+  <section class="sec" id="peds">
+    <div class="sec-header">
+      <div class="sec-num">10</div>
+      <div>
+        <div class="sec-title">Pediatric Considerations</div>
+        <div class="sec-subtitle">When the patient is smaller than the circuit</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Pediatric apheresis follows the same physics but with smaller margins for error. Three things change:</p>
+
+      <p><strong>1. TBV calculation.</strong> The Nadler equation is calibrated for adults and underestimates pediatric blood volume. Institutional practice uses weight-banded mL/kg:</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr><th>Age / weight</th><th>TBV factor</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Neonate (≤ 5 kg)</td><td>90 mL/kg</td></tr>
+          <tr><td>Infant / small child (5.1–15 kg)</td><td>80 mL/kg</td></tr>
+          <tr><td>Child (15.1–25 kg)</td><td>70 mL/kg</td></tr>
+          <tr><td>Above 25 kg</td><td>Nadler equation (adult math)</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>2. Extracorporeal volume (ECV) as % of TBV.</strong> The Optia TPE/RBCX circuit holds 235 mL of fluid. For a 70 kg adult that's ~5% of TBV — trivial. For a 12 kg toddler it's ~25% — substantial. When ECV exceeds 10–15% of TBV, the patient can't tolerate the volume shift without a custom prime:</p>
+
+      <div class="callout callout-key">
+        <span class="callout-icon">🔑</span>
+        <div class="callout-body">
+          <span class="callout-label">Pediatric prime decision (institutional)</span>
+          <strong>≤ 10% TBV:</strong> Standard NS prime. Patient stable.<br>
+          <strong>10–15% TBV:</strong> Consider Albumin Prime (closer 10%) or Diluted PRBC Prime at 35% Hct (closer 15%).<br>
+          <strong>&gt; 15% TBV:</strong> Strongly recommend Diluted PRBC Prime, 250 mL at 35% Hct. Maintains isovolemic state during initiation.<br>
+          <em>Albumin prime → rinseback ON</em> (Optia auto-disables it; manually re-enable). <em>Diluted blood prime → NO rinseback</em> (maintains equilibrium).
+        </div>
+      </div>
+
+      <p><strong>3. AC tolerance.</strong> Citrate toxicity hits pediatric patients sooner because their liver mass is smaller relative to AC dose. Prophylactic calcium infusion is essentially mandatory, and AC ratio often goes to 12:1 or 13:1 (looser) for pediatric runs.</p>
+
+      <div class="callout callout-research">
+        <span class="callout-icon">🔬</span>
+        <div class="callout-body">
+          <span class="callout-label">Tiny patients, real outcomes</span>
+          Successful TPE has been performed in patients as small as <strong>3 kg</strong> for catastrophic indications (refractory neonatal lupus, fulminant Wilson). Requires meticulous prime calibration, real-time iCa monitoring, and a hemodynamics-trained physician at the bedside. The technique exists; the judgment is everything.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 — Breakthroughs -->
+  <section class="sec" id="breakthroughs">
+    <div class="sec-header">
+      <div class="sec-num">11</div>
+      <div>
+        <div class="sec-title">What's New (2023–2025)</div>
+        <div class="sec-subtitle">Where the field is moving</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The last two years have brought meaningful shifts.</p>
+
+      <div class="callout callout-research">
+        <span class="callout-icon">🆕</span>
+        <div class="callout-body">
+          <span class="callout-label">Anti-NMDA encephalitis upgraded</span>
+          The 2023 ASFA guidelines reclassified <strong>anti-NMDA receptor encephalitis</strong> to <strong>Category I</strong> based on accumulating evidence that early immunotherapy (including TPE) improves long-term cognitive outcomes. Combination protocols — steroids + IVIG + TPE up front, often with rituximab — are now standard.
+        </div>
+      </div>
+
+      <div class="callout callout-research">
+        <span class="callout-icon">🧬</span>
+        <div class="callout-body">
+          <span class="callout-label">Gene therapy integration</span>
+          The arrival of <strong>lovo-cel (Lyfgenia, Bluebird Bio)</strong> and <strong>exa-cel (Casgevy)</strong> for sickle cell and TDT created a new role for apheresis services: collecting autologous HPC for ex-vivo gene editing. The collection technique borrows from HPC-A but with critical differences — no G-CSF in SCD (vaso-occlusive crisis risk), HbS &lt; 30% pre-collection, plerixafor-driven mobilization, tight AC ratios (8:1 to 6:1), and DARK collection-preference settings on the Optia. The DART calculator integrates these as company-specific protocols.
+        </div>
+      </div>
+
+      <div class="callout callout-research">
+        <span class="callout-icon">📊</span>
+        <div class="callout-body">
+          <span class="callout-label">FSGS post-transplant breakthrough</span>
+          Multiple 2023–2024 studies demonstrated that <strong>early TPE initiation</strong> (within 7 days of recurrence detection) substantially improves kidney graft survival in recurrent FSGS — possibly via removal of the circulating permeability factor (<em>suPAR</em> remains the leading candidate, though debated). Institutional protocols now favor proactive monitoring of urinary protein post-transplant in high-risk recipients.
+        </div>
+      </div>
+
+      <div class="callout callout-research">
+        <span class="callout-icon">🧠</span>
+        <div class="callout-body">
+          <span class="callout-label">CAPS triple therapy outcomes</span>
+          The CAPS Registry (~600 patients) has matured enough to validate <strong>triple therapy</strong> (anticoagulation + steroids + TPE or IVIG) as the standard of care. Mortality dropped from historical ~50% to ~30%, with TPE-based regimens showing a modest edge over IVIG in the most recent analyses.
+        </div>
+      </div>
+
+      <div class="callout callout-research">
+        <span class="callout-icon">⚡</span>
+        <div class="callout-body">
+          <span class="callout-label">High-volume TPE for liver failure</span>
+          A 2024 multicenter trial confirmed earlier APACHE-trial signals: <strong>high-volume TPE</strong> (1.5–2× plasma volume per session, with FFP replacement) improves transplant-free survival in acute liver failure. The mechanism is multi-pronged: removal of hepatotoxins, supply of clotting factors, modulation of systemic inflammation. Not yet first-line where transplant is available, but increasingly used as a bridge.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 — Future -->
+  <section class="sec" id="future">
+    <div class="sec-header">
+      <div class="sec-num">12</div>
+      <div>
+        <div class="sec-title">Where the Field Is Going</div>
+        <div class="sec-subtitle">Selective apheresis, AI, and beyond plasma</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>TPE has been doing the same thing for 60 years: remove plasma, replace fluid. The next decade may finally change the "remove plasma" part.</p>
+
+      <p><strong>Selective immunoadsorption</strong> uses affinity columns (Staphylococcal protein A, polyclonal anti-IgG, or disease-specific ligands) to remove only the pathogenic antibody while returning the cleaned plasma to the patient. This avoids the need for replacement fluid entirely. Already approved in Europe for several indications; trials ongoing in the US. It's apheresis without the volume problem.</p>
+
+      <p><strong>AI-guided procedure optimization</strong> is starting to show up in trial publications. Models trained on thousands of TPE sessions can predict optimal inlet flow, AC ratio, and replacement composition for individual patients based on their clinical state — potentially reducing adverse events and procedure time.</p>
+
+      <p><strong>Engineered biopolymer adsorbents</strong> are in early-stage trials for sepsis (removing cytokines, endotoxin) and post-cardiac surgery inflammation. The principle: instead of dumping plasma to a waste bag, run it through a smart filter that removes only what's harmful.</p>
+
+      <div class="pull-quote">
+        <div class="pull-quote-text">The next era of apheresis is selectivity. Whole-plasma exchange is a hammer; the future is a scalpel.</div>
+        <div class="pull-quote-attr">— Common refrain at recent ASFA meetings</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA back to calculator -->
+  <div class="cta-card">
+    <div class="cta-text">
+      <div class="cta-title">Ready to plan a TPE run?</div>
+      <div class="cta-sub">Open the Plasmapheresis Calculator for Plasma Removed, Replacement Volume, Calcium Gluconate, and Prime Decision banner — populated with the latest formulas (K = 550 × Hct empirical, validated against 5 Optia screen pairs).</div>
+    </div>
+    <a class="cta-btn" href="plasmapheresis.html">🧮 Open Calculator</a>
+  </div>
+
+  <!-- References -->
+  <section class="sec" id="refs">
+    <div class="sec-header">
+      <div class="sec-num">∞</div>
+      <div>
+        <div class="sec-title">References &amp; Further Reading</div>
+        <div class="sec-subtitle">Curated sources — all open or institutional access</div>
+      </div>
+    </div>
+    <ol class="ref-list">
+      <li>Connelly-Smith L, Alquist CR, Aqui NA, et al. <strong>Guidelines on the Use of Therapeutic Apheresis in Clinical Practice — Evidence-Based Approach from the Writing Committee of the American Society for Apheresis: The Ninth Special Issue.</strong> J Clin Apheresis. 2023;38(2):77–278. <a href="https://onlinelibrary.wiley.com/doi/10.1002/jca.22043" target="_blank">DOI link</a></li>
+      <li>Padmanabhan A, Connelly-Smith L, Aqui N, et al. <strong>Therapeutic Plasma Exchange: Core Curriculum 2023.</strong> Am J Kidney Dis. 2023;81(4). <a href="https://www.ajkd.org/article/S0272-6386(22)01080-0/fulltext" target="_blank">Open access</a></li>
+      <li>Terumo BCT. <strong>Spectra Optia Apheresis System Operator's Manual.</strong> Current revision. <a href="https://www.terumobct.com/content/dam/terumo-bct/local-documents/learning/1000036875A-web-ENUS_rls8-15-24.pdf" target="_blank">PDF</a></li>
+      <li>Kim Y, Joo Y, Kang JK, et al. <strong>Trends in category and grade for therapeutic plasma exchange in the latest ASFA guideline.</strong> Vox Sang. 2024. <a href="https://onlinelibrary.wiley.com/doi/10.1111/vox.13603" target="_blank">DOI link</a></li>
+      <li>Dalakas MC. <strong>Anti-NMDA-Receptor Encephalitis: A Review of Current Standards of Care and Recent Updates.</strong> Multiple 2023–2024 reviews — search PubMed.</li>
+      <li>Genetix Biotherapeutics / Bluebird Bio. <strong>Optimizing HPC-A Collections from Patients with SCD or TDT.</strong> Apheresis Operations Reference Card. Confidential institutional training material.</li>
+      <li>Yi-Chen Wei, et al. <strong>High-volume plasma exchange in acute liver failure: a contemporary multicenter analysis.</strong> 2024. PubMed search "high volume plasmapheresis acute liver failure 2024."</li>
+      <li>Schiff M, et al. <strong>FSGS recurrence post-kidney transplant: TPE outcomes and timing.</strong> Multiple 2023–2024 transplant nephrology series.</li>
+    </ol>
+  </section>
+
+  <div class="foot">
+    <span>DART Tools · Why Plasmapheresis?</span>
+    <span>Educational reference — verify all clinical decisions against current guidelines and your institutional protocol.</span>
+  </div>
+
+</div>
+
+</body>
+</html>

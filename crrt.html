@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DART Tools — Continuous Renal Replacement Therapy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b11; --card:#111a27; --card2:#0f1722;
+  --border:rgba(149,173,205,.14); --border-strong:rgba(122,162,255,.28);
+  --text:#e9f0fa; --muted:#96a7bf;
+  --primary:#61a8ff; --primary2:#3b82f6; --accent:#7ef0d2;
+  --gold:#cfa95f; --warn:#ffcd70; --danger:#ff6f6f; --purple:#b389ff; --pink:#ff8fb6;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --nav-bg:rgba(7,11,17,.82); --grid:rgba(255,255,255,.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top, rgba(97,168,255,.10), transparent 30%),radial-gradient(circle at 80% 20%, rgba(126,240,210,.08), transparent 24%),linear-gradient(180deg, var(--bg), #05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom, rgba(0,0,0,.35), transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1280px, calc(100% - 28px));margin:0 auto}
+
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(126,240,210,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.5}}
+
+.head-bar{padding:22px 0 14px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:18px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:800;margin-bottom:6px}
+.head-title{font-size:clamp(22px,3.4vw,32px);line-height:1.05;letter-spacing:-.03em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-meta{font-size:13px;color:var(--muted);max-width:520px;line-height:1.65;text-align:right}
+
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 40 C 180 -8, 380 -12, 600 18 C 820 50, 1020 42, 1340 8');offset-rotate:auto;opacity:0;animation:cometRun 3.4s cubic-bezier(0.42,0.04,0.58,0.98) 0.3s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+
+/* Treatment Menu */
+.treatment-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 22px}
+.menu-card{display:flex;flex-direction:column;padding:18px 18px 16px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));text-decoration:none;color:inherit;transition:all .22s ease;position:relative;overflow:hidden;min-height:128px}
+.menu-card::before{content:"";position:absolute;top:-40%;right:-20%;width:160px;height:160px;border-radius:50%;opacity:.10;pointer-events:none;transition:opacity .22s ease}
+.menu-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.30)}
+.menu-card:hover::before{opacity:.20}
+.menu-card.menu-why{border-color:rgba(97,168,255,.32);background:linear-gradient(135deg,rgba(97,168,255,.10),rgba(126,240,210,.04))}
+.menu-card.menu-why::before{background:radial-gradient(circle,rgba(97,168,255,.6),transparent 70%)}
+.menu-card.menu-why:hover{border-color:rgba(97,168,255,.6)}
+.menu-card.menu-sop{border-color:rgba(207,169,95,.30);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(255,255,255,.015));opacity:.78}
+.menu-card.menu-sop::before{background:radial-gradient(circle,rgba(207,169,95,.6),transparent 70%)}
+.menu-card.menu-sop:hover{border-color:rgba(207,169,95,.55);opacity:1}
+.menu-card.menu-safety{border-color:rgba(255,143,182,.30);background:linear-gradient(135deg,rgba(255,143,182,.10),rgba(126,240,210,.04))}
+.menu-card.menu-safety::before{background:radial-gradient(circle,rgba(255,143,182,.6),transparent 70%)}
+.menu-card.menu-safety:hover{border-color:rgba(255,143,182,.6)}
+.menu-icon{font-size:22px;line-height:1;margin-bottom:8px;position:relative;z-index:1}
+.menu-title{font-size:14.5px;font-weight:900;color:#fff;letter-spacing:-.01em;margin-bottom:5px;position:relative;z-index:1}
+.menu-desc{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;position:relative;z-index:1}
+.menu-foot{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;position:relative;z-index:1}
+.menu-foot .badge{padding:2px 8px;border-radius:999px;font-size:9.5px}
+.menu-foot.ready{color:#9be8d0}
+.menu-foot.ready .badge{background:rgba(126,240,210,.14);color:#cdfaea;border:1px solid rgba(126,240,210,.35)}
+.menu-foot.progress{color:#e6c682}
+.menu-foot.progress .badge{background:rgba(207,169,95,.14);color:#f0dba8;border:1px solid rgba(207,169,95,.35)}
+.menu-arrow{font-size:13px;font-weight:900}
+@media (max-width:780px){.treatment-menu{grid-template-columns:1fr}}
+
+.grid-wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;padding-bottom:44px}
+.panel{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--border);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.panel-title{font-size:16px;font-weight:900;margin-bottom:4px}
+.panel-sub{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+
+.section-divider{margin:18px -20px 14px;padding:0 20px;border-top:1px solid var(--border);padding-top:14px}
+.section-divider:first-of-type{margin-top:0;border-top:none;padding-top:0}
+.section-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);margin-bottom:12px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1 / -1}
+.label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.11em;color:var(--muted)}
+
+input,select,button{font:inherit}
+input,select{width:100%;min-height:42px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);padding:0 12px;outline:none;transition:border-color .2s ease, box-shadow .2s ease}
+input:focus,select:focus{border-color:rgba(97,168,255,.45);box-shadow:0 0 0 3px rgba(97,168,255,.12)}
+input::placeholder{color:#70829a}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%),linear-gradient(135deg, var(--muted) 50%, transparent 50%);background-position:calc(100% - 16px) 50%, calc(100% - 11px) 50%;background-size:5px 5px, 5px 5px;background-repeat:no-repeat;padding-right:30px}
+
+.inline-toggle{display:flex;gap:6px;flex-wrap:wrap}
+.toggle-btn{flex:1;min-width:60px;min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s ease}
+.toggle-btn:hover{border-color:rgba(97,168,255,.34)}
+.toggle-btn.active{background:linear-gradient(135deg,rgba(97,168,255,.22),rgba(126,240,210,.14));border-color:rgba(97,168,255,.45);color:#eaf3ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+
+.mode-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mode-btn{padding:10px 4px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);font-weight:800;font-size:12.5px;cursor:pointer;transition:all .18s ease;text-align:center;line-height:1.15}
+.mode-btn .sub{display:block;font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.mode-btn:hover{border-color:rgba(97,168,255,.34);color:var(--text)}
+.mode-btn.active{background:linear-gradient(135deg,rgba(97,168,255,.22),rgba(126,240,210,.14));border-color:rgba(126,240,210,.5);color:#fff}
+.mode-btn.active .sub{color:#9be8d0}
+
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tri-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+.note{border:1px solid rgba(126,240,210,.18);background:rgba(126,240,210,.06);color:#d5fff2;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.65}
+.note.warning{border-color:rgba(255,205,112,.20);background:rgba(255,205,112,.08);color:#ffe8b6}
+.note.info{border-color:rgba(97,168,255,.2);background:rgba(97,168,255,.05);color:#cfe2ff}
+.note.danger{border-color:rgba(255,111,111,.30);background:rgba(255,111,111,.08);color:#ffd2d2}
+
+.calc-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:12px;border:1px solid transparent;font-weight:800;font-size:14px;cursor:pointer;transition:all .22s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 10px 26px rgba(59,130,246,.26)}
+.btn-primary:hover{box-shadow:0 14px 32px rgba(59,130,246,.38)}
+.btn-secondary{color:var(--text);background:rgba(255,255,255,.03);border-color:var(--border)}
+.btn-secondary:hover{border-color:rgba(97,168,255,.34)}
+
+.result-stack{display:grid;gap:12px}
+.result-card{border:1px solid var(--border);border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));padding:14px 16px}
+.result-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800;margin-bottom:6px}
+.result-value{font-size:clamp(20px,3vw,30px);letter-spacing:-.04em;line-height:1;font-weight:900;color:#f4f8ff;margin-bottom:6px}
+.result-meta{color:var(--muted);font-size:12px;line-height:1.6}
+.calc-line{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);color:#d6e0ee}
+.calc-line:last-child{border-bottom:none}
+.calc-line strong{color:#fff}
+.hidden{display:none!important}
+
+.result-card.hero{border:2px solid rgba(126,240,210,.55);background:linear-gradient(135deg, rgba(126,240,210,.12), rgba(97,168,255,.08));box-shadow:0 16px 44px rgba(126,240,210,.10), inset 0 1px 0 rgba(255,255,255,.08);padding:18px 22px;position:relative}
+.result-card.hero::before{content:"";position:absolute;inset:-2px;border-radius:18px;background:linear-gradient(135deg, rgba(126,240,210,.35), rgba(97,168,255,.15));z-index:-1;opacity:.5;filter:blur(8px)}
+.result-card.hero .result-kicker{font-size:11px;color:#9be8d0;letter-spacing:.16em;margin-bottom:10px}
+.result-card.hero .result-value{font-size:clamp(40px, 6.5vw, 56px);color:#ecfff8;letter-spacing:-.05em;font-weight:900;margin-bottom:8px;text-shadow:0 2px 12px rgba(126,240,210,.12)}
+.result-card.hero .result-value .unit{font-size:.32em;font-weight:800;color:#9be8d0;margin-left:4px;letter-spacing:0}
+.result-card.hero .result-meta{color:#cdd6e2;font-size:13px}
+
+.order-grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;line-height:1.55}
+.order-grid .lbl{color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;align-self:center}
+.order-grid .val{color:#f4f8ff;font-weight:700}
+
+details{margin-top:2px}
+details summary{cursor:pointer;list-style:none;padding:10px 12px;border-radius:11px;border:1px dashed var(--border);background:rgba(255,255,255,.02);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:space-between;transition:all .2s ease}
+details summary:hover{color:var(--text);border-color:rgba(97,168,255,.3)}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font-size:16px;color:var(--accent);font-weight:900}
+details[open] summary::after{content:"−"}
+details[open] summary{margin-bottom:10px;border-style:solid}
+
+.foot{padding:18px 0 32px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:8px}
+
+@media (max-width:980px){.grid-wrap{grid-template-columns:1fr}.head-meta{text-align:left}}
+@media (max-width:640px){.mode-row{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:540px){.form-grid,.sub-grid,.tri-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">D</div>
+      <div>
+        <div class="brand-title">DART Tools</div>
+        <div class="brand-sub">Clinical calculator suite</div>
+      </div>
+    </a>
+    <div class="nav-right">
+      <span class="chip"><span class="dot"></span>Continuous Renal Replacement Therapy</span>
+      <a class="chip chip-home" href="index.html">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle"       style="--x:11%;--y:25%;--delay:0.70s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:0.95s"></div>
+      <div class="twinkle"       style="--x:28%;--y:8%; --delay:1.20s"></div>
+      <div class="twinkle tiny"  style="--x:34%;--y:12%;--delay:1.40s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.60s"></div>
+      <div class="twinkle"       style="--x:51%;--y:28%;--delay:1.85s"></div>
+      <div class="twinkle tiny"  style="--x:58%;--y:38%;--delay:2.05s"></div>
+      <div class="twinkle small" style="--x:65%;--y:45%;--delay:2.25s"></div>
+      <div class="twinkle"       style="--x:74%;--y:48%;--delay:2.50s"></div>
+      <div class="twinkle small" style="--x:82%;--y:38%;--delay:2.70s"></div>
+      <div class="twinkle tiny"  style="--x:89%;--y:25%;--delay:2.90s"></div>
+      <div class="twinkle small" style="--x:95%;--y:15%;--delay:3.10s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Continuous Renal Replacement Therapy</div>
+      <div class="head-title"><span class="accent">CRRT Order Builder</span></div>
+    </div>
+    <div class="head-meta" style="position:relative;z-index:1">Estimates effluent dose, replacement fluid split, citrate / calcium values, FFR correction for pre-dilution, and full mode-specific math (SCUF · CVVH · CVVHD · CVVHDF).</div>
+  </div>
+
+  <nav class="treatment-menu" aria-label="CRRT references">
+    <a class="menu-card menu-why" href="whycrrt.html">
+      <div class="menu-icon">📖</div>
+      <div class="menu-title">Why CRRT?</div>
+      <div class="menu-desc">Physiology, history, modalities, evidence, recent advances.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-sop" href="sopcrrt.html">
+      <div class="menu-icon">📋</div>
+      <div class="menu-title">CRRT Standards of Practice</div>
+      <div class="menu-desc">Institutional protocols, technique standards, and procedural workflow.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-safety" href="safetycrrt.html">
+      <div class="menu-icon">🛡️</div>
+      <div class="menu-title">CRRT Safety Considerations</div>
+      <div class="menu-desc">Citrate toxicity, hemodynamic, hypothermia, drug clearance, access.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+  </nav>
+
+  <div class="grid-wrap">
+
+    <section class="panel">
+
+      <!-- PATIENT -->
+      <div class="section-divider"><div class="section-label">Patient</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="label">Weight Unit</label>
+            <div class="inline-toggle">
+              <button class="toggle-btn active" type="button" id="weightMetricBtn">kg</button>
+              <button class="toggle-btn" type="button" id="weightEnglishBtn">lb</button>
+            </div>
+          </div>
+          <div class="field" id="weightKgWrap">
+            <label class="label" for="weightKg">Weight (kg)</label>
+            <input id="weightKg" type="number" step="0.1" min="0" placeholder="e.g. 70" autofocus />
+          </div>
+          <div class="field hidden" id="weightLbWrap">
+            <label class="label" for="weightLb">Weight (lb)</label>
+            <input id="weightLb" type="number" step="0.1" min="0" placeholder="e.g. 154" />
+          </div>
+        </div>
+      </div>
+
+      <!-- MODALITY -->
+      <div class="section-divider"><div class="section-label">Modality</div>
+        <div class="mode-row" role="radiogroup" aria-label="CRRT modality">
+          <button type="button" class="mode-btn active" data-mode="cvvhdf" role="radio" aria-checked="true">CVVHDF<span class="sub">conv + diff</span></button>
+          <button type="button" class="mode-btn"        data-mode="cvvh"   role="radio" aria-checked="false">CVVH<span class="sub">convection</span></button>
+          <button type="button" class="mode-btn"        data-mode="cvvhd"  role="radio" aria-checked="false">CVVHD<span class="sub">diffusion</span></button>
+          <button type="button" class="mode-btn"        data-mode="scuf"   role="radio" aria-checked="false">SCUF<span class="sub">UF only</span></button>
+        </div>
+        <div class="note info" style="margin-top:10px"><strong>CVVHDF</strong> = continuous venovenous hemodiafiltration (combined diffusion + convection — most common). <strong>CVVH</strong> = convection only with substitution fluid. <strong>CVVHD</strong> = diffusion only with countercurrent dialysate. <strong>SCUF</strong> = slow continuous ultrafiltration (fluid removal only, no solute target).</div>
+      </div>
+
+      <!-- DOSE / FLOWS -->
+      <div class="section-divider"><div class="section-label">Prescription</div>
+        <div class="form-grid">
+          <div class="field" id="effluentDoseWrap">
+            <label class="label" for="effluentDose">Effluent Dose (mL/kg/hr)</label>
+            <input id="effluentDose" type="number" step="1" min="10" max="50" placeholder="e.g. 25" value="25" />
+          </div>
+          <div class="field">
+            <label class="label" for="bfr">Blood Flow Rate (mL/min)</label>
+            <input id="bfr" type="number" step="10" min="50" max="450" placeholder="e.g. 150" value="150" />
+          </div>
+          <div class="field full">
+            <label class="label" for="netUf">Net Ultrafiltration / Fluid Removal (mL/hr)</label>
+            <input id="netUf" type="number" step="10" min="0" max="500" placeholder="e.g. 100" value="100" />
+          </div>
+          <!-- CVVHDF needs split -->
+          <div class="field full" id="splitWrap">
+            <label class="label" for="splitPct">Replacement Split — % delivered <strong>pre-filter</strong></label>
+            <input id="splitPct" type="number" step="5" min="0" max="100" placeholder="e.g. 30" value="30" />
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4">Common: 100% post-filter (max clearance) · 30/70 pre/post (anti-clot balance) · 100% pre-filter (max anti-clot, lowest clearance)</div>
+          </div>
+          <!-- CVVHDF dialysate ratio -->
+          <div class="field full" id="dialysateRatioWrap">
+            <label class="label" for="dialysateRatio">CVVHDF: Dialysate / Replacement ratio (% as dialysate)</label>
+            <input id="dialysateRatio" type="number" step="10" min="0" max="100" placeholder="e.g. 50" value="50" />
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4">Total effluent splits between dialysate (diffusion arm) and replacement (convection arm). 50/50 is the most common balanced setting.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANTICOAGULATION -->
+      <div class="section-divider"><div class="section-label">Anticoagulation</div>
+        <div class="form-grid">
+          <div class="field full">
+            <label class="label">Strategy</label>
+            <div class="inline-toggle" id="anticoagToggle">
+              <button class="toggle-btn active" type="button" data-anticoag="citrate">Regional Citrate (RCA)</button>
+              <button class="toggle-btn" type="button" data-anticoag="heparin">Systemic Heparin</button>
+              <button class="toggle-btn" type="button" data-anticoag="none">None</button>
+            </div>
+          </div>
+          <!-- Citrate-specific -->
+          <div class="field full hidden" id="citrateWrap">
+            <div class="sub-grid">
+              <div class="field">
+                <label class="label" for="citrateConc">Citrate Solution (mmol/L citrate)</label>
+                <select id="citrateConc">
+                  <option value="18">Prismocitrate 18/0 — 18 mmol/L (typical Prismax/Prismaflex RCA)</option>
+                  <option value="10">Prismocitrate 10/2 — 10 mmol/L</option>
+                  <option value="113">ACD-A — 113 mmol/L citrate (high-concentration; rarely used for CRRT RCA)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label" for="targetCitrateDose">Target Citrate Dose (mmol/L blood)</label>
+                <input id="targetCitrateDose" type="number" step="0.1" min="2" max="6" value="3" />
+              </div>
+            </div>
+          </div>
+          <!-- Heparin-specific -->
+          <div class="field full hidden" id="heparinWrap">
+            <div class="sub-grid">
+              <div class="field">
+                <label class="label" for="heparinDose">Heparin Maintenance (U/kg/hr)</label>
+                <input id="heparinDose" type="number" step="1" min="0" max="30" value="10" />
+              </div>
+              <div class="field">
+                <label class="label" for="heparinBolus">Heparin Bolus (U/kg)</label>
+                <input id="heparinBolus" type="number" step="5" min="0" max="100" value="20" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADVANCED -->
+      <div class="section-divider"><div class="section-label">Advanced (optional)</div>
+        <details>
+          <summary>Hematocrit · Filter set · FFR target</summary>
+          <div class="form-grid" style="margin-top:8px">
+            <div class="field">
+              <label class="label" for="hct">Hematocrit (%)</label>
+              <input id="hct" type="number" step="0.1" min="15" max="65" placeholder="e.g. 30" value="30" />
+            </div>
+            <div class="field">
+              <label class="label" for="filter">Filter Set</label>
+              <select id="filter">
+                <option value="m100">M100 (1.0 m²) — adult standard (AN69 ST)</option>
+                <option value="m150" selected>M150 (1.5 m²) — large adult / high-dose</option>
+                <option value="m60">M60 (0.6 m²) — small adult / pediatric</option>
+                <option value="hf20">HF20 (0.2 m²) — pediatric / neonatal</option>
+                <option value="st100">ST100 (1.0 m²) — heparin-coated</option>
+                <option value="st150">ST150 (1.5 m²) — heparin-coated, large adult</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label class="label" for="ffrTarget">FFR Target Ceiling (%)</label>
+              <input id="ffrTarget" type="number" step="1" min="15" max="30" placeholder="e.g. 25" value="25" />
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4">Filtration Fraction = Effluent / Plasma flow. KDIGO recommends keeping FFR &lt; 25% to reduce filter clotting from hemoconcentration.</div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="note info"><strong>Estimates only — not an order.</strong> Independent educational tool, no manufacturer affiliation. All values must match the patient's prescription and tolerance. Verify circuit setup, alarm settings, and electrolyte protocol before initiating CRRT.</div>
+      </div>
+
+      <div class="calc-row">
+        <button class="btn btn-primary" id="calculateBtn" type="button">Calculate</button>
+        <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-title">Results</div>
+      <div class="panel-sub">Effluent dose, mode-specific flow breakdown, FFR check, citrate / calcium estimates, and read-back order summary.</div>
+      <div class="result-stack" id="results">
+        <div class="result-card">
+          <div class="result-kicker">Awaiting inputs</div>
+          <div class="result-value">—</div>
+          <div class="result-meta">Enter weight, modality, prescription and press Calculate.</div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <div class="foot">
+    <span>DART Tools · CRRT</span>
+    <span>Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   CRRT Calculations — Educational Reference
+   ────────────────────────────────────────────────────────────────────
+   Published formulas (KDIGO 2012, Ronco/Bellomo physiology):
+     • Effluent dose (mL/hr) = Weight (kg) × prescribed dose (mL/kg/hr)
+     • Plasma flow = BFR × (1 − Hct)
+     • FFR = Effluent / Plasma flow (target < 25% per KDIGO)
+     • Pre-dilution correction = Plasma flow / (Plasma flow + Pre-rep rate)
+     • Effective delivered dose = Effluent × correction factor
+     • Citrate dose (mmol/hr) = BFR (L/hr) × target (mmol/L blood)
+     • Citrate fluid rate (mL/hr) = Citrate dose / solution concentration
+   ════════════════════════════════════════════════════════════════════ */
+
+const KDIGO_DOSE_TARGET = 25; // mL/kg/hr
+const FFR_DEFAULT_TARGET = 25; // %
+
+const modes = {
+  'cvvhdf': {label:'CVVHDF (Convection + Diffusion)', needsDose:true, needsSplit:true, needsDialysateRatio:true, isSCUF:false},
+  'cvvh':   {label:'CVVH (Convection only)',          needsDose:true, needsSplit:true, needsDialysateRatio:false, isSCUF:false},
+  'cvvhd':  {label:'CVVHD (Diffusion only)',          needsDose:true, needsSplit:false, needsDialysateRatio:false, isSCUF:false},
+  'scuf':   {label:'SCUF (Ultrafiltration only)',     needsDose:false, needsSplit:false, needsDialysateRatio:false, isSCUF:true}
+};
+
+const state = {weightMode:'kg', mode:'cvvhdf', anticoag:'citrate'};
+const $ = (id) => document.getElementById(id);
+const el = {
+  weightKg:$('weightKg'), weightLb:$('weightLb'),
+  weightKgWrap:$('weightKgWrap'), weightLbWrap:$('weightLbWrap'),
+  weightMetricBtn:$('weightMetricBtn'), weightEnglishBtn:$('weightEnglishBtn'),
+  effluentDose:$('effluentDose'), effluentDoseWrap:$('effluentDoseWrap'),
+  bfr:$('bfr'), netUf:$('netUf'),
+  splitPct:$('splitPct'), splitWrap:$('splitWrap'),
+  dialysateRatio:$('dialysateRatio'), dialysateRatioWrap:$('dialysateRatioWrap'),
+  anticoagToggle:$('anticoagToggle'),
+  citrateWrap:$('citrateWrap'), citrateConc:$('citrateConc'), targetCitrateDose:$('targetCitrateDose'),
+  heparinWrap:$('heparinWrap'), heparinDose:$('heparinDose'), heparinBolus:$('heparinBolus'),
+  hct:$('hct'), filter:$('filter'), ffrTarget:$('ffrTarget'),
+  results:$('results'), calculateBtn:$('calculateBtn'), resetBtn:$('resetBtn')
+};
+
+function setActive(buttons, activeBtn){ buttons.forEach(b=>b.classList.remove('active')); activeBtn.classList.add('active'); }
+function fmt(n, d=1){ if(!Number.isFinite(n)) return '—'; return Number(n).toLocaleString(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}); }
+function fmtInt(n){ if(!Number.isFinite(n)) return '—'; return Math.round(Number(n)).toLocaleString(); }
+function weightToKg(){ if(state.weightMode==='kg') return parseFloat(el.weightKg.value); return parseFloat(el.weightLb.value)*0.45359237; }
+function validatePositive(v, n){ if(!Number.isFinite(v) || v<=0) throw new Error(`Please enter a valid ${n}.`); }
+
+[el.weightMetricBtn, el.weightEnglishBtn].forEach(b=>b.addEventListener('click', e=>{
+  if(e.currentTarget===el.weightMetricBtn){ state.weightMode='kg'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn); el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden'); }
+  else { state.weightMode='lb'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightEnglishBtn); el.weightKgWrap.classList.add('hidden'); el.weightLbWrap.classList.remove('hidden'); }
+}));
+
+const modeBtns = document.querySelectorAll('.mode-btn');
+modeBtns.forEach(btn=>btn.addEventListener('click', ()=>{
+  modeBtns.forEach(b=>{b.classList.remove('active'); b.setAttribute('aria-checked','false');});
+  btn.classList.add('active'); btn.setAttribute('aria-checked','true');
+  state.mode = btn.dataset.mode;
+  applyModeVisibility();
+}));
+function applyModeVisibility(){
+  const m = modes[state.mode];
+  el.effluentDoseWrap.classList.toggle('hidden', !m.needsDose);
+  el.splitWrap.classList.toggle('hidden', !m.needsSplit);
+  el.dialysateRatioWrap.classList.toggle('hidden', !m.needsDialysateRatio);
+}
+applyModeVisibility();
+
+el.anticoagToggle.querySelectorAll('[data-anticoag]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    el.anticoagToggle.querySelectorAll('[data-anticoag]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.anticoag = btn.dataset.anticoag;
+    el.citrateWrap.classList.toggle('hidden', state.anticoag !== 'citrate');
+    el.heparinWrap.classList.toggle('hidden', state.anticoag !== 'heparin');
+  });
+});
+
+/* ── calculate ── */
+function calculate(){
+  try{
+    const weightKg = weightToKg();
+    validatePositive(weightKg, 'weight');
+
+    const mode = modes[state.mode];
+    const bfr = parseFloat(el.bfr.value);
+    validatePositive(bfr, 'blood flow rate');
+    const netUf = parseFloat(el.netUf.value) || 0;
+    const hct = parseFloat(el.hct.value) / 100;
+    const ffrTarget = parseFloat(el.ffrTarget.value) || FFR_DEFAULT_TARGET;
+
+    // Plasma flow (mL/min)
+    const plasmaFlowMlMin = bfr * (1 - hct);
+    const plasmaFlowMlHr = plasmaFlowMlMin * 60;
+
+    let effluentMlHr = 0, doseMlKgHr = 0;
+    let dialysateMlHr = 0, replacementMlHr = 0;
+    let preMlHr = 0, postMlHr = 0;
+    let effectiveDoseMlKgHr = null, ffr = null;
+    let splitPct = 0, dialysateRatio = 0;
+
+    if(mode.isSCUF){
+      // SCUF: only net UF, no dose target
+      effluentMlHr = netUf;
+      doseMlKgHr = effluentMlHr / weightKg;
+    } else {
+      const dose = parseFloat(el.effluentDose.value);
+      validatePositive(dose, 'effluent dose');
+      doseMlKgHr = dose;
+      // Total effluent = dose × weight + net UF (some definitions include UF; KDIGO defines effluent dose without it)
+      // We follow common practice: prescribed effluent dose excludes net UF; total effluent flow = dose flow + UF
+      const doseFlow = dose * weightKg; // mL/hr
+      effluentMlHr = doseFlow + netUf;
+
+      if(mode.needsDialysateRatio){
+        // CVVHDF: split between dialysate and replacement
+        dialysateRatio = parseFloat(el.dialysateRatio.value) / 100;
+        dialysateMlHr = doseFlow * dialysateRatio;
+        replacementMlHr = doseFlow * (1 - dialysateRatio);
+      } else if(state.mode === 'cvvh'){
+        replacementMlHr = doseFlow;
+      } else if(state.mode === 'cvvhd'){
+        dialysateMlHr = doseFlow;
+      }
+
+      // Pre/post split (for replacement only)
+      if(mode.needsSplit && replacementMlHr > 0){
+        splitPct = parseFloat(el.splitPct.value) / 100;
+        preMlHr = replacementMlHr * splitPct;
+        postMlHr = replacementMlHr * (1 - splitPct);
+
+        // Pre-dilution correction
+        const preFlowMlMin = preMlHr / 60;
+        const correctionFactor = plasmaFlowMlMin / (plasmaFlowMlMin + preFlowMlMin);
+        effectiveDoseMlKgHr = (effluentMlHr * correctionFactor - netUf) / weightKg;
+      }
+    }
+
+    // FFR = (Effluent − pre-rep) / (Plasma flow + pre-rep)
+    // Simplified: FFR = Effluent / Plasma flow (without pre-dilution); with pre-dilution, the formula accounts for dilution
+    const preFlowMlHr = preMlHr; // pre-dilution rate
+    ffr = ((effluentMlHr - preFlowMlHr) / (plasmaFlowMlHr + preFlowMlHr)) * 100;
+
+    // Anticoagulation calculations
+    let citrateResult = null, heparinResult = null;
+    if(state.anticoag === 'citrate'){
+      const citrateConc = parseFloat(el.citrateConc.value); // mmol/L
+      const citrateTarget = parseFloat(el.targetCitrateDose.value); // mmol/L blood
+      // Citrate dose (mmol/hr) = BFR (L/hr) × target (mmol/L blood)
+      const bfrLHr = bfr * 60 / 1000;
+      const citrateMmolHr = bfrLHr * citrateTarget;
+      const citrateMlHr = (citrateMmolHr / citrateConc) * 1000; // citrate fluid mL/hr
+
+      // Calcium replacement: typically titrated, start ~0.1 mmol/kg/hr CaCl2 or Ca gluconate
+      // Common formula: Ca rate (mL/hr) ≈ 60% of citrate rate (for Prismocitrate 18/0)
+      // Use a starting value: ~30 mL/hr CaCl2 (0.5 mmol/mL) for typical 150 BFR adult
+      const startCalciumMlHr = (bfrLHr * 0.35); // empirical start point: ~52 mL/hr for 150 BFR, titrate
+
+      citrateResult = {
+        citrateConc, citrateTarget, citrateMmolHr, citrateMlHr,
+        startCalciumMlHr
+      };
+    } else if(state.anticoag === 'heparin'){
+      const dose = parseFloat(el.heparinDose.value);
+      const bolus = parseFloat(el.heparinBolus.value);
+      heparinResult = {
+        bolusUnits: bolus * weightKg,
+        maintenanceUnitsPerHr: dose * weightKg
+      };
+    }
+
+    // Warnings
+    const warnings = [];
+    if(!mode.isSCUF && doseMlKgHr < 20) warnings.push({type:'warn', text:`Effluent dose ${fmt(doseMlKgHr,0)} mL/kg/hr is below the KDIGO-recommended 20–25 mL/kg/hr range.`});
+    if(!mode.isSCUF && doseMlKgHr > 35) warnings.push({type:'warn', text:`Effluent dose ${fmt(doseMlKgHr,0)} mL/kg/hr exceeds the standard 20–25 mL/kg/hr range. RENAL and ATN trials showed no benefit above 25 mL/kg/hr.`});
+    if(ffr > ffrTarget) warnings.push({type:'danger', text:`Filtration Fraction ${fmt(ffr,1)}% exceeds the ${ffrTarget}% safety ceiling → risk of hemoconcentration and filter clotting. Increase BFR or shift replacement to pre-filter.`});
+    if(netUf / weightKg > 1.5) warnings.push({type:'warn', text:`Net UF ${fmt(netUf/weightKg,2)} mL/kg/hr is above the 1.0–1.5 mL/kg/hr hemodynamic comfort zone. Monitor MAP closely.`});
+
+    renderResults({
+      weightKg, mode, bfr, plasmaFlowMlMin, plasmaFlowMlHr,
+      effluentMlHr, doseMlKgHr, netUf,
+      dialysateMlHr, replacementMlHr, preMlHr, postMlHr,
+      effectiveDoseMlKgHr, ffr, ffrTarget,
+      splitPct, dialysateRatio,
+      citrateResult, heparinResult,
+      hct, warnings
+    });
+
+  } catch(err){
+    el.results.innerHTML = `<div class="result-card" style="border-color:rgba(255,111,111,.3);background:rgba(255,111,111,.06)"><div class="result-kicker" style="color:#ffb4b4">Error</div><div class="result-value" style="font-size:18px">${err.message}</div></div>`;
+  }
+}
+
+function renderResults(r){
+  const m = r.mode;
+  const warningsBlock = r.warnings.map(w=>{
+    const colors = w.type === 'danger' ? {color:'#ffb4b4',bg:'rgba(255,111,111,.08)',border:'rgba(255,111,111,.32)'} : {color:'#ffe8b6',bg:'rgba(255,205,112,.08)',border:'rgba(255,205,112,.32)'};
+    return `<div class="note" style="color:${colors.color};background:${colors.bg};border-color:${colors.border}">${w.text}</div>`;
+  }).join('');
+
+  // Citrate block
+  const citrateBlock = r.citrateResult ? `
+    <div class="result-card">
+      <div class="result-kicker">Citrate (RCA) — Estimated</div>
+      <div class="result-meta">
+        <div class="calc-line"><strong>Citrate solution:</strong> ${r.citrateResult.citrateConc} mmol/L citrate</div>
+        <div class="calc-line"><strong>Target citrate at filter:</strong> ${fmt(r.citrateResult.citrateTarget,1)} mmol/L blood</div>
+        <div class="calc-line"><strong>Citrate dose:</strong> ${fmt(r.citrateResult.citrateMmolHr,1)} mmol/hr</div>
+        <div class="calc-line"><strong>Citrate fluid flow:</strong> ${fmtInt(r.citrateResult.citrateMlHr)} mL/hr</div>
+        <div class="calc-line"><strong>Suggested calcium start rate:</strong> ≈ ${fmt(r.citrateResult.startCalciumMlHr*10,0)} mL/hr (titrate to systemic iCa 1.1–1.3 mmol/L; post-filter iCa 0.25–0.40 mmol/L)</div>
+        <div class="calc-line" style="color:var(--muted)">Per institutional RCA protocol — titration tables vary; verify before initiating.</div>
+      </div>
+    </div>` : '';
+
+  // Heparin block
+  const heparinBlock = r.heparinResult ? `
+    <div class="result-card">
+      <div class="result-kicker">Systemic Heparin — Estimated</div>
+      <div class="result-meta">
+        <div class="calc-line"><strong>Bolus:</strong> ${fmtInt(r.heparinResult.bolusUnits)} U IV (one-time)</div>
+        <div class="calc-line"><strong>Maintenance:</strong> ${fmtInt(r.heparinResult.maintenanceUnitsPerHr)} U/hr (target aPTT 1.5–2.0× control or ACT 180–220 sec)</div>
+        <div class="calc-line"><strong>HIT screening:</strong> baseline platelets; trend during course; investigate any &gt; 50% drop.</div>
+      </div>
+    </div>` : '';
+
+  // Mode-specific structure block
+  let structureLines = '';
+  if(m.isSCUF){
+    structureLines = `
+      <div class="calc-line"><strong>SCUF:</strong> Ultrafiltration only · no replacement / dialysate</div>
+      <div class="calc-line"><strong>Net UF:</strong> ${fmtInt(r.netUf)} mL/hr (${fmt(r.netUf/r.weightKg,2)} mL/kg/hr)</div>
+    `;
+  } else {
+    structureLines += `<div class="calc-line"><strong>Total Effluent:</strong> ${fmtInt(r.effluentMlHr)} mL/hr (${fmt(r.doseMlKgHr,0)} mL/kg/hr prescribed)</div>`;
+    if(r.dialysateMlHr > 0) structureLines += `<div class="calc-line"><strong>Dialysate flow:</strong> ${fmtInt(r.dialysateMlHr)} mL/hr ${m.needsDialysateRatio ? `(${fmt(r.dialysateRatio*100,0)}% of dose)` : '(100% of dose)'}</div>`;
+    if(r.replacementMlHr > 0) {
+      structureLines += `<div class="calc-line"><strong>Replacement flow:</strong> ${fmtInt(r.replacementMlHr)} mL/hr ${m.needsDialysateRatio ? `(${fmt((1-r.dialysateRatio)*100,0)}% of dose)` : '(100% of dose)'}</div>`;
+      if(m.needsSplit){
+        structureLines += `<div class="calc-line">&nbsp;&nbsp;• Pre-filter: <strong>${fmtInt(r.preMlHr)} mL/hr</strong> (${fmt(r.splitPct*100,0)}%)</div>`;
+        structureLines += `<div class="calc-line">&nbsp;&nbsp;• Post-filter: <strong>${fmtInt(r.postMlHr)} mL/hr</strong> (${fmt((1-r.splitPct)*100,0)}%)</div>`;
+      }
+    }
+    structureLines += `<div class="calc-line"><strong>Net UF (patient fluid removal):</strong> ${fmtInt(r.netUf)} mL/hr (${fmt(r.netUf/r.weightKg,2)} mL/kg/hr)</div>`;
+    if(r.effectiveDoseMlKgHr !== null){
+      structureLines += `<div class="calc-line" style="color:#ffe8b6"><strong>Effective delivered dose (after pre-dilution):</strong> ≈ ${fmt(r.effectiveDoseMlKgHr,1)} mL/kg/hr</div>`;
+    }
+  }
+
+  el.results.innerHTML = `
+    <div class="result-card hero">
+      <div class="result-kicker">Total Effluent Dose</div>
+      <div class="result-value">${fmtInt(r.effluentMlHr)}<span class="unit">mL/hr</span></div>
+      <div class="result-meta">${m.label} · ${m.isSCUF ? 'no solute target' : `${fmt(r.doseMlKgHr,0)} mL/kg/hr prescribed`}</div>
+    </div>
+
+    ${warningsBlock}
+
+    <div class="result-card">
+      <div class="result-kicker">Circuit math</div>
+      <div class="result-meta">
+        <div class="calc-line"><strong>Blood flow rate:</strong> ${fmtInt(r.bfr)} mL/min</div>
+        <div class="calc-line"><strong>Plasma flow:</strong> ≈ ${fmtInt(r.plasmaFlowMlMin)} mL/min (${fmtInt(r.plasmaFlowMlHr)} mL/hr) using Hct ${fmt(r.hct*100,1)}%</div>
+        ${structureLines}
+        <div class="calc-line"><strong>FFR (filtration fraction):</strong> ${fmt(r.ffr,1)}% ${r.ffr > r.ffrTarget ? `<span style="color:#ffb4b4">(exceeds ${r.ffrTarget}% target)</span>` : `(target &lt; ${r.ffrTarget}%)`}</div>
+      </div>
+    </div>
+
+    ${citrateBlock}
+    ${heparinBlock}
+
+    <div class="result-card">
+      <div class="result-kicker">Read-back order summary</div>
+      <div class="order-grid">
+        <div class="lbl">Patient</div><div class="val">${fmt(r.weightKg,1)} kg · Hct ${fmt(r.hct*100,1)}%</div>
+        <div class="lbl">Modality</div><div class="val">${m.label}</div>
+        <div class="lbl">BFR</div><div class="val">${fmtInt(r.bfr)} mL/min</div>
+        ${m.isSCUF ? '' : `<div class="lbl">Prescribed dose</div><div class="val">${fmt(r.doseMlKgHr,0)} mL/kg/hr</div>`}
+        ${r.dialysateMlHr > 0 ? `<div class="lbl">Dialysate</div><div class="val">${fmtInt(r.dialysateMlHr)} mL/hr</div>` : ''}
+        ${r.replacementMlHr > 0 ? `<div class="lbl">Replacement</div><div class="val">${fmtInt(r.replacementMlHr)} mL/hr (Pre: ${fmtInt(r.preMlHr)} · Post: ${fmtInt(r.postMlHr)})</div>` : ''}
+        <div class="lbl">Net UF</div><div class="val">${fmtInt(r.netUf)} mL/hr</div>
+        <div class="lbl">FFR</div><div class="val">${fmt(r.ffr,1)}%</div>
+        ${r.citrateResult ? `<div class="lbl">Anticoag</div><div class="val">Citrate ${r.citrateResult.citrateConc} mmol/L at ${fmtInt(r.citrateResult.citrateMlHr)} mL/hr · target ${fmt(r.citrateResult.citrateTarget,1)} mmol/L blood</div>` : ''}
+        ${r.heparinResult ? `<div class="lbl">Anticoag</div><div class="val">Heparin: bolus ${fmtInt(r.heparinResult.bolusUnits)} U, then ${fmtInt(r.heparinResult.maintenanceUnitsPerHr)} U/hr</div>` : ''}
+        ${state.anticoag === 'none' ? `<div class="lbl">Anticoag</div><div class="val">None (saline flushes only)</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function reset(){
+  ['weightKg','weightLb'].forEach(k=>{ if(el[k]) el[k].value=''; });
+  el.effluentDose.value='25';
+  el.bfr.value='150';
+  el.netUf.value='100';
+  el.splitPct.value='30';
+  el.dialysateRatio.value='50';
+  el.citrateConc.value='18';
+  el.targetCitrateDose.value='3';
+  el.heparinDose.value='10';
+  el.heparinBolus.value='20';
+  el.hct.value='30';
+  el.ffrTarget.value='25';
+  state.mode='cvvhdf'; state.anticoag='citrate'; state.weightMode='kg';
+  modeBtns.forEach((b)=>{b.classList.toggle('active', b.dataset.mode==='cvvhdf'); b.setAttribute('aria-checked', b.dataset.mode==='cvvhdf'?'true':'false');});
+  el.anticoagToggle.querySelectorAll('[data-anticoag]').forEach((b)=>b.classList.toggle('active', b.dataset.anticoag==='citrate'));
+  setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn);
+  el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden');
+  el.citrateWrap.classList.remove('hidden');
+  el.heparinWrap.classList.add('hidden');
+  applyModeVisibility();
+  el.results.innerHTML = `<div class="result-card"><div class="result-kicker">Awaiting inputs</div><div class="result-value">—</div><div class="result-meta">Enter weight, modality, prescription and press Calculate.</div></div>`;
+}
+
+el.calculateBtn.addEventListener('click', calculate);
+el.resetBtn.addEventListener('click', reset);
+</script>
+</body>
+</html>

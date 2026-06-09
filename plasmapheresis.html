@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DART Tools — Plasmapheresis Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b11;
+  --card:#111a27;
+  --card2:#0f1722;
+  --border:rgba(149,173,205,.14);
+  --border-strong:rgba(122,162,255,.28);
+  --text:#e9f0fa;
+  --muted:#96a7bf;
+  --primary:#61a8ff;
+  --primary2:#3b82f6;
+  --accent:#7ef0d2;
+  --gold:#cfa95f;
+  --warn:#ffcd70;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --nav-bg:rgba(7,11,17,.82);
+  --grid:rgba(255,255,255,.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(97,168,255,.10), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(126,240,210,.08), transparent 24%),
+    linear-gradient(180deg, var(--bg), #05080d 100%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:40px 40px;opacity:.45;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,.35), transparent 80%);
+}
+a{text-decoration:none;color:inherit}
+.container{width:min(1280px, calc(100% - 28px));margin:0 auto}
+
+/* ── compact sticky nav ───────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:200;
+  backdrop-filter:blur(18px);
+  background:var(--nav-bg);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  min-height:58px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;padding:8px 0;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:44px;height:44px;border-radius:13px;
+  display:grid;place-items:center;
+  font-size:20px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28);
+}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 13px;border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+  color:var(--muted);font-size:12px;font-weight:700;
+  transition:all .2s ease;
+}
+.chip-home{
+  background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));
+  border-color:rgba(97,168,255,.3); color:#d8ecff;
+}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-why{background:linear-gradient(135deg,rgba(207,169,95,.18),rgba(126,240,210,.10));border-color:rgba(207,169,95,.35);color:#f0dba8}
+.chip-why:hover{border-color:rgba(207,169,95,.6);color:#fff;transform:translateY(-1px)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(126,240,210,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.5}}
+
+/* ── title bar ────────────────────────────────────── */
+.head-bar{
+  padding:22px 0 14px;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border);margin-bottom:18px;
+}
+.head-kicker{
+  font-size:11px;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--accent);font-weight:800;margin-bottom:6px;
+}
+.head-title{
+  font-size:clamp(22px,3.4vw,32px);
+  line-height:1.05;letter-spacing:-.03em;font-weight:900;
+}
+.head-title .accent{
+  background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.head-meta{font-size:13px;color:var(--muted);max-width:520px;line-height:1.65;text-align:right}
+
+/* ── layout ───────────────────────────────────────── */
+.grid-wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;padding-bottom:44px}
+.panel{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid var(--border);
+  border-radius:22px;padding:20px;
+  box-shadow:var(--shadow);
+}
+.panel-title{font-size:16px;font-weight:900;margin-bottom:4px}
+.panel-sub{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+
+/* ── form ─────────────────────────────────────────── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1 / -1}
+.label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.11em;color:var(--muted)}
+
+input,select,button{font:inherit}
+input,select{
+  width:100%;min-height:42px;border-radius:11px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+  color:var(--text);padding:0 12px;outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+input:focus,select:focus{border-color:rgba(97,168,255,.45);box-shadow:0 0 0 3px rgba(97,168,255,.12)}
+input::placeholder{color:#70829a}
+select{
+  appearance:none;-webkit-appearance:none;
+  background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+                   linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:calc(100% - 16px) 50%, calc(100% - 11px) 50%;
+  background-size:5px 5px, 5px 5px;background-repeat:no-repeat;padding-right:30px;
+}
+
+.inline-toggle{display:flex;gap:6px;flex-wrap:wrap}
+.toggle-btn{
+  flex:1;min-width:60px;min-height:40px;padding:0 10px;
+  border-radius:10px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text);
+  font-weight:700;font-size:13px;cursor:pointer;
+  transition:all .2s ease;
+}
+.toggle-btn:hover{border-color:rgba(97,168,255,.34)}
+.toggle-btn.active{
+  background:linear-gradient(135deg,rgba(97,168,255,.22),rgba(126,240,210,.14));
+  border-color:rgba(97,168,255,.45);color:#eaf3ff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.sub-grid,.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.note{
+  border:1px solid rgba(126,240,210,.18);
+  background:rgba(126,240,210,.06);color:#d5fff2;
+  border-radius:12px;padding:10px 12px;
+  font-size:12.5px;line-height:1.65;
+}
+.note.warning{border-color:rgba(255,205,112,.20);background:rgba(255,205,112,.08);color:#ffe8b6}
+.note.info{border-color:rgba(97,168,255,.2);background:rgba(97,168,255,.05);color:#cfe2ff}
+
+.calc-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:46px;padding:0 20px;border-radius:12px;
+  border:1px solid transparent;font-weight:800;font-size:14px;
+  cursor:pointer;transition:all .22s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{
+  color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 10px 26px rgba(59,130,246,.26);
+}
+.btn-primary:hover{box-shadow:0 14px 32px rgba(59,130,246,.38)}
+.btn-secondary{
+  color:var(--text);background:rgba(255,255,255,.03);
+  border-color:var(--border);
+}
+.btn-secondary:hover{border-color:rgba(97,168,255,.34)}
+
+/* ── results ──────────────────────────────────────── */
+.result-stack{display:grid;gap:12px}
+.result-card{
+  border:1px solid var(--border);border-radius:16px;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+  padding:14px 16px;
+}
+.result-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800;margin-bottom:6px}
+.result-value{font-size:clamp(20px,3vw,30px);letter-spacing:-.04em;line-height:1;font-weight:900;color:#f4f8ff;margin-bottom:6px}
+.result-meta{color:var(--muted);font-size:12px;line-height:1.6}
+
+/* ── hero tiles — the numbers the nurse actually uses ─── */
+.result-card.hero{
+  border:2px solid rgba(126,240,210,.55);
+  background:linear-gradient(135deg, rgba(126,240,210,.12), rgba(97,168,255,.08));
+  box-shadow:0 16px 44px rgba(126,240,210,.10), inset 0 1px 0 rgba(255,255,255,.08);
+  padding:18px 22px;
+  position:relative;
+}
+.result-card.hero::before{
+  content:"";position:absolute;inset:-2px;border-radius:18px;
+  background:linear-gradient(135deg, rgba(126,240,210,.35), rgba(97,168,255,.15));
+  z-index:-1;opacity:.5;filter:blur(8px);
+}
+.result-card.hero .result-kicker{
+  font-size:11px;color:#9be8d0;letter-spacing:.16em;margin-bottom:10px;
+}
+.result-card.hero .result-value{
+  font-size:clamp(40px, 6.5vw, 56px);
+  color:#ecfff8;
+  letter-spacing:-.05em;
+  font-weight:900;
+  margin-bottom:8px;
+  text-shadow:0 2px 12px rgba(126,240,210,.12);
+}
+.result-card.hero .result-value .unit{
+  font-size:.32em;font-weight:800;color:#9be8d0;margin-left:4px;letter-spacing:0;
+}
+.result-card.hero .result-meta{color:#cdd6e2;font-size:13px}
+.math-box{
+  border:1px solid rgba(97,168,255,.18);
+  background:rgba(97,168,255,.05);color:#d8e9ff;
+  border-radius:14px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;
+}
+.math-box strong{color:#fff}
+.calc-line{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.calc-line:last-child{border-bottom:none}
+.hidden{display:none!important}
+
+/* ── collapsible ──────────────────────────────────── */
+details{margin-top:2px}
+details summary{
+  cursor:pointer;list-style:none;
+  padding:10px 12px;border-radius:11px;
+  border:1px dashed var(--border);
+  background:rgba(255,255,255,.02);
+  font-size:12px;font-weight:700;color:var(--muted);
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .2s ease;
+}
+details summary:hover{color:var(--text);border-color:rgba(97,168,255,.3)}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font-size:16px;color:var(--accent);font-weight:900}
+details[open] summary::after{content:"−"}
+details[open] summary{margin-bottom:10px;border-style:solid}
+
+/* ── footer ──────────────────────────────────────── */
+.foot{
+  padding:18px 0 32px;border-top:1px solid var(--border);
+  color:var(--muted);font-size:11.5px;
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  margin-top:8px;
+}
+
+@media (max-width:980px){
+  .grid-wrap{grid-template-columns:1fr}
+  .head-meta{text-align:left}
+}
+@media (max-width:540px){
+  .form-grid,.sub-grid,.mini-grid{grid-template-columns:1fr}
+}
+/* ── comet + twinkles on title (plays once on load) ── */
+.head-bar{position:relative;overflow:hidden}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 40 C 180 -8, 380 -12, 600 18 C 820 50, 1020 42, 1340 8');offset-rotate:auto;opacity:0;animation:cometRun 3.4s cubic-bezier(0.42,0.04,0.58,0.98) 0.3s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95) 0%,rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent 100%);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+
+/* ── Treatment Menu (Why / SOP / Safety) ───────────── */
+.treatment-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 22px}
+.menu-card{display:flex;flex-direction:column;padding:18px 18px 16px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));text-decoration:none;color:inherit;transition:all .22s ease;position:relative;overflow:hidden;min-height:128px}
+.menu-card::before{content:"";position:absolute;top:-40%;right:-20%;width:160px;height:160px;border-radius:50%;opacity:.10;pointer-events:none;transition:opacity .22s ease}
+.menu-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.30)}
+.menu-card:hover::before{opacity:.20}
+.menu-card.menu-why{border-color:rgba(97,168,255,.32);background:linear-gradient(135deg,rgba(97,168,255,.10),rgba(126,240,210,.04))}
+.menu-card.menu-why::before{background:radial-gradient(circle,rgba(97,168,255,.6),transparent 70%)}
+.menu-card.menu-why:hover{border-color:rgba(97,168,255,.6)}
+.menu-card.menu-sop{border-color:rgba(207,169,95,.30);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(255,255,255,.015));opacity:.78}
+.menu-card.menu-sop::before{background:radial-gradient(circle,rgba(207,169,95,.6),transparent 70%)}
+.menu-card.menu-sop:hover{border-color:rgba(207,169,95,.55);opacity:1}
+.menu-card.menu-safety{border-color:rgba(255,143,182,.30);background:linear-gradient(135deg,rgba(255,143,182,.10),rgba(126,240,210,.04))}
+.menu-card.menu-safety::before{background:radial-gradient(circle,rgba(255,143,182,.6),transparent 70%)}
+.menu-card.menu-safety:hover{border-color:rgba(255,143,182,.6)}
+.menu-icon{font-size:22px;line-height:1;margin-bottom:8px;position:relative;z-index:1}
+.menu-title{font-size:14.5px;font-weight:900;color:#fff;letter-spacing:-.01em;margin-bottom:5px;position:relative;z-index:1}
+.menu-desc{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;position:relative;z-index:1}
+.menu-foot{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;position:relative;z-index:1}
+.menu-foot .badge{padding:2px 8px;border-radius:999px;font-size:9.5px}
+.menu-foot.ready{color:#9be8d0}
+.menu-foot.ready .badge{background:rgba(126,240,210,.14);color:#cdfaea;border:1px solid rgba(126,240,210,.35)}
+.menu-foot.progress{color:#e6c682}
+.menu-foot.progress .badge{background:rgba(207,169,95,.14);color:#f0dba8;border:1px solid rgba(207,169,95,.35)}
+.menu-arrow{font-size:13px;font-weight:900}
+@media (max-width:780px){.treatment-menu{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">D</div>
+      <div>
+        <div class="brand-title">DART Tools</div>
+        <div class="brand-sub">Clinical calculator suite</div>
+      </div>
+    </a>
+    <div class="nav-right">
+      <span class="chip"><span class="dot"></span>Plasmapheresis</span>
+      <a class="chip chip-home" href="index.html">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle"       style="--x:11%;--y:25%;--delay:0.70s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:0.95s"></div>
+      <div class="twinkle"       style="--x:28%;--y:8%; --delay:1.20s"></div>
+      <div class="twinkle tiny"  style="--x:34%;--y:12%;--delay:1.40s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.60s"></div>
+      <div class="twinkle"       style="--x:51%;--y:28%;--delay:1.85s"></div>
+      <div class="twinkle tiny"  style="--x:58%;--y:38%;--delay:2.05s"></div>
+      <div class="twinkle small" style="--x:65%;--y:45%;--delay:2.25s"></div>
+      <div class="twinkle"       style="--x:74%;--y:48%;--delay:2.50s"></div>
+      <div class="twinkle small" style="--x:82%;--y:38%;--delay:2.70s"></div>
+      <div class="twinkle tiny"  style="--x:89%;--y:25%;--delay:2.90s"></div>
+      <div class="twinkle small" style="--x:95%;--y:15%;--delay:3.10s"></div>
+    </div>
+    <div>
+      <div class="head-kicker">Therapeutic Plasma Exchange</div>
+      <div class="head-title"><span class="accent">Plasmapheresis Calculator</span></div>
+    </div>
+    <div class="head-meta">Estimates TBV (Nadler), plasma volume, PVE-scaled replacement, and calcium values based on published apheresis formulas.</div>
+  </div>
+
+  <nav class="treatment-menu" aria-label="TPE references">
+    <a class="menu-card menu-why" href="whyplasmapheresis.html">
+      <div class="menu-icon">📖</div>
+      <div class="menu-title">Why TPE?</div>
+      <div class="menu-desc">Physiology, history, indications, ASFA categories, recent breakthroughs.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-sop" href="soptpe.html">
+      <div class="menu-icon">📋</div>
+      <div class="menu-title">TPE Standards of Practice</div>
+      <div class="menu-desc">Institutional protocols, technique standards, and procedural workflow.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-safety" href="safetytpe.html">
+      <div class="menu-icon">🛡️</div>
+      <div class="menu-title">TPE Safety Considerations</div>
+      <div class="menu-desc">Major risks, monitoring, complications, and prevention strategies.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+  </nav>
+
+  <div class="grid-wrap">
+
+    <section class="panel">
+      <div class="form-grid">
+
+        <div class="field">
+          <label class="label" for="sex">Sex</label>
+          <select id="sex" autofocus>
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="label" for="hct">Hematocrit (%)</label>
+          <input id="hct" type="number" step="0.1" min="0" placeholder="e.g. 32" />
+        </div>
+
+        <div class="field">
+          <label class="label">Height Unit</label>
+          <div class="inline-toggle">
+            <button class="toggle-btn active" type="button" id="heightMetricBtn">cm</button>
+            <button class="toggle-btn" type="button" id="heightEnglishBtn">ft + in</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Weight Unit</label>
+          <div class="inline-toggle">
+            <button class="toggle-btn active" type="button" id="weightMetricBtn">kg</button>
+            <button class="toggle-btn" type="button" id="weightEnglishBtn">lb</button>
+          </div>
+        </div>
+
+        <div class="field" id="heightCmWrap">
+          <label class="label" for="heightCm">Height (cm)</label>
+          <input id="heightCm" type="number" step="0.1" min="0" placeholder="e.g. 175" />
+        </div>
+        <div class="field hidden" id="heightEnglishWrap">
+          <label class="label">Height (ft + in)</label>
+          <div class="sub-grid">
+            <input id="heightFt" type="number" step="1" min="0" placeholder="ft" />
+            <input id="heightIn" type="number" step="0.1" min="0" placeholder="in" />
+          </div>
+        </div>
+
+        <div class="field" id="weightKgWrap">
+          <label class="label" for="weightKg">Weight (kg)</label>
+          <input id="weightKg" type="number" step="0.1" min="0" placeholder="e.g. 72" />
+        </div>
+        <div class="field hidden" id="weightLbWrap">
+          <label class="label" for="weightLb">Weight (lb)</label>
+          <input id="weightLb" type="number" step="0.1" min="0" placeholder="e.g. 160" />
+        </div>
+
+        <div class="field full">
+          <label class="label">Plasma Volume Exchange (PVE)</label>
+          <div class="inline-toggle" id="pveToggle">
+            <button class="toggle-btn active" type="button" data-pve="1">1.0 PVE</button>
+            <button class="toggle-btn" type="button" data-pve="1.2">1.2 PVE</button>
+            <button class="toggle-btn" type="button" data-pve="1.5">1.5 PVE</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Inlet:AC Ratio</label>
+          <div class="inline-toggle" id="acdToggle">
+            <button class="toggle-btn active" type="button" data-acd="10">10:1</button>
+            <button class="toggle-btn" type="button" data-acd="11">11:1</button>
+            <button class="toggle-btn" type="button" data-acd="12">12:1</button>
+            <button class="toggle-btn" type="button" data-acd="13">13:1</button>
+            <button class="toggle-btn" type="button" data-acd="15">15:1</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="inletFlowTpe">Inlet Flow (mL/min) — typ. ≈ wt(kg)</label>
+          <input id="inletFlowTpe" type="number" step="1" min="20" max="120" value="60" />
+        </div>
+
+        <div class="field full">
+          <label class="label">Prime / Rinseback Mode</label>
+          <div class="inline-toggle" id="rinsebackToggle">
+            <button class="toggle-btn active" type="button" data-rinseback="on">Standard · Rinseback ON</button>
+            <button class="toggle-btn" type="button" data-rinseback="off">Diluted Blood Prime · No Rinseback</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="replacementType">Replacement</label>
+          <select id="replacementType">
+            <option value="">Select</option>
+            <option value="albumin">Albumin only</option>
+            <option value="ffp">FFP only</option>
+            <option value="both">Albumin + FFP</option>
+          </select>
+        </div>
+
+        <div class="field hidden" id="splitWrap">
+          <label class="label" for="splitType">Split Ratio</label>
+          <select id="splitType">
+            <option value="half">½ Albumin : ½ FFP</option>
+            <option value="third">⅔ Albumin : ⅓ FFP</option>
+          </select>
+        </div>
+
+        <div class="field full hidden" id="ffpWarning"></div>
+
+        <div class="field full hidden" id="ibwUseWrap">
+          <div class="note warning">BMI &gt; 30. Some protocols use ideal body weight. Verify with physician.</div>
+          <div style="height:8px"></div>
+          <label class="label">Weight Basis</label>
+          <div class="inline-toggle">
+            <button class="toggle-btn active" type="button" id="actualBasisBtn">Entered Weight</button>
+            <button class="toggle-btn" type="button" id="ibwBasisBtn">Ideal Body Weight</button>
+          </div>
+        </div>
+
+        <div class="field full">
+          <details>
+            <summary>Optional — Diagnosis / ASFA 2023 indication</summary>
+            <select id="diagnosis">
+              <option value="">Select diagnosis (optional)</option>
+              <option value="ttp">TTP — Thrombotic thrombocytopenic purpura</option>
+              <option value="aidp">Guillain-Barré / AIDP</option>
+              <option value="cidp">CIDP</option>
+              <option value="mg-acute">Myasthenia gravis — acute</option>
+              <option value="mg-long">Myasthenia gravis — long-term</option>
+              <option value="anti-gbm-dah">Anti-GBM — diffuse alveolar hemorrhage</option>
+              <option value="anti-gbm-dialysis-independent">Anti-GBM — dialysis-independent</option>
+              <option value="anti-gbm-dialysis-dependent">Anti-GBM — dialysis-dependent, no DAH</option>
+              <option value="sle-severe">SLE — severe</option>
+              <option value="aav-mpa">ANCA vasculitis — MPA</option>
+              <option value="aav-gpa">ANCA vasculitis — GPA</option>
+              <option value="kidney-abo-compatible-amr">Kidney ABO-compatible AMR</option>
+              <option value="kidney-abo-compatible-desens">Kidney ABO-compatible desensitization</option>
+              <option value="kidney-abo-incompatible-desens">Kidney ABO-incompatible desensitization</option>
+              <option value="kidney-abo-incompatible-amr">Kidney ABO-incompatible AMR</option>
+              <option value="heart-desens">Heart — desensitization</option>
+              <option value="heart-amr">Heart — AMR</option>
+              <option value="liver-aboi-desens">Liver ABO-incompatible desensitization</option>
+              <option value="thyroid-storm">Thyroid storm</option>
+              <option value="wilson-fulminant">Wilson disease, fulminant</option>
+              <optgroup label="── Hyperviscosity / Hematology ──">
+                <option value="hyperviscosity-waldenstrom">Hyperviscosity — Waldenström macroglobulinemia</option>
+                <option value="hyperviscosity-myeloma">Hyperviscosity — Multiple Myeloma (IgA/IgG)</option>
+                <option value="cryoglobulinemia-severe">Cryoglobulinemia — severe / symptomatic</option>
+              </optgroup>
+              <optgroup label="── Renal / Microangiopathy ──">
+                <option value="fsgs-recurrent-tx">FSGS — recurrent post-kidney transplant</option>
+                <option value="ahus-factor-h-ab">aHUS — anti-Factor H antibody</option>
+                <option value="ahus-complement">aHUS — complement mutation (CFH/CFI/C3/MCP/THBD)</option>
+              </optgroup>
+              <optgroup label="── Autoimmune / Rheumatology ──">
+                <option value="caps">Catastrophic APS (CAPS)</option>
+                <option value="pemphigus-severe">Pemphigus — severe / refractory</option>
+              </optgroup>
+              <optgroup label="── Hepatic / Metabolic ──">
+                <option value="acute-liver-failure">Acute Liver Failure</option>
+                <option value="hypertrig-pancreatitis">Hypertriglyceridemic Pancreatitis</option>
+                <option value="drug-protein-bound">Drug overdose — protein-bound</option>
+              </optgroup>
+              <optgroup label="── Neuroimmunology ──">
+                <option value="nmda-encephalitis">Anti-NMDA Receptor Encephalitis</option>
+                <option value="vgkc-encephalitis">LGI1 / CASPR2 / VGKC Encephalitis</option>
+                <option value="nmosd-relapse">NMOSD — acute relapse</option>
+                <option value="ms-acute-relapse">MS — acute steroid-refractory relapse</option>
+                <option value="adem">ADEM (Acute Disseminated Encephalomyelitis)</option>
+                <option value="pandas-sydenham">PANDAS / Sydenham Chorea</option>
+                <option value="rasmussen-encephalitis">Rasmussen Encephalitis</option>
+                <option value="stiff-person">Stiff-Person Syndrome</option>
+                <option value="hashimoto-encephalopathy">Hashimoto Encephalopathy (SREAT)</option>
+              </optgroup>
+              <option value="other">Other / not listed</option>
+            </select>
+            <div id="diagnosisInfoCard" class="math-box hidden" style="margin-top:10px"></div>
+          </details>
+        </div>
+
+        <div class="field full">
+          <div class="note info"><strong>Estimates only — not an order.</strong> Independent educational tool, no manufacturer affiliation. Physician direction required for weight basis, PVE, and replacement product. Outputs may differ from values displayed by commercial apheresis devices.</div>
+        </div>
+
+      </div>
+
+      <div class="calc-row">
+        <button class="btn btn-primary" id="calculateBtn" type="button">Calculate</button>
+        <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-title">Results</div>
+      <div class="panel-sub">Values appear after Calculate. PVE multiplier is applied to total replacement.</div>
+      <div class="result-stack" id="results">
+        <div class="result-card">
+          <div class="result-kicker">Awaiting inputs</div>
+          <div class="result-value">—</div>
+          <div class="result-meta">Fill the form and press Calculate.</div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <div class="foot">
+    <span>DART Tools · Plasmapheresis</span>
+    <span>Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+  </div>
+
+</div>
+
+<script>
+/* ─── diagnosis library (ASFA 2023, educational) ─── */
+const diagnosisLibrary = {
+  "ttp":{label:"Thrombotic thrombocytopenic purpura (TTP)", category:"Category I", grade:"1A", rationale:"TPE is first-line: removes circulating ADAMTS13 inhibitor and ultra-large vWF multimers, AND supplies ADAMTS13 enzyme via FFP. Albumin alone is inadequate — does not replenish ADAMTS13.", nurse:"MEDICAL EMERGENCY. Expedite therapy, confirm FFP replacement, watch neuro change, hemolysis, platelet recovery, and access.", requiresFFP:true, ffpReason:"TTP requires FFP to supply ADAMTS13 enzyme (the deficient protein). Albumin replacement is inadequate and contraindicated as primary fluid."},
+  "aidp":{label:"Guillain-Barré / AIDP", category:"Category I", grade:"1A", rationale:"TPE removes pathogenic antibodies and inflammatory mediators in acute inflammatory demyelinating polyradiculoneuropathy.", nurse:"Watch respiratory status, bulbar weakness, autonomic instability, pain, mobility, and tolerance of serial exchanges."},
+  "cidp":{label:"CIDP", category:"Category I", grade:"1B", rationale:"TPE reduces circulating immune factors in autoimmune demyelinating neuropathy, often as rescue or short-term response.", nurse:"Trend strength, gait, sensory symptoms, and whether apheresis is bridge or maintenance."},
+  "mg-acute":{label:"Myasthenia gravis — acute", category:"Category I", grade:"1B", rationale:"Rapid, short-acting immunomodulation for crisis, unstable or refractory disease, and pre-thymectomy.", nurse:"Watch bulbar symptoms, respiratory fatigue, secretions, aspiration risk, and therapy timing."},
+  "mg-long":{label:"Myasthenia gravis — long-term", category:"Category II", grade:"2B", rationale:"Second-line when longer-term apheresis is needed for persistent/refractory disease.", nurse:"Clarify cadence, access durability, interval response, and whether bridging another therapy."},
+  "anti-gbm-dah":{label:"Anti-GBM — DAH", category:"Category I", grade:"1C", rationale:"Early TPE removes circulating anti-GBM antibodies in pulmonary hemorrhage.", nurse:"Respiratory status is critical; plasma replacement may be indicated — monitor oxygenation."},
+  "anti-gbm-dialysis-independent":{label:"Anti-GBM — dialysis-independent", category:"Category I", grade:"1B", rationale:"Early TPE with immunosuppression to clear antibodies before dialysis dependence develops.", nurse:"Trend creatinine, urine output, pulmonary symptoms, and immunosuppression timing."},
+  "anti-gbm-dialysis-dependent":{label:"Anti-GBM — dialysis-dependent, no DAH", category:"Category III", grade:"2B", rationale:"Individualized role when already dialysis-dependent without pulmonary hemorrhage.", nurse:"Confirm treatment goal with team; benefit is less established here."},
+  "sle-severe":{label:"SLE — severe", category:"Category II", grade:"2C", rationale:"Second-line in selected severe SLE when rapid removal of immune mediators is desired.", nurse:"Clarify the target organ — nursing priorities differ for nephritis, DAH, or CNS disease."},
+  "aav-mpa":{label:"ANCA vasculitis — MPA", category:"Category III", grade:"1B", rationale:"Optimum role not established; individualize in severe renal disease or DAH.", nurse:"Know if target is severe renal failure, DAH, or rescue after incomplete induction."},
+  "aav-gpa":{label:"ANCA vasculitis — GPA", category:"Category III", grade:"1B", rationale:"Optimum role not established; individualized in severe disease.", nurse:"Track renal trajectory, pulmonary status, bleeding, coordination with steroids/rituximab/cyclophosphamide."},
+  "kidney-abo-compatible-amr":{label:"Kidney ABO-compatible — AMR", category:"Category I", grade:"1B", rationale:"First-line to reduce donor-specific antibodies alongside immunomodulatory therapy.", nurse:"Distinguish active rejection vs desensitization; coordinate with IVIG/adjuncts."},
+  "kidney-abo-compatible-desens":{label:"Kidney ABO-compatible — desensitization (LD)", category:"Category I", grade:"1B", rationale:"Pre-transplant in selected sensitized living-donor candidates to lower antibody burden.", nurse:"Verify timeline to transplant and antibody endpoints/adjunct meds."},
+  "kidney-abo-incompatible-desens":{label:"Kidney ABO-incompatible — desensitization (LD)", category:"Category I", grade:"1B", rationale:"Pre-transplant reduction of isoagglutinins for ABO-incompatible living-donor transplant.", nurse:"Confirm center protocol, endpoint, and replacement strategy."},
+  "kidney-abo-incompatible-amr":{label:"Kidney ABO-incompatible — AMR", category:"Category II", grade:"1B", rationale:"Second-line for AMR in this setting, generally part of a multimodal strategy.", nurse:"Monitor graft dysfunction, fluid balance, product tolerance, immunotherapy timing."},
+  "heart-desens":{label:"Heart — desensitization", category:"Category II", grade:"1C", rationale:"Second-line for sensitized heart-transplant candidates to reduce antibody burden.", nurse:"Clarify pre-transplant vs peri-transplant support and track transplant timeline."},
+  "heart-amr":{label:"Heart — AMR", category:"Category III", grade:"2C", rationale:"Optimum role not established; individualized with the transplant team.", nurse:"Watch hemodynamics, volume status, graft dysfunction, and adjunct therapy timing."},
+  "liver-aboi-desens":{label:"Liver ABO-incompatible — desensitization (LD)", category:"Category I", grade:"1C", rationale:"First-line desensitization support in ABO-incompatible living-donor liver transplant.", nurse:"Verify transplant timing, target titers, and product strategy."},
+  "thyroid-storm":{label:"Thyroid storm", category:"Category II", grade:"2C", rationale:"Second-line when rapid reduction of thyroid hormone / protein-bound mediators is needed.", nurse:"Monitor rhythm, temperature, blood pressure, mental status; coordinate with antithyroid drugs and beta blockade."},
+  "wilson-fulminant":{label:"Wilson disease, fulminant", category:"Category I", grade:"1C", rationale:"First-line supportive therapy to rapidly remove circulating copper; often bridge to transplant.", nurse:"Monitor hemolysis, liver failure, coagulopathy, and transplant evaluation."},
+
+  /* ── Additional diagnoses (ASFA 2023 ninth edition) ───── */
+  "hyperviscosity-waldenstrom":{label:"Hyperviscosity — Waldenström macroglobulinemia", category:"Category I", grade:"1B", rationale:"TPE rapidly removes IgM paraprotein (mostly intravascular) — viscosity drops within hours, reversing visual changes, bleeding, and neurologic symptoms. Bridge to chemo/rituximab.", nurse:"Trend visual acuity (retinal hemorrhages), cognition, bleeding/oozing, mucosal symptoms. Avoid IgM-containing FFP unless coag-replacement indicated."},
+  "hyperviscosity-myeloma":{label:"Hyperviscosity — Multiple Myeloma (IgA / IgG)", category:"Category I", grade:"1B", rationale:"TPE removes IgA/IgG paraproteins when serum viscosity drives symptoms (typically &gt;4–5 cP). IgG/IgA less efficient than IgM due to larger extravascular pool — may need repeat sessions.", nurse:"Monitor visual symptoms, bleeding, neuro changes; expect 1–3 daily exchanges; coordinate with hematology for definitive chemo."},
+  "cryoglobulinemia-severe":{label:"Cryoglobulinemia — severe / symptomatic vasculitis", category:"Category I", grade:"2A", rationale:"TPE removes cryoglobulins in symptomatic disease (vasculitis, neuropathy, glomerulonephritis, digital ischemia). Warm patient + lines essential to prevent cryoprecipitation inside the circuit.", nurse:"WARM the patient and access lines with blood warmer / hot packs. Watch Raynaud, peripheral pulses, renal trends. Coordinate with rheumatology / hepatology if HCV-associated."},
+  "fsgs-recurrent-tx":{label:"FSGS — recurrent post-kidney transplant", category:"Category I", grade:"1B", rationale:"TPE removes presumed circulating permeability factor (suPAR, others) within hours of allograft recurrence. Early initiation correlates with graft salvage.", nurse:"Trend proteinuria, albumin, eGFR. Typical course: 5–9 sessions over 2–3 weeks, then taper. Coordinate with transplant nephrology and immunosuppression adjustment."},
+  "ahus-factor-h-ab":{label:"Atypical HUS — anti-Factor H antibody", category:"Category I", grade:"2C", rationale:"TPE removes pathogenic anti-Factor H antibody AND supplies complement regulators via FFP. Eculizumab is now first-line but TPE/FFP remains the option when eculizumab is unavailable or as adjunct.", nurse:"FFP REPLACEMENT supplies Factor H. Trend renal function, schistocytes, LDH, haptoglobin, platelets, neurologic status.", requiresFFP:true, ffpReason:"Anti-FH aHUS responds to FFP because it supplies the autoimmune-target protein (Complement Factor H). Albumin alone leaves the patient without the regulator they're auto-attacking."},
+  "ahus-complement":{label:"Atypical HUS — complement mutation (CFH, CFI, C3, MCP, THBD)", category:"Category III", grade:"2C", rationale:"Optimum role not established. Eculizumab/ravulizumab is first-line. TPE with FFP has been used as a bridge before genetic typing or when complement inhibitors unavailable.", nurse:"Coordinate closely with nephrology — eculizumab usually preferred. If TPE used, FFP replacement typical."},
+  "caps":{label:"Catastrophic Antiphospholipid Syndrome (CAPS)", category:"Category I", grade:"2C", rationale:"Triple therapy (anticoagulation + steroids + TPE/IVIG) reduces mortality of CAPS from ~50% to ~30%. TPE removes pathogenic antiphospholipid antibodies + complement activation products.", nurse:"Watch for multi-organ thromboembolic events — kidneys, lung (DAH), brain, heart, skin. Coordinate with rheumatology/hematology. Consider FFP if coagulopathy/bleeding present."},
+  "acute-liver-failure":{label:"Acute Liver Failure", category:"Category III", grade:"2B", rationale:"High-volume TPE (1.5–2× PV with FFP) removes hepatotoxins, ammonia, and pro-inflammatory mediators. APACHE study showed improved transplant-free survival in ALF when liver transplant not available.", nurse:"FFP supplies coagulation factors. Trend INR, ammonia, lactate, fibrinogen, hemodynamics. Coordinate with hepatology and transplant team.", requiresFFP:true, ffpReason:"ALF patients have profound coagulopathy from impaired hepatic synthesis. FFP supplies factors II, V, VII, IX, X, fibrinogen, and ADAMTS13. Albumin alone worsens coagulopathy."},
+  "hypertrig-pancreatitis":{label:"Severe Hypertriglyceridemic Pancreatitis (TG &gt; 1000 mg/dL)", category:"Category III", grade:"2C", rationale:"TPE rapidly drops TG (target &lt; 500 mg/dL within 1–2 sessions) and removes inflammatory mediators in severe necrotizing pancreatitis. Insulin infusion is an alternative.", nurse:"Trend TG, lipase, organ failure scores, hemodynamics. Coordinate with critical care and endocrinology."},
+  "drug-protein-bound":{label:"Drug Overdose / Toxin — highly protein-bound", category:"Category III", grade:"2C", rationale:"TPE removes drugs/toxins with high protein binding and low Vd that aren't cleared by HD: digoxin-Fab complexes, mushroom toxins (Amanita), L-asparaginase, mistletoe, paraquat, cisplatin.", nurse:"Coordinate with toxicology / poison control. Trend drug level, organ function. Albumin replacement maintains binding capacity for ongoing drug clearance."},
+  "nmda-encephalitis":{label:"Anti-NMDA Receptor Encephalitis", category:"Category I", grade:"1C", rationale:"TPE is first-line immunotherapy along with steroids and IVIG (often combined). If teratoma-associated, tumor resection essential. Earlier treatment correlates with better neuropsychiatric recovery.", nurse:"Watch psychiatric symptoms, seizures, autonomic instability, orofacial dyskinesias, hypoventilation. Coordinate with neurology + gyn-onc if tumor screening."},
+  "vgkc-encephalitis":{label:"LGI1 / CASPR2 / VGKC-complex Antibody Encephalitis", category:"Category II", grade:"2C", rationale:"TPE removes pathogenic antibodies in faciobrachial dystonic seizures, limbic encephalitis, Morvan syndrome. Often combined with steroids and rituximab.", nurse:"Cognitive/memory testing, seizure precautions, hyponatremia (LGI1). Coordinate with neurology + immunotherapy."},
+  "nmosd-relapse":{label:"NMOSD — acute relapse (transverse myelitis / optic neuritis)", category:"Category II", grade:"1B", rationale:"TPE second-line for steroid-refractory NMOSD attacks; faster recovery than IVIG in this population. Removes anti-AQP4 (or anti-MOG) antibodies. Earlier = better outcome.", nurse:"Track visual acuity, motor strength, dermatomal sensory level, bladder/bowel function. Coordinate with neuro-immunology for long-term DMT."},
+  "ms-acute-relapse":{label:"Multiple Sclerosis — acute steroid-refractory relapse", category:"Category II", grade:"1B", rationale:"TPE second-line for severe acute MS attacks not responding to high-dose steroids; typically 5–7 sessions over 1–2 weeks. ~50% have meaningful recovery.", nurse:"Track relevant deficits, EDSS, plan rehab. Coordinate disease-modifying therapy adjustment."},
+  "adem":{label:"Acute Disseminated Encephalomyelitis (ADEM)", category:"Category II", grade:"2C", rationale:"TPE second-line after steroid failure in severe ADEM; case-by-case use in fulminant disease, especially with poor steroid response.", nurse:"Mental status, focal deficits, seizures; coordinate with neurology / peds-neurology and rehab planning."},
+  "pandas-sydenham":{label:"PANDAS / Sydenham Chorea — severe / refractory", category:"Category I (Sydenham) / II (PANDAS)", grade:"2B", rationale:"TPE removes autoantibodies against basal ganglia in post-streptococcal autoimmune neuropsychiatric disease. Established benefit for severe Sydenham chorea; PANDAS evidence weaker.", nurse:"Track chorea severity, OCD symptoms, tic frequency, school/family function. Coordinate with peds neurology / psychiatry."},
+  "pemphigus-severe":{label:"Pemphigus Vulgaris / Foliaceus — severe, refractory", category:"Category III", grade:"2C", rationale:"TPE adjunctive in severe/refractory disease to lower anti-desmoglein autoantibodies; rituximab is preferred initial steroid-sparing agent.", nurse:"Skin/mucosa burden score, infection precautions (broken skin), nutrition support, pain control. Coordinate with derm/rheum."},
+  "rasmussen-encephalitis":{label:"Rasmussen Encephalitis", category:"Category III", grade:"2C", rationale:"TPE adjunctive for refractory focal seizures + progressive hemiparesis; bridge to hemispherectomy in some cases. Benefit modest, individualize.", nurse:"Seizure precautions, neuro deficit tracking, pediatric volume management."},
+  "stiff-person":{label:"Stiff-Person Syndrome", category:"Category III", grade:"2C", rationale:"TPE removes anti-GAD65 (or anti-amphiphysin) antibodies in selected cases; benefit variable; IVIG is generally preferred first-line.", nurse:"Trend muscle stiffness, spasm frequency, autonomic symptoms, falls. Coordinate with neurology."},
+  "hashimoto-encephalopathy":{label:"Hashimoto Encephalopathy (SREAT)", category:"Category II", grade:"2C", rationale:"Steroid-responsive encephalopathy with thyroid autoimmunity. TPE used in steroid-refractory cases; anti-TPO/anti-Tg antibodies removed though pathogenicity debated.", nurse:"Mental status, seizures, tremors, thyroid function trending. Coordinate neurology / endocrine."},
+
+  "other":{label:"Other / not listed", category:"Unspecified", grade:"—", rationale:"Indication not mapped here. Verify role of TPE with current guideline, physician order, and local protocol.", nurse:"Ensure indication, endpoint, replacement plan, and adjunct schedule are documented."}
+};
+
+/* ─── state + refs ─── */
+const state = {heightMode:'cm', weightMode:'kg', weightBasis:'actual', pve:1.0, acd:10, rinseback:'on'};
+const $ = (id) => document.getElementById(id);
+const el = {
+  sex:$('sex'), hct:$('hct'),
+  heightCm:$('heightCm'), heightFt:$('heightFt'), heightIn:$('heightIn'),
+  weightKg:$('weightKg'), weightLb:$('weightLb'),
+  diagnosis:$('diagnosis'), diagnosisInfoCard:$('diagnosisInfoCard'),
+  replacementType:$('replacementType'), splitType:$('splitType'), splitWrap:$('splitWrap'),
+  ffpWarning:$('ffpWarning'),
+  results:$('results'),
+  calculateBtn:$('calculateBtn'), resetBtn:$('resetBtn'),
+  heightMetricBtn:$('heightMetricBtn'), heightEnglishBtn:$('heightEnglishBtn'),
+  weightMetricBtn:$('weightMetricBtn'), weightEnglishBtn:$('weightEnglishBtn'),
+  heightCmWrap:$('heightCmWrap'), heightEnglishWrap:$('heightEnglishWrap'),
+  weightKgWrap:$('weightKgWrap'), weightLbWrap:$('weightLbWrap'),
+  ibwUseWrap:$('ibwUseWrap'), actualBasisBtn:$('actualBasisBtn'), ibwBasisBtn:$('ibwBasisBtn'),
+  pveToggle:$('pveToggle'),
+  acdToggle:$('acdToggle'),
+  inletFlowTpe:$('inletFlowTpe'),
+  rinsebackToggle:$('rinsebackToggle')
+};
+
+/* ─── helpers ─── */
+function setActive(buttons, activeButton){ buttons.forEach(b=>b.classList.remove('active')); activeButton.classList.add('active'); }
+function fmt(num, digits=1){ return Number(num).toLocaleString(undefined,{minimumFractionDigits:digits, maximumFractionDigits:digits}); }
+function heightToCm(){ if(state.heightMode==='cm') return parseFloat(el.heightCm.value); const ft=parseFloat(el.heightFt.value||0); const inches=parseFloat(el.heightIn.value||0); return ((ft*12)+inches)*2.54; }
+function heightToInches(){ return heightToCm()/2.54; }
+function weightToKg(){ if(state.weightMode==='kg') return parseFloat(el.weightKg.value); return parseFloat(el.weightLb.value)*0.45359237; }
+function devineIBWKg(sex, heightInches){ return sex==='male' ? 50 + 2.3*(heightInches-60) : 45.5 + 2.3*(heightInches-60); }
+function nadlerTBVml(sex, heightCm, weightKg){ const h=heightCm/100; return sex==='male' ? 604 + (367*Math.pow(h,3)) + (32.2*weightKg) : 183 + (356*Math.pow(h,3)) + (33.1*weightKg); }
+function validatePositive(v, n){ if(!Number.isFinite(v) || v<=0) throw new Error(`Please enter a valid ${n}.`); }
+
+/* ─── Pediatric TBV (≤ 25 kg) — institution policy ───────
+   Neonates (≤ 5 kg)               : TBV = 90 mL/kg
+   Infants & Small Children (5.1–15 kg): TBV = 80 mL/kg
+   Children (15.1–25 kg)           : TBV = 70 mL/kg
+   Above 25 kg → use Nadler formula
+*/
+function pediatricTBVml(weightKg){
+  if(weightKg <= 5)        return { tbv: 90 * weightKg, factor: 90, band: 'Neonate (≤ 5 kg)' };
+  if(weightKg <= 15)       return { tbv: 80 * weightKg, factor: 80, band: 'Infant / Small Child (5.1–15 kg)' };
+  return                          { tbv: 70 * weightKg, factor: 70, band: 'Child (15.1–25 kg)' };
+}
+const PEDIATRIC_THRESHOLD_KG = 25;
+
+/* Optia-empirical "cellular displacement volume" K (mL).
+   Reverse-engineered from 5 paired Optia screens (Hct 0.22-0.40, TBV 3.2-5.6 L).
+   Replacement formula: PVE × (TBV × (1−Hct) − K × Hct)
+   Mean |error| ≈ 19 mL, worst ≈ 33 mL (within bag-rounding for clinical use). */
+const OPTIA_K_ML = 550;
+
+/* ─── ECV constants for prime decision (TPE / RBCX) ─── */
+const ECV_CIRCUIT_ML = 185;          // Optia TPE/RBCX tubing set
+const ECV_WARMER_ML  = 50;           // warmer tubing
+const ECV_TOTAL_ML   = ECV_CIRCUIT_ML + ECV_WARMER_ML;   // 235 mL
+const PRIME_VOLUME_ML = 250;         // recommended prime volume for TPE/RBCX (250 mL diluted PRBC at 35% Hct OR albumin)
+
+function decidePrime(ecvPctOfTbv){
+  if(ecvPctOfTbv > 15){
+    return {
+      level:'diluted-strong',
+      label:'Strongly recommend Diluted Blood Prime',
+      color:'#ffb4b4',
+      bg:'rgba(255,111,111,.10)',
+      border:'rgba(255,111,111,.32)',
+      icon:'⚠',
+      detail:`ECV is <strong>${ecvPctOfTbv.toFixed(1)}%</strong> of patient TBV (above 15%). Recommend pre-procedure <strong>Diluted PRBC Prime (35% Hct, ${PRIME_VOLUME_ML} mL)</strong> to maintain isovolemic state.`
+    };
+  }
+  if(ecvPctOfTbv > 10){
+    const bias = ecvPctOfTbv >= 12.5 ? 'closer to 15%' : 'closer to 10%';
+    return {
+      level:'consider-prime',
+      label:'Consider Custom Prime (Albumin or Diluted Blood)',
+      color:'#ffe8b6',
+      bg:'rgba(255,205,112,.08)',
+      border:'rgba(255,205,112,.32)',
+      icon:'▲',
+      detail:`ECV is <strong>${ecvPctOfTbv.toFixed(1)}%</strong> of patient TBV (10–15% range, ${bias}). Consider <strong>Albumin Prime</strong> (stable, no transfusion) or <strong>Diluted PRBC Prime (35% Hct)</strong> closer to 15%. Volume: <strong>${PRIME_VOLUME_ML} mL</strong>.`
+    };
+  }
+  return {
+    level:'standard',
+    label:'Standard NS prime acceptable',
+    color:'#cdfaea',
+    bg:'rgba(126,240,210,.06)',
+    border:'rgba(126,240,210,.28)',
+    icon:'●',
+    detail:`ECV is <strong>${ecvPctOfTbv.toFixed(1)}%</strong> of patient TBV (≤ 10%). Standard NS prime acceptable if patient is hemodynamically stable.`
+  };
+}
+
+/* ─── diagnosis preview + FFP auto-switch ─── */
+function renderDiagnosisInfo(){
+  const key = el.diagnosis.value;
+  if(!key){
+    el.diagnosisInfoCard.classList.add('hidden'); el.diagnosisInfoCard.innerHTML='';
+    el.ffpWarning.classList.add('hidden'); el.ffpWarning.innerHTML='';
+    return;
+  }
+  const d = diagnosisLibrary[key];
+  el.diagnosisInfoCard.classList.remove('hidden');
+  el.diagnosisInfoCard.innerHTML = `
+    <div class="calc-line"><strong>ASFA 2023:</strong> ${d.category}${d.grade && d.grade !== '—' ? ` · Grade ${d.grade}` : ''}</div>
+    <div class="calc-line"><strong>Rationale:</strong> ${d.rationale}</div>
+    <div class="calc-line"><strong>Nurse focus:</strong> ${d.nurse}</div>
+  `;
+
+  // FFP auto-switch for diagnoses that require it
+  if(d.requiresFFP === true){
+    if(el.replacementType.value !== 'ffp'){
+      el.replacementType.value = 'ffp';
+      el.splitWrap.classList.add('hidden');
+    }
+    el.ffpWarning.classList.remove('hidden');
+    el.ffpWarning.innerHTML = `
+      <div style="border:1px solid rgba(255,111,111,.40);background:rgba(255,111,111,.10);color:#ffd2d2;padding:11px 14px;border-radius:11px;font-size:12.5px;line-height:1.55;display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:18px;line-height:1;flex-shrink:0">⚠</span>
+        <div><strong>FFP REPLACEMENT REQUIRED for this diagnosis.</strong> ${d.ffpReason || 'This indication requires FFP for plasma factor replacement; albumin alone is inadequate.'} Replacement auto-set to FFP only — override only with attending approval.</div>
+      </div>`;
+  } else {
+    el.ffpWarning.classList.add('hidden');
+    el.ffpWarning.innerHTML='';
+  }
+}
+
+/* ─── flag if user overrides FFP recommendation ─── */
+function checkFFPOverride(){
+  const key = el.diagnosis.value;
+  if(!key){ return; }
+  const d = diagnosisLibrary[key];
+  if(!d || d.requiresFFP !== true){
+    // Diagnosis doesn't require FFP — clear any override warning
+    el.ffpWarning.classList.add('hidden');
+    el.ffpWarning.innerHTML='';
+    return;
+  }
+  // Diagnosis requires FFP
+  if(el.replacementType.value === 'ffp'){
+    // Compliance — show the standard "required" message
+    el.ffpWarning.classList.remove('hidden');
+    el.ffpWarning.innerHTML = `
+      <div style="border:1px solid rgba(255,111,111,.40);background:rgba(255,111,111,.10);color:#ffd2d2;padding:11px 14px;border-radius:11px;font-size:12.5px;line-height:1.55;display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:18px;line-height:1;flex-shrink:0">⚠</span>
+        <div><strong>FFP REPLACEMENT REQUIRED for this diagnosis.</strong> ${d.ffpReason || 'This indication requires FFP for plasma factor replacement; albumin alone is inadequate.'}</div>
+      </div>`;
+  } else {
+    // User OVERRIDE — escalate to bright red banner
+    el.ffpWarning.classList.remove('hidden');
+    el.ffpWarning.innerHTML = `
+      <div style="border:2px solid rgba(255,111,111,.7);background:rgba(255,111,111,.18);color:#ffeeee;padding:12px 14px;border-radius:11px;font-size:13px;line-height:1.55;display:flex;gap:10px;align-items:flex-start;box-shadow:0 0 0 3px rgba(255,111,111,.15)">
+        <span style="font-size:22px;line-height:1;flex-shrink:0">⚠</span>
+        <div><strong>OVERRIDE WARNING — ${d.label} typically requires FFP.</strong> You have selected <strong>${el.replacementType.value === 'albumin' ? 'albumin only' : 'albumin + FFP split'}</strong>. ${d.ffpReason || 'FFP is recommended for plasma factor replacement.'} Confirm this override with the attending physician before proceeding.</div>
+      </div>`;
+  }
+}
+
+/* ─── calcium chloride (on demand) ─── */
+function showCalciumChloride(show, replacementMl=0){
+  const box = document.getElementById('cacl2Box');
+  if(!box) return;
+  if(!show){ box.classList.add('hidden'); box.innerHTML=''; return; }
+  const mg = replacementMl * (133/500);
+  box.classList.remove('hidden');
+  box.innerHTML = `
+    <div class="math-box">
+      <div class="calc-line"><strong>Calcium chloride</strong></div>
+      <div class="calc-line">Rule: 133 mg per 500 mL replacement</div>
+      <div class="calc-line">${fmt(replacementMl)} × (133 / 500) = <strong>${fmt(mg)} mg</strong></div>
+    </div>`;
+}
+
+/* ─── result render ─── */
+function createResultHTML(d){
+  // Calcium gluconate dosing per institutional rule: 400 mg per 500 mL replacement.
+  const calciumMg = d.totalReplacementMl * 0.8;
+  const calciumMl = calciumMg / 100;
+
+  let albuminText='—', ffpText='—', mixNote='';
+  if(d.replacementType==='albumin'){ albuminText=`${fmt(d.totalReplacementMl)} mL`; ffpText='0.0 mL'; mixNote='Albumin only.'; }
+  else if(d.replacementType==='ffp'){ albuminText='0.0 mL'; ffpText=`${fmt(d.totalReplacementMl)} mL`; mixNote='FFP only.'; }
+  else if(d.replacementType==='both' && d.splitType==='half'){ albuminText=`${fmt(d.totalReplacementMl*0.5)} mL`; ffpText=`${fmt(d.totalReplacementMl*0.5)} mL`; mixNote='Split ½ Albumin : ½ FFP.'; }
+  else if(d.replacementType==='both' && d.splitType==='third'){ albuminText=`${fmt(d.totalReplacementMl*(2/3))} mL`; ffpText=`${fmt(d.totalReplacementMl*(1/3))} mL`; mixNote='Split ⅔ Albumin : ⅓ FFP.'; }
+
+  return `
+    ${d.diagnosis ? `
+    <div class="result-card">
+      <div class="result-kicker">Diagnosis Context</div>
+      <div class="result-value" style="font-size:18px">${d.diagnosis.label}</div>
+      <div class="result-meta">ASFA 2023: <strong>${d.diagnosis.category}</strong>${d.diagnosis.grade && d.diagnosis.grade !== '—' ? ` · Grade ${d.diagnosis.grade}` : ''}</div>
+    </div>` : ''}
+
+    <div class="mini-grid">
+      <div class="result-card">
+        <div class="result-kicker">BMI</div>
+        <div class="result-value">${fmt(d.bmi,1)}</div>
+        <div class="result-meta">Weight basis: <strong>${d.weightBasisLabel}</strong></div>
+      </div>
+      <div class="result-card">
+        <div class="result-kicker">Ideal Body Weight</div>
+        <div class="result-value">${fmt(d.ibwKg)} <span style="font-size:.48em;font-weight:800;color:var(--muted)">kg</span></div>
+        <div class="result-meta">${fmt(d.ibwLb)} lb · Devine</div>
+      </div>
+    </div>
+
+    ${d.bmi > 30 ? `<div class="note warning">BMI &gt; 30. Calculation currently using <strong>${d.weightBasisLabel}</strong>.</div>` : ''}
+
+    ${d.pedInfo ? `
+    <div class="result-card" style="border-color:rgba(255,205,112,.28);background:linear-gradient(180deg, rgba(255,205,112,.05), rgba(97,168,255,.03));">
+      <div class="result-kicker">⚠ Pediatric Patient — Nadler not used</div>
+      <div class="result-meta" style="margin-bottom:8px;font-size:12.5px">Patient weight <strong>${fmt(d.weightKgActual,1)} kg</strong> is ≤ 25 kg. Per institutional policy we use the pediatric weight-based TBV formula (not Nadler). Nadler is reserved for patients &gt; 25 kg.</div>
+      <div class="math-box" style="background:rgba(255,205,112,.06);border-color:rgba(255,205,112,.22)">
+        <div class="calc-line"><strong>Band:</strong> ${d.pedInfo.band} → TBV = <strong>${d.pedInfo.factor} mL/kg</strong> × weight</div>
+        <div class="calc-line"><strong>Math:</strong> ${d.pedInfo.factor} × ${fmt(d.weightKgActual,1)} kg = <strong>${fmt(d.tbvMl)} mL TBV</strong></div>
+        <div class="calc-line">Plasma Volume = TBV × (1 − Hct) = ${fmt(d.tbvMl)} × ${fmt(1 - d.hctFraction,3)} = <strong>${fmt(d.plasmaVolumeMl)} mL</strong></div>
+        <div class="calc-line" style="color:#ffe8b6"><strong>Reference bands:</strong> ≤ 5 kg → 90 mL/kg · 5.1–15 kg → 80 mL/kg · 15.1–25 kg → 70 mL/kg</div>
+      </div>
+    </div>` : ''}
+
+    <div class="mini-grid">
+      <div class="result-card">
+        <div class="result-kicker">Total Blood Volume</div>
+        <div class="result-value">${fmt(d.tbvMl)} <span style="font-size:.48em;font-weight:800;color:var(--muted)">mL</span></div>
+        <div class="result-meta">${d.tbvMethod}</div>
+      </div>
+      <div class="result-card">
+        <div class="result-kicker">Plasma Volume (1 PVE)</div>
+        <div class="result-value">${fmt(d.plasmaVolumeMl)} <span style="font-size:.48em;font-weight:800;color:var(--muted)">mL</span></div>
+        <div class="result-meta">TBV × (1 − Hct)</div>
+      </div>
+    </div>
+
+    <!-- Prime decision card -->
+    <div class="result-card" style="border-color:${d.primeDecision.border};background:linear-gradient(180deg, ${d.primeDecision.bg}, rgba(255,255,255,.01));">
+      <div class="result-kicker" style="color:${d.primeDecision.color}">${d.primeDecision.icon} Prime Decision · ECV ${fmt(d.ecvPctOfTbv,1)}% of TBV</div>
+      <div class="result-value" style="font-size:18px;color:${d.primeDecision.color}">${d.primeDecision.label}</div>
+      <div class="result-meta" style="margin-top:6px;font-size:12.5px">${d.primeDecision.detail}</div>
+      <div class="math-box" style="margin-top:10px;background:${d.primeDecision.bg};border-color:${d.primeDecision.border}">
+        <div class="calc-line"><strong>ECV (TPE/RBCx circuit reference):</strong> ${d.ecvCircuitMl} mL circuit + ${d.ecvWarmerMl} mL warmer = <strong>${d.ecvTotalMl} mL total</strong></div>
+        <div class="calc-line"><strong>ECV %:</strong> (${d.ecvTotalMl} / ${fmt(d.tbvMl)}) × 100 = <strong>${fmt(d.ecvPctOfTbv,1)}%</strong></div>
+        <div class="calc-line"><strong>Institutional thresholds:</strong> ≤ 10% → standard NS · 10–15% → consider Albumin (closer 10%) or Diluted Blood (closer 15%) · &gt; 15% → strongly recommend Diluted Blood Prime</div>
+        ${d.primeDecision.level !== 'standard' ? `
+          <div class="calc-line"><strong>Estimated prime volume:</strong> ${d.primeVolumeMl} mL (Diluted PRBC at 35% Hct, OR 5% Albumin) — verify against institutional protocol before ordering</div>
+          <div class="calc-line" style="color:#ffd2d2;margin-top:4px"><strong>⚠ ALBUMIN PRIME → BLOOD RINSEBACK REQUIRED.</strong> Many apheresis instruments <em>auto-disable</em> rinseback when a custom prime is selected. <strong>Verify and manually re-enable Rinseback</strong> per device operating instructions before starting.</div>
+          <div class="calc-line" style="color:#cdfaea"><strong>● DILUTED BLOOD PRIME → NO RINSEBACK.</strong> Skip rinseback to maintain isovolemic state and cellular equilibrium. Requires physician order + transfusion consent.</div>
+          <div class="calc-line"><strong>Rationale — Albumin prime:</strong> maintains osmotic/oncotic pressure when ECV displaces a meaningful share of TBV; preferred when stable, no transfusion needed, or bradykinin risk (ACE-i / on-pump).</div>
+          <div class="calc-line"><strong>Rationale — Diluted PRBC prime (35% Hct):</strong> maintains a constant Hct in the patient's vascular space; preferred when ECV approaches 15% TBV and bradykinin risk is not a concern. Reduces post-procedure anemia for low-weight patients.</div>
+        ` : ''}
+      </div>
+    </div>
+
+    <!-- HERO: Estimated Replacement Volume — what the nurse hangs -->
+    <div class="result-card hero">
+      <div class="result-kicker">Estimated Replacement Volume @ ${fmt(d.pve,1)} PVE · ${mixNote}</div>
+      <div class="result-value">${fmt(d.totalReplacementMl)}<span class="unit">mL</span></div>
+      <div class="result-meta">${d.rinseback === 'off' ? 'Strict isovolemic (No Rinseback) = Plasma Removed − AC' : 'Standard (Rinseback ON) = K=550×Hct empirical · published apheresis formula'}</div>
+    </div>
+
+    <!-- Run Parameters: AC, Total Inlet, Whole Blood, Run Time -->
+    <div class="result-card" style="border-color:rgba(97,168,255,.32);background:linear-gradient(180deg, rgba(97,168,255,.05), rgba(255,255,255,.01))">
+      <div class="result-kicker">Run Parameters · Inlet:AC ${d.acdRatio}:1 · Inlet flow ${fmt(d.inletFlowSet,0)} mL/min</div>
+      <div class="mini-grid" style="gap:8px;margin-top:8px">
+        <div>
+          <div class="result-meta">ACD-A volume (est.)</div>
+          <div class="result-value" style="font-size:20px">${fmt(d.acdMlEst,0)} <span style="font-size:.55em;font-weight:800;color:var(--muted)">mL</span></div>
+        </div>
+        <div>
+          <div class="result-meta">Total inlet (est.)</div>
+          <div class="result-value" style="font-size:20px">${fmt(d.totalInletMlEst,0)} <span style="font-size:.55em;font-weight:800;color:var(--muted)">mL</span></div>
+        </div>
+      </div>
+      <div class="mini-grid" style="gap:8px;margin-top:10px">
+        <div>
+          <div class="result-meta">Whole blood processed (est.)</div>
+          <div class="result-value" style="font-size:20px">${fmt(d.wholeBloodMlEst,0)} <span style="font-size:.55em;font-weight:800;color:var(--muted)">mL</span></div>
+        </div>
+        <div>
+          <div class="result-meta">Estimated run time</div>
+          <div class="result-value" style="font-size:20px">${fmt(d.runMinEst,0)} <span style="font-size:.55em;font-weight:800;color:var(--muted)">min</span></div>
+          <div class="result-meta" style="font-size:11px">≈ ${fmt(d.runMinEst/60,2)} h at ${fmt(d.inletFlowSet,0)} mL/min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-grid">
+      <div class="result-card">
+        <div class="result-kicker">Albumin</div>
+        <div class="result-value" style="font-size:22px">${albuminText}</div>
+      </div>
+      <div class="result-card">
+        <div class="result-kicker">FFP</div>
+        <div class="result-value" style="font-size:22px">${ffpText}</div>
+      </div>
+    </div>
+
+    <div class="result-card" style="padding:10px 14px">
+      <div class="result-kicker" style="margin-bottom:4px">Plasma Removed (verify against device display)</div>
+      <div class="result-value" style="font-size:18px;color:var(--muted);font-weight:800">${fmt(d.plasmaRemovedMl)} <span style="font-size:12px;font-weight:700;color:var(--muted)">mL</span></div>
+    </div>
+
+    <!-- HERO: Estimated Calcium Gluconate dose -->
+    <div class="result-card hero">
+      <div class="result-kicker">Estimated Calcium Gluconate Dose</div>
+      <div class="result-value">${fmt(calciumMg,0)}<span class="unit">mg</span> <span style="opacity:.4;font-weight:700">·</span> ${fmt(calciumMl,1)}<span class="unit">mL</span></div>
+      <div class="result-meta">10% solution (1000 mg / 10 mL) · Rule: 400 mg per 500 mL replacement</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-kicker">Calcium Chloride Option</div>
+      <div class="result-meta" style="margin-bottom:10px">Calculate calcium chloride instead?</div>
+      <div class="calc-row" style="margin-top:0">
+        <button class="btn btn-secondary" type="button" onclick="showCalciumChloride(false)">No</button>
+        <button class="btn btn-primary" type="button" onclick="showCalciumChloride(true, ${d.totalReplacementMl})">Yes, calculate CaCl₂</button>
+      </div>
+      <div id="cacl2Box" class="hidden" style="margin-top:12px"></div>
+    </div>
+
+    ${d.diagnosis ? `
+    <div class="math-box">
+      <div class="calc-line"><strong>Why TPE may be used:</strong> ${d.diagnosis.rationale}</div>
+      <div class="calc-line"><strong>Nurse focus:</strong> ${d.diagnosis.nurse}</div>
+    </div>` : ''}
+  `;
+}
+
+/* ─── calculate ─── */
+function calculate(){
+  try{
+    const sex = el.sex.value;
+    const hctRaw = parseFloat(el.hct.value);
+    const heightCm = heightToCm();
+    const weightKgActual = weightToKg();
+    const heightInches = heightToInches();
+
+    if(!sex) throw new Error('Please select sex.');
+    validatePositive(hctRaw, 'hematocrit');
+    validatePositive(heightCm, 'height');
+    validatePositive(weightKgActual, 'weight');
+    if(hctRaw >= 100) throw new Error('Hematocrit must be less than 100.');
+
+    const hctFraction = hctRaw / 100;
+    const bmi = weightKgActual / Math.pow(heightCm/100, 2);
+    const ibwKg = devineIBWKg(sex, heightInches);
+    const ibwLb = ibwKg / 0.45359237;
+
+    if(bmi > 30){
+      el.ibwUseWrap.classList.remove('hidden');
+    } else {
+      el.ibwUseWrap.classList.add('hidden');
+      state.weightBasis = 'actual';
+      setActive([el.actualBasisBtn, el.ibwBasisBtn], el.actualBasisBtn);
+    }
+
+    const calcWeightKg = (bmi > 30 && state.weightBasis === 'ibw') ? ibwKg : weightKgActual;
+
+    // ── TBV: pediatric formula (≤ 25 kg) vs Nadler ──
+    let tbvMl, tbvMethod, pedInfo = null;
+    if(weightKgActual <= PEDIATRIC_THRESHOLD_KG){
+      pedInfo = pediatricTBVml(weightKgActual);
+      tbvMl = pedInfo.tbv;
+      tbvMethod = `Pediatric formula (${pedInfo.band})`;
+    } else {
+      tbvMl = nadlerTBVml(sex, heightCm, calcWeightKg);
+      tbvMethod = 'Nadler equation (> 25 kg)';
+    }
+
+    const plasmaVolumeMl = tbvMl * (1 - hctFraction);
+
+    // ── PLASMA REMOVED (Optia "Plasma Removed" target) ──
+    const plasmaRemovedMl = plasmaVolumeMl * state.pve;
+
+    // ── AC VOLUME (empirical estimate, validated within ±16 mL on 4 pairs) ──
+    // AC ≈ Plasma Removed × 1.25 / (AC ratio × (1−Hct))
+    // The 1.25 factor accounts for the centrifuge processing more inlet than just plasma waste
+    // (extraction efficiency ~80%).
+    const acdMlEst = plasmaRemovedMl * 1.25 / (state.acd * (1 - hctFraction));
+    const totalInletMlEst = acdMlEst * state.acd;
+    const wholeBloodMlEst = totalInletMlEst - acdMlEst;
+    const inletFlowSet = parseFloat(el.inletFlowTpe.value) || 60;
+    const runMinEst = totalInletMlEst / inletFlowSet;
+
+    // ── REPLACEMENT VOLUME — formula depends on rinseback mode ──
+    // Standard (Rinseback ON, default 100% fluid balance):
+    //   Optia builds in a positive fluid offset (~10% TBV during run) anticipating rinseback
+    //   redistribution. Empirically: R = PVE × (TBV × (1−Hct) − K × Hct), K = 550 mL.
+    //   Validated mean |error| ≈ 19 mL, worst ≈ 33 mL across 5 paired Optia screens (all rinseback ON).
+    //
+    // No Rinseback (Diluted Blood Prime — patient stays at 100% balance throughout):
+    //   Strict isovolemic: R = Plasma Removed − AC volume
+    let totalReplacementMl;
+    if(state.rinseback === 'off'){
+      totalReplacementMl = plasmaRemovedMl - acdMlEst;
+    } else {
+      totalReplacementMl = (tbvMl * (1 - hctFraction) - OPTIA_K_ML * hctFraction) * state.pve;
+    }
+
+    // ── ECV / prime decision ──
+    const ecvPctOfTbv = (ECV_TOTAL_ML / tbvMl) * 100;
+    const primeDecision = decidePrime(ecvPctOfTbv);
+
+    const replacementType = el.replacementType.value;
+    if(!replacementType) throw new Error('Please select a replacement type.');
+
+    const diagnosisKey = el.diagnosis.value;
+    const data = {
+      bmi, ibwKg, ibwLb, tbvMl, tbvMethod, pedInfo, weightKgActual,
+      ecvTotalMl: ECV_TOTAL_ML, ecvCircuitMl: ECV_CIRCUIT_ML, ecvWarmerMl: ECV_WARMER_ML,
+      primeVolumeMl: PRIME_VOLUME_ML, ecvPctOfTbv, primeDecision,
+      hctFraction, plasmaVolumeMl, plasmaRemovedMl, totalReplacementMl, pve: state.pve,
+      optiaK: OPTIA_K_ML,
+      acdRatio: state.acd, rinseback: state.rinseback,
+      acdMlEst, totalInletMlEst, wholeBloodMlEst, inletFlowSet, runMinEst,
+      replacementType, splitType: el.splitType.value,
+      weightBasisLabel: (bmi > 30 && state.weightBasis === 'ibw') ? 'Ideal Body Weight' : 'Entered Weight',
+      diagnosis: diagnosisKey ? diagnosisLibrary[diagnosisKey] : null
+    };
+
+    el.results.innerHTML = createResultHTML(data);
+  } catch(err){
+    el.results.innerHTML = `
+      <div class="result-card">
+        <div class="result-kicker">Input Error</div>
+        <div class="result-value" style="font-size:18px;color:#ffb4b4">Unable to calculate</div>
+        <div class="result-meta">${err.message}</div>
+      </div>`;
+  }
+}
+
+/* ─── reset ─── */
+function resetForm(){
+  el.sex.value=''; el.hct.value='';
+  el.heightCm.value=''; el.heightFt.value=''; el.heightIn.value='';
+  el.weightKg.value=''; el.weightLb.value='';
+  el.diagnosis.value=''; el.replacementType.value=''; el.splitType.value='half';
+  el.splitWrap.classList.add('hidden');
+  el.ibwUseWrap.classList.add('hidden');
+  el.diagnosisInfoCard.classList.add('hidden'); el.diagnosisInfoCard.innerHTML='';
+  state.heightMode='cm'; state.weightMode='kg'; state.weightBasis='actual'; state.pve=1.0; state.acd=10; state.rinseback='on';
+  if(el.acdToggle) el.acdToggle.querySelectorAll('[data-acd]').forEach(b => b.classList.toggle('active', b.dataset.acd==='10'));
+  if(el.rinsebackToggle) el.rinsebackToggle.querySelectorAll('[data-rinseback]').forEach(b => b.classList.toggle('active', b.dataset.rinseback==='on'));
+  if(el.inletFlowTpe) el.inletFlowTpe.value='60';
+  setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightMetricBtn);
+  setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn);
+  setActive([el.actualBasisBtn, el.ibwBasisBtn], el.actualBasisBtn);
+  const pveBtns = el.pveToggle.querySelectorAll('[data-pve]');
+  pveBtns.forEach(b => b.classList.toggle('active', parseFloat(b.dataset.pve)===1));
+  el.heightCmWrap.classList.remove('hidden'); el.heightEnglishWrap.classList.add('hidden');
+  el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden');
+  el.results.innerHTML = `<div class="result-card"><div class="result-kicker">Awaiting inputs</div><div class="result-value">—</div><div class="result-meta">Fill the form and press Calculate.</div></div>`;
+}
+
+/* ─── wiring ─── */
+el.heightMetricBtn.addEventListener('click', ()=>{ state.heightMode='cm'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightMetricBtn); el.heightCmWrap.classList.remove('hidden'); el.heightEnglishWrap.classList.add('hidden'); });
+el.heightEnglishBtn.addEventListener('click', ()=>{ state.heightMode='ftin'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightEnglishBtn); el.heightCmWrap.classList.add('hidden'); el.heightEnglishWrap.classList.remove('hidden'); });
+el.weightMetricBtn.addEventListener('click', ()=>{ state.weightMode='kg'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn); el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden'); });
+el.weightEnglishBtn.addEventListener('click', ()=>{ state.weightMode='lb'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightEnglishBtn); el.weightKgWrap.classList.add('hidden'); el.weightLbWrap.classList.remove('hidden'); });
+el.actualBasisBtn.addEventListener('click', ()=>{ state.weightBasis='actual'; setActive([el.actualBasisBtn, el.ibwBasisBtn], el.actualBasisBtn); });
+el.ibwBasisBtn.addEventListener('click', ()=>{ state.weightBasis='ibw'; setActive([el.actualBasisBtn, el.ibwBasisBtn], el.ibwBasisBtn); });
+
+el.pveToggle.querySelectorAll('[data-pve]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    el.pveToggle.querySelectorAll('[data-pve]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.pve = parseFloat(btn.dataset.pve);
+  });
+});
+
+el.acdToggle.querySelectorAll('[data-acd]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    el.acdToggle.querySelectorAll('[data-acd]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.acd = parseFloat(btn.dataset.acd);
+  });
+});
+el.rinsebackToggle.querySelectorAll('[data-rinseback]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    el.rinsebackToggle.querySelectorAll('[data-rinseback]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.rinseback = btn.dataset.rinseback;
+  });
+});
+
+el.diagnosis.addEventListener('change', renderDiagnosisInfo);
+el.replacementType.addEventListener('change', ()=>{
+  if(el.replacementType.value==='both') el.splitWrap.classList.remove('hidden');
+  else el.splitWrap.classList.add('hidden');
+  checkFFPOverride();
+});
+el.calculateBtn.addEventListener('click', calculate);
+el.resetBtn.addEventListener('click', resetForm);
+
+/* Enter key calculates */
+document.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); calculate(); } });
+</script>
+</body>
+</html>

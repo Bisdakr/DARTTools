@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why CRRT? — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(97,168,255,.10),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.08),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(126,240,210,.22),rgba(97,168,255,.14));border-color:rgba(126,240,210,.4);color:#cdfaea}
+.chip-calc:hover{border-color:rgba(126,240,210,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 50 C 180 0,380 -8,600 30 C 820 70,1020 60,1340 18');offset-rotate:auto;opacity:0;animation:cometRun 3.6s cubic-bezier(0.42,0.04,0.58,0.98) 0.4s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.22);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.06));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#7ef0d2,#61a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#cdfaea;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-research{background:rgba(179,137,255,.08);border-color:var(--purple)}.callout-research .callout-label{color:#b389ff}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cfe2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.timeline{margin:24px 0;padding-left:20px;border-left:2px solid rgba(126,240,210,.25)}
+.tline-item{margin-bottom:18px;position:relative}
+.tline-item::before{content:"";position:absolute;left:-26px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(126,240,210,.18)}
+.tline-year{font-size:11px;color:var(--accent);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.tline-text{font-size:14.5px;color:#d6e0ee;line-height:1.55}
+.tline-text strong{color:#fff}
+.pull-quote{margin:30px 0;padding:22px 26px;border-radius:14px;background:linear-gradient(135deg,rgba(179,137,255,.08),rgba(97,168,255,.05));border-left:4px solid var(--purple);font-family:'Source Serif 4',serif;font-size:19px;line-height:1.55;color:#e3dcff;font-style:italic}
+.pull-quote::before{content:"\201C";font-size:48px;color:rgba(179,137,255,.4);line-height:0;vertical-align:-18px;margin-right:6px}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(97,168,255,.15),rgba(126,240,210,.10));border:1px solid rgba(97,168,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#cfe2ff}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(59,130,246,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:#9bc4ff;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">D</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Educational Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="crrt.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle" style="--x:11%;--y:25%;--delay:0.80s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:1.05s"></div>
+      <div class="twinkle" style="--x:28%;--y:8%;--delay:1.30s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.70s"></div>
+      <div class="twinkle" style="--x:51%;--y:30%;--delay:1.95s"></div>
+      <div class="twinkle small" style="--x:65%;--y:50%;--delay:2.35s"></div>
+      <div class="twinkle" style="--x:74%;--y:52%;--delay:2.60s"></div>
+      <div class="twinkle small" style="--x:82%;--y:40%;--delay:2.85s"></div>
+      <div class="twinkle tiny" style="--x:89%;--y:25%;--delay:3.05s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Education · Continuous Renal Replacement Therapy</div>
+      <div class="head-title"><span class="accent">Why CRRT?</span></div>
+      <div class="head-sub">Slow continuous solute and fluid removal in the hemodynamically unstable ICU patient — physiology, modalities, machines, the evidence behind dose targets, and the future of continuous extracorporeal organ support.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#mechanism">01 · How It Works</a>
+  <a class="sec-pill" href="#history">02 · History</a>
+  <a class="sec-pill" href="#modalities">03 · Modalities</a>
+  <a class="sec-pill" href="#machines">04 · Machines &amp; Filters</a>
+  <a class="sec-pill" href="#dose">05 · Dose Evidence</a>
+  <a class="sec-pill" href="#anticoag">06 · Anticoagulation</a>
+  <a class="sec-pill" href="#replacement">07 · Pre vs Post Dilution</a>
+  <a class="sec-pill" href="#indications">08 · Indications</a>
+  <a class="sec-pill" href="#peds">09 · Pediatric CRRT</a>
+  <a class="sec-pill" href="#new">10 · 2024–2025</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The 60-second version</div>
+  <div class="hero-tldr-text">
+    Continuous Renal Replacement Therapy provides <strong>slow, continuous solute and fluid removal</strong> for critically ill patients with acute kidney injury who cannot tolerate the rapid shifts of intermittent hemodialysis. Where standard HD removes 3,000 mL of UF over 4 hours, CRRT removes the same volume over 24 hours — far gentler on hemodynamics, less likely to cause cerebral / myocardial stunning, and able to be precisely titrated minute-by-minute. The standard dose per KDIGO is <strong>20–25 mL/kg/hr</strong> of effluent. The dominant modality globally is <strong>CVVHDF</strong> (combined diffusion + convection). Regional citrate anticoagulation (RCA) has displaced heparin in most centers. Modern platforms like Prismax and Prismaflex enable bedside operation with integrated balance management and citrate protocols.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">20–25</div><div class="stat-label">mL/kg/hr — KDIGO effluent dose target</div></div>
+    <div class="stat"><div class="stat-num">~24 hr</div><div class="stat-label">Typical session length (continuous)</div></div>
+    <div class="stat"><div class="stat-num">&lt; 25%</div><div class="stat-label">FFR target (filter clotting safety)</div></div>
+    <div class="stat"><div class="stat-num">~50%</div><div class="stat-label">AKI ICU mortality (CRRT-treated cohorts)</div></div>
+  </div>
+</div>
+
+<section class="sec" id="mechanism">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">How CRRT Works</div><div class="sec-subtitle">Three physical processes happening across a hollow-fiber membrane</div></div></div>
+  <div class="prose">
+    <p>CRRT uses the same physical principles as intermittent hemodialysis — but applied <strong>continuously and slowly</strong>. Blood is drawn from a central venous catheter, passed through a synthetic hollow-fiber membrane, and returned to the patient. At the membrane, three processes can be invoked depending on the chosen modality:</p>
+    <table class="compare-table">
+      <thead><tr><th>Process</th><th>What it does</th><th>Driven by</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Diffusion</strong></td><td>Small solutes (urea, K, creatinine) move from blood to dialysate</td><td>Concentration gradient (countercurrent dialysate flow)</td></tr>
+        <tr><td><strong>Convection</strong></td><td>Water plus dissolved solute (including middle molecules) move with bulk fluid flow</td><td>Transmembrane pressure (ultrafiltration)</td></tr>
+        <tr><td><strong>Replacement</strong></td><td>Sterile replacement fluid replaces the ultrafiltrate volume (pre- or post-filter)</td><td>Substitution pump</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The slow-and-continuous advantage</span>Intermittent HD removes 3,000 mL of UF in 4 hours (12.5 mL/min). CRRT removes the same volume in 24 hours (~2 mL/min). The slow rate avoids <strong>compartment shifts</strong> (intracranial pressure rise, myocardial stunning, mesenteric ischemia) and lets the body's adaptive mechanisms keep pace. This is why CRRT is the modality of choice for ICU patients with shock, cerebral edema, or fragile cardiac function.</div></div>
+    <p>The total volume of effluent (drainage fluid out of the filter) per hour, normalized to patient weight, defines the <strong>effluent dose</strong> — the standard prescription metric for CRRT.</p>
+  </div>
+</section>
+
+<section class="sec" id="history">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">A Brief History</div><div class="sec-subtitle">From Kramer's accidental discovery to modern continuous therapy</div></div></div>
+  <div class="prose">
+    <div class="timeline">
+      <div class="tline-item"><div class="tline-year">1977</div><div class="tline-text"><strong>Peter Kramer</strong> at Göttingen, Germany, treats an oliguric patient with diuretic-resistant fluid overload by connecting an arterial-venous shunt to a small hemofilter. <strong>Continuous arteriovenous hemofiltration (CAVH)</strong> is born — accidentally, as a rescue maneuver — but immediately recognized as transformative for ICU AKI.</div></div>
+      <div class="tline-item"><div class="tline-year">1980s</div><div class="tline-text">CAVH proliferates but has limitations: dependent on patient's own BP to drive flow; low clearance; arterial access. <strong>CVVH (continuous venovenous hemofiltration)</strong> emerges — pump-driven, more reliable, requires only venous access.</div></div>
+      <div class="tline-item"><div class="tline-year">1990s</div><div class="tline-text">Dedicated CRRT machines launch. <strong>CVVHDF</strong> combining diffusion + convection becomes the dominant clinical modality. ICUs around the world standardize CRRT for ICU AKI.</div></div>
+      <div class="tline-item"><div class="tline-year">2000</div><div class="tline-text"><strong>Ronco et al.</strong> publish a single-center trial suggesting CRRT dose &gt; 35 mL/kg/hr improves mortality vs &lt; 20. The "high-dose CRRT" era begins; many centers double their effluent flow.</div></div>
+      <div class="tline-item"><div class="tline-year">2008</div><div class="tline-text"><strong>ATN trial</strong> (NEJM, US VA cohort) — intensive vs less-intensive RRT in 1,124 patients. <strong>No mortality benefit</strong> of higher dose. The high-dose era is challenged.</div></div>
+      <div class="tline-item"><div class="tline-year">2009</div><div class="tline-text"><strong>RENAL trial</strong> (NEJM, Australian/NZ ANZICS cohort) — 1,508 patients randomized to 25 vs 40 mL/kg/hr effluent dose. <strong>No mortality benefit</strong> of the higher dose. The 20–25 mL/kg/hr standard is established.</div></div>
+      <div class="tline-item"><div class="tline-year">2012</div><div class="tline-text"><strong>KDIGO AKI guidelines</strong> published — recommend 20–25 mL/kg/hr effluent dose, regional citrate anticoagulation as preferred over heparin (Grade 2B), and standardized timing/initiation criteria.</div></div>
+      <div class="tline-item"><div class="tline-year">2014</div><div class="tline-text"><strong>STOP-AKI</strong> and similar trials begin testing early-vs-delayed CRRT initiation. The "best timing" question remains active.</div></div>
+      <div class="tline-item"><div class="tline-year">2016</div><div class="tline-text"><strong>AKIKI trial</strong> (NEJM) — early vs delayed RRT in ICU AKI. Delayed strategy non-inferior; many patients in the delayed group never needed RRT.</div></div>
+      <div class="tline-item"><div class="tline-year">2019</div><div class="tline-text">Prismax platform launches (Baxter/Gambro) — touchscreen interface, TPE-capable, integrated citrate balance, improved alarm logic. Many centers transition from Prismaflex to Prismax over the early 2020s.</div></div>
+      <div class="tline-item"><div class="tline-year">2020</div><div class="tline-text"><strong>STARRT-AKI trial</strong> (NEJM) — definitive early vs standard initiation in 3,019 ICU patients. <strong>Earlier initiation does not improve mortality</strong>; cements the "wait unless absolutely necessary" approach.</div></div>
+      <div class="tline-item"><div class="tline-year">2023–2024</div><div class="tline-text">Renewed interest in <strong>extended dialysis (PIRRT/SLED)</strong> as a bridge between intermittent HD and 24-hour CRRT. Adoption of <strong>medium cut-off membranes</strong>, novel anticoagulation strategies, and AI-supported prescription. Hyperammonemia and toxin-removal protocols expand CRRT into broader critical-care applications.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="modalities">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">The CRRT Modalities</div><div class="sec-subtitle">SCUF, CVVH, CVVHD, CVVHDF, HVHF</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Modality</th><th>Solute removal</th><th>Fluid removal</th><th>Best use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SCUF</strong><br><span style="color:var(--muted);font-size:12px">Slow Continuous Ultrafiltration</span></td><td>None (no replacement, no dialysate)</td><td>Yes — net UF only</td><td>Diuretic-resistant fluid overload with normal solute balance</td></tr>
+        <tr><td><strong>CVVH</strong><br><span style="color:var(--muted);font-size:12px">Continuous Venovenous Hemofiltration</span></td><td>Convection only</td><td>Yes — net UF</td><td>Middle-molecule clearance (e.g., sepsis cytokine theory)</td></tr>
+        <tr><td><strong>CVVHD</strong><br><span style="color:var(--muted);font-size:12px">Continuous Venovenous Hemodialysis</span></td><td>Diffusion only</td><td>Yes — net UF</td><td>Small-solute clearance with minimal hemoconcentration risk</td></tr>
+        <tr><td><strong>CVVHDF</strong><br><span style="color:var(--muted);font-size:12px">Continuous Venovenous Hemodiafiltration</span></td><td><strong>Convection + Diffusion</strong></td><td>Yes — net UF</td><td><strong>Most common modality globally</strong> — broadest clearance, flexible</td></tr>
+        <tr><td><strong>HVHF</strong><br><span style="color:var(--muted);font-size:12px">High-Volume Hemofiltration</span></td><td>Convection (high dose &gt; 35 mL/kg/hr)</td><td>Yes</td><td>Septic shock cytokine theory (largely abandoned — IVOIRE trial negative)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Why CVVHDF is dominant</span>CVVHDF combines small-solute clearance (diffusion) with middle-molecule clearance (convection) in one prescription. The 50/50 dialysate/replacement split gives flexibility — you can shift toward more diffusion (if filter clotting) or more convection (if middle-molecule clearance is the goal). It's the workhorse of modern ICU CRRT.</div></div>
+    <p>Globally, CVVHDF accounts for roughly half of CRRT prescriptions; CVVH and CVVHD split most of the remainder. SCUF is uncommon (most patients also need solute support). HVHF was extensively trialed for septic shock but the <strong>IVOIRE trial (2013)</strong> showed no benefit and significant electrolyte/hypothermia downsides; it is now rarely prescribed.</p>
+  </div>
+</section>
+
+<section class="sec" id="machines">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">CRRT Platforms — Generations &amp; Filter Sets</div><div class="sec-subtitle">Prismaflex, Prismax, and the membrane lineup</div></div></div>
+  <div class="prose">
+    <p>Modern CRRT machines are bedside instruments designed for ICU operation by nursing staff. The dominant platforms in North American and European ICUs are the <strong>Prismaflex</strong> (originally Gambro, now under Baxter) and its successor <strong>Prismax</strong>, alongside competing systems from other manufacturers (omitted here for educational scope).</p>
+    <table class="compare-table">
+      <thead><tr><th>Platform</th><th>Generation</th><th>Highlights</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Prismaflex</strong></td><td>Legacy (1999 launch; widely deployed)</td><td>Versatile CRRT + TPE-capable on M60/M100/M150/HF20 set lineup; integrated citrate protocols (Prismocitrate 18/0)</td></tr>
+        <tr><td><strong>Prismax</strong></td><td>Current (2019+)</td><td>Touchscreen UI · improved alarm management · enhanced balance accuracy · TPE-capable · faster setup workflow · integrated training mode</td></tr>
+      </tbody>
+    </table>
+    <p>Both platforms use disposable filter <strong>sets</strong> that bundle the hemofilter, tubing, and circuit components. The set is matched to patient size and prescribed dose:</p>
+    <table class="compare-table">
+      <thead><tr><th>Set</th><th>Surface area</th><th>Membrane</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HF20</strong></td><td>0.2 m²</td><td>AN69 ST</td><td>Pediatric / neonatal (down to ~3 kg with appropriate prime)</td></tr>
+        <tr><td><strong>M60</strong></td><td>0.6 m²</td><td>AN69 ST</td><td>Small adult / older pediatric</td></tr>
+        <tr><td><strong>M100</strong></td><td>1.0 m²</td><td>AN69 ST</td><td>Standard adult — most common</td></tr>
+        <tr><td><strong>M150</strong></td><td>1.5 m²</td><td>AN69 ST</td><td>Large adult / high-dose prescription</td></tr>
+        <tr><td><strong>ST60/ST100/ST150</strong></td><td>0.6 / 1.0 / 1.5 m²</td><td>AN69 ST (heparin-bonded)</td><td>Patients on systemic heparin anticoagulation</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-tip"><span class="callout-icon">💡</span><div class="callout-body"><span class="callout-label">AN69 ST membrane</span>The AN69 (acrylonitrile / sodium methallyl sulfonate copolymer) membrane is highly biocompatible and the most common CRRT membrane in use globally. The "ST" surface treatment reduces bradykinin generation, important because ACE-inhibitor patients can have bradykinin reactions with untreated AN69 membranes. ST-AN69 has been the workhorse membrane for two decades.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🧪</span><div class="callout-body"><span class="callout-label">Medium cut-off membranes</span>Newer membranes (e.g., Theranova-class) with larger pores remove middle molecules including some cytokines. Trials in septic AKI continue; results to date are mixed. The traditional AN69 ST remains standard for most CRRT prescriptions.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="dose">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Effluent Dose — The Evidence Behind 20–25 mL/kg/hr</div><div class="sec-subtitle">Two landmark trials settled the question</div></div></div>
+  <div class="prose">
+    <p>The single most important number in a CRRT order is the <strong>effluent dose</strong> in mL/kg/hr. This represents the sum of dialysate flow + replacement flow + net UF, normalized to body weight. It corresponds roughly to "how aggressively we are clearing solute."</p>
+    <table class="compare-table">
+      <thead><tr><th>Dose</th><th>Era</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td>&lt; 15 mL/kg/hr</td><td>Historical</td><td>Inadequate; associated with worse outcomes (Ronco 2000)</td></tr>
+        <tr><td>20–25 mL/kg/hr</td><td><strong>Current standard (KDIGO 2012)</strong></td><td>RENAL, ATN trials — no benefit of higher; this is the target</td></tr>
+        <tr><td>35–45 mL/kg/hr</td><td>"High-dose" era 2000s</td><td>Single-center Ronco trial suggested benefit; not replicated in larger trials</td></tr>
+        <tr><td>&gt; 50 mL/kg/hr (HVHF)</td><td>Sepsis cytokine era</td><td>IVOIRE: no benefit, more downsides (hypothermia, drug clearance, electrolyte loss)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Prescribed vs delivered dose</span><strong>Delivered dose is always lower than prescribed.</strong> Pre-filter dilution (the most common configuration) reduces effective solute concentration at the filter. Filter clotting / circuit interruptions further reduce delivered dose. To deliver 25 mL/kg/hr, prescribe ~30 mL/kg/hr to account for ~10–25% delivery loss. The DART calculator computes the pre-dilution correction explicitly.</div></div>
+    <p>Higher doses are <em>not</em> harmless. They increase: drug clearance (under-dosing antibiotics and sedatives is well-documented), electrolyte loss (hypophosphatemia, hypomagnesemia), and hypothermia. Stay near the 20–25 mL/kg/hr target unless a specific clinical scenario (severe hyperkalemia, hyperammonemia, drug overdose) warrants temporary escalation.</p>
+  </div>
+</section>
+
+<section class="sec" id="anticoag">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Anticoagulation Strategy</div><div class="sec-subtitle">Regional citrate has displaced heparin in most ICUs</div></div></div>
+  <div class="prose">
+    <p>Without anticoagulation, the CRRT circuit will clot quickly — typically within hours. Three options:</p>
+    <table class="compare-table">
+      <thead><tr><th>Strategy</th><th>How it works</th><th>Pros</th><th>Cons</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Regional citrate (RCA)</strong></td><td>Citrate infused pre-filter chelates ionized Ca; calcium replaced post-filter to restore patient ionized Ca</td><td>No systemic anticoagulation · longer filter life · KDIGO Grade 2B recommendation</td><td>Citrate accumulation risk in hepatic failure; requires more nursing attention; cost</td></tr>
+        <tr><td><strong>Systemic heparin</strong></td><td>Continuous heparin infusion; targets aPTT 1.5–2.0× or ACT 180–220</td><td>Familiar · cheap · easy to monitor</td><td>Bleeding risk · HIT · circuit life shorter than RCA</td></tr>
+        <tr><td><strong>None (saline flushes only)</strong></td><td>Periodic saline flushes through circuit; high BFR helps reduce stasis</td><td>No bleeding risk · simplest</td><td>Shortest filter life · frequent circuit changes · increased clotting alarms</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Why RCA wins</span>Multiple large trials and meta-analyses (Liu 2020, Bai 2015, Zarbock 2020) consistently show <strong>longer filter life and fewer bleeding events with RCA vs heparin</strong>. KDIGO 2012 gives a Grade 2B recommendation favoring citrate. Most modern ICUs have transitioned to RCA as their default; heparin remains for centers without an established RCA protocol or for patients with hepatic failure.</div></div>
+    <p><strong>RCA mechanics:</strong> Citrate infused pre-filter chelates calcium → blood within the circuit is unable to clot. Citrate-bound complex is partially removed in the effluent; the rest enters systemic circulation. Liver metabolism converts citrate to bicarbonate, releasing calcium. Patient ionized calcium is restored by post-filter calcium infusion (CaCl₂ or calcium gluconate). The institutional RCA protocol prescribes the citrate dose (typically 3 mmol/L blood) and a starting calcium rate, then titrates to: <strong>systemic iCa 1.1–1.3 mmol/L</strong> and <strong>post-filter iCa 0.25–0.40 mmol/L</strong> (the latter confirming adequate circuit anticoagulation).</p>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Citrate accumulation</span>In hepatic failure or shock with poor citrate clearance, citrate accumulates. The hallmark is rising <strong>total-to-ionized calcium ratio (&gt; 2.5)</strong> with metabolic acidosis. Response: reduce citrate dose, consider switching to heparin or no anticoagulant.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="replacement">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Pre vs Post Dilution — The Trade-off</div><div class="sec-subtitle">Anticoagulation vs effective clearance</div></div></div>
+  <div class="prose">
+    <p>Replacement fluid can be infused <strong>before</strong> the filter (pre-dilution) or <strong>after</strong> the filter (post-dilution). The trade-off shapes both filter life and effective dose delivered.</p>
+    <table class="compare-table">
+      <thead><tr><th>Configuration</th><th>Effect</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr><td><strong>100% Post-filter</strong></td><td>Full clearance of prescribed dose; highest blood concentration through filter</td><td>Maximum clearance; filter clotting risk</td></tr>
+        <tr><td><strong>30/70 (Pre/Post)</strong></td><td>Balanced — small dilution reduces clotting; modest dose reduction</td><td>Common balanced setting</td></tr>
+        <tr><td><strong>100% Pre-filter</strong></td><td>Maximum dilution; longest filter life; greatest reduction in effective dose</td><td>High filter-clotting risk; severely hypercoagulable patients</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The math behind pre-dilution correction</span>When replacement is given pre-filter, the blood is diluted before reaching the membrane. The effective clearance is reduced by the dilution factor:<br><br><code style="color:#cdfaea">Effective dose = Effluent × (Plasma flow / (Plasma flow + Pre-rep rate))</code><br><br>To deliver 25 mL/kg/hr with 30% pre-dilution, prescribe ~30 mL/kg/hr. The DART calculator computes this correction explicitly.</div></div>
+    <p><strong>Filtration Fraction (FFR)</strong> — the ratio of effluent flow to plasma flow at the filter — should stay <strong>under 25%</strong>. Above this, hemoconcentration at the filter increases viscosity, triggers clotting, and shortens filter life. Reduce FFR by: (1) increasing BFR, (2) shifting more replacement to pre-filter, or (3) reducing the effluent dose.</p>
+  </div>
+</section>
+
+<section class="sec" id="indications">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Indications &amp; Patient Selection</div><div class="sec-subtitle">ICU AKI and beyond</div></div></div>
+  <div class="prose">
+    <p>The dominant indication is <strong>AKI requiring RRT in a hemodynamically unstable ICU patient</strong>. The classic "AEIOU" indications for RRT remain valid:</p>
+    <table class="compare-table">
+      <thead><tr><th>Indication</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A — Acidosis</strong></td><td>Severe metabolic acidosis (pH &lt; 7.10, HCO₃ &lt; 10) refractory to medical management</td></tr>
+        <tr><td><strong>E — Electrolytes</strong></td><td>Severe hyperkalemia (&gt; 6.5) with ECG changes, refractory to insulin/glucose, kayexalate</td></tr>
+        <tr><td><strong>I — Intoxications</strong></td><td>Salicylate, ethylene glycol, methanol, metformin lactic acidosis, valproate</td></tr>
+        <tr><td><strong>O — Overload</strong></td><td>Diuretic-resistant fluid overload (especially with pulmonary edema, ARDS)</td></tr>
+        <tr><td><strong>U — Uremia</strong></td><td>BUN &gt; 100, encephalopathy, pericarditis</td></tr>
+      </tbody>
+    </table>
+    <p><strong>CRRT-specific advantages</strong> drive choice over intermittent HD in:</p>
+    <ul style="list-style:none;padding:0;margin:18px 0">
+      <li style="padding:8px 14px;background:rgba(255,255,255,.025);border-left:3px solid var(--accent);border-radius:8px;margin-bottom:8px"><strong>Septic shock</strong> — vasopressor-dependent patients tolerate CRRT vs IHD's hemodynamic shifts</li>
+      <li style="padding:8px 14px;background:rgba(255,255,255,.025);border-left:3px solid var(--accent);border-radius:8px;margin-bottom:8px"><strong>Cerebral edema</strong> (TBI, hepatic encephalopathy, fulminant liver failure) — IHD risks ICP rise; CRRT does not</li>
+      <li style="padding:8px 14px;background:rgba(255,255,255,.025);border-left:3px solid var(--accent);border-radius:8px;margin-bottom:8px"><strong>Cardiogenic shock</strong> — IHD's UF removes too fast; CRRT titrates minute-by-minute</li>
+      <li style="padding:8px 14px;background:rgba(255,255,255,.025);border-left:3px solid var(--accent);border-radius:8px;margin-bottom:8px"><strong>Hyperammonemia</strong> (urea cycle defects, post-transplant, valproate) — continuous clearance superior to IHD's "rebound"</li>
+      <li style="padding:8px 14px;background:rgba(255,255,255,.025);border-left:3px solid var(--accent);border-radius:8px;margin-bottom:8px"><strong>Rhabdomyolysis</strong> — continuous myoglobin clearance protects kidneys</li>
+      <li style="padding:8px 14px;background:rgba(255,255,255,.025);border-left:3px solid var(--accent);border-radius:8px;margin-bottom:8px"><strong>Massive fluid resuscitation</strong> — patients on continuous high-volume fluids need continuous removal</li>
+    </ul>
+    <div class="callout callout-research"><span class="callout-icon">🔬</span><div class="callout-body"><span class="callout-label">When to start? STARRT-AKI answered</span>The STARRT-AKI trial (NEJM 2020, n=3,019) randomized accelerated vs standard initiation of RRT in ICU AKI. <strong>Earlier initiation did not improve mortality.</strong> Modern practice: wait for absolute indications (severe acidosis, hyperkalemia, intoxication, refractory volume overload, severe uremia) rather than pre-emptively starting on lab numbers alone.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Pediatric CRRT</div><div class="sec-subtitle">Down to neonatal sizes with the right filter and prime</div></div></div>
+  <div class="prose">
+    <p>Pediatric CRRT presents two challenges: <strong>extracorporeal volume (ECV) as a percentage of TBV</strong>, and <strong>vascular access in small patients</strong>. Both are solvable with the right hardware and protocols.</p>
+    <table class="compare-table">
+      <thead><tr><th>Patient size</th><th>Filter set</th><th>Vascular access</th><th>Considerations</th></tr></thead>
+      <tbody>
+        <tr><td>Neonate / &lt; 5 kg</td><td>HF20 (0.2 m²)</td><td>5–6 Fr dual-lumen</td><td>Blood prime almost always; very careful Ca balance; CARPEDIEM platform alternative</td></tr>
+        <tr><td>5–10 kg</td><td>HF20 or M60</td><td>7 Fr</td><td>Blood prime if ECV &gt; 10% TBV; reduced flows</td></tr>
+        <tr><td>10–25 kg</td><td>M60 (0.6 m²)</td><td>8–9 Fr</td><td>Standard pediatric set; weight-based dose 25–30 mL/kg/hr</td></tr>
+        <tr><td>&gt; 25 kg</td><td>M100/M150</td><td>11–14 Fr (adult-style)</td><td>Adult prescription principles</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Pediatric ECV threshold</span>If circuit ECV exceeds <strong>10% of patient TBV</strong>, blood prime the circuit. Otherwise, the patient transiently loses 10%+ of their blood volume at circuit initiation — a major hemodynamic insult. This is standard pediatric ICU practice.</div></div>
+    <p>The <strong>CARPEDIEM</strong> platform (Cardio-Renal Pediatric Dialysis Emergency Machine) is a dedicated neonatal CRRT system designed for patients &lt; 10 kg. It uses tiny circuit volumes (~30 mL) and small filters, enabling CRRT in newborns with severe AKI.</p>
+  </div>
+</section>
+
+<section class="sec" id="new">
+  <div class="sec-header"><div class="sec-num">10</div><div><div class="sec-title">2024–2025 Developments</div><div class="sec-subtitle">Where CRRT is going</div></div></div>
+  <div class="prose">
+    <div class="callout callout-research"><span class="callout-icon">🧪</span><div class="callout-body"><span class="callout-label">Extended/Hybrid Dialysis (SLED, PIRRT)</span>Sustained low-efficiency dialysis (SLED) and prolonged intermittent renal replacement therapy (PIRRT) offer a middle ground between IHD and CRRT — 8–12 hour daily sessions with slower flows. Comparable hemodynamic profile to CRRT, lower cost, less nursing burden. Adoption is growing in cost-constrained settings.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">💊</span><div class="callout-body"><span class="callout-label">Drug-removal protocols</span>CRRT for severe toxin/drug overdose continues to expand. New protocols for <strong>valproate</strong>, <strong>metformin-associated lactic acidosis</strong>, and <strong>severe salicylate toxicity</strong> integrate enhanced CRRT dosing with serial drug levels. Pharmacists increasingly integrated into ICU rounds for CRRT drug-dose adjustment.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🤖</span><div class="callout-body"><span class="callout-label">AI-supported prescription</span>Machine learning models trained on large CRRT registries (ATHN, AKIKI follow-up cohorts) are being evaluated for <strong>real-time prescription adjustment</strong>, predicting filter life, and optimizing fluid balance. Early trials show promise; clinical adoption pending.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">Cytokine adsorption columns</span>Standalone cytokine-removal cartridges (CytoSorb, oXiris) can be added to CRRT circuits in cytokine-storm syndromes (sepsis, COVID-19, post-cardiac surgery). Evidence is mixed; some signals in specific subgroups; not yet standard care.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">📊</span><div class="callout-body"><span class="callout-label">CKRT registry and outcomes</span>Multi-center collaborative registries (Australia/NZ, US, European) are now tracking long-term outcomes of ICU AKI survivors — including <strong>renal recovery rates, dialysis dependence, and quality of life</strong>. The picture is sobering: half of CRRT survivors have significant residual kidney dysfunction; many require chronic dialysis. AKI follow-up clinics are becoming standard.</div></div>
+    <div class="pull-quote">CRRT is the only extracorporeal therapy that runs 24 hours a day in the ICU — the bedside nurse, not the machine, is the most important piece of equipment in delivering it well.</div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a CRRT prescription?</div>
+    <div class="cta-sub">Open the CRRT Calculator for effluent dose, mode-specific flow breakdown, FFR check, citrate / calcium estimates, and full order summary.</div>
+  </div>
+  <a class="cta-btn" href="crrt.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Primary trials and society guidance</div></div></div>
+  <ol class="ref-list">
+    <li>KDIGO Clinical Practice Guideline for Acute Kidney Injury. <strong>Kidney Int Suppl 2012.</strong></li>
+    <li>RENAL Replacement Therapy Study Investigators. <strong>Intensity of continuous renal replacement therapy in critically ill patients.</strong> N Engl J Med 2009.</li>
+    <li>VA/NIH ATN Study Group. <strong>Intensity of renal support in critically ill patients with acute kidney injury.</strong> N Engl J Med 2008.</li>
+    <li>Ronco C, et al. <strong>Effects of different doses in CRRT on outcomes of acute renal failure: a prospective randomised trial.</strong> Lancet 2000.</li>
+    <li>STARRT-AKI Investigators. <strong>Timing of initiation of renal-replacement therapy in acute kidney injury.</strong> N Engl J Med 2020.</li>
+    <li>AKIKI Study Group. <strong>Initiation strategies for renal-replacement therapy in the ICU.</strong> N Engl J Med 2016.</li>
+    <li>Joannidis M, et al. <strong>Citrate-based anticoagulation in CRRT.</strong> Intensive Care Med.</li>
+    <li>Zarbock A, et al. <strong>Effect of regional citrate anticoagulation vs systemic heparin on filter life and bleeding — RICH trial.</strong> JAMA 2020.</li>
+    <li>Joannidis M, Oudemans-van Straaten HM. <strong>Clinical review: patency of the CRRT circuit.</strong> Crit Care.</li>
+    <li>Bagshaw SM, et al. <strong>Acute kidney injury — Global Perspective.</strong> Lancet 2019.</li>
+    <li>Kellum JA, et al. <strong>Acute kidney injury: a synopsis from the 2024 AKI consensus.</strong> Crit Care Med.</li>
+    <li>Ronco C, et al. <strong>Continuous renal replacement therapy: clinical aspects.</strong> Critical Care.</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Why CRRT?</span>
+  <span>Educational reference — verify all clinical decisions against current guidelines and your institutional protocol.</span>
+</div>
+</div></body></html>

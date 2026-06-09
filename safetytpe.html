@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TPE Safety Considerations — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,143,182,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,143,182,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(255,143,182,.22),rgba(126,240,210,.10));border-color:rgba(255,143,182,.4);color:#ffd1e2}
+.chip-calc:hover{border-color:rgba(255,143,182,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffe1ec 0%,#ff8fb6 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,143,182,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,143,182,.4);color:var(--text);background:rgba(255,143,182,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,143,182,.24);background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,143,182,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--pink);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:28px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#ff8fb6,#7ef0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,143,182,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#ffd1e2;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-watch{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-watch .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,143,182,.10);color:#ffd1e2;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.symptom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:18px 0}
+.symptom-card{padding:14px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid var(--border);font-size:13px;line-height:1.5}
+.symptom-card strong{display:block;color:#fff;font-size:13.5px;margin-bottom:4px}
+.symptom-card.mild{border-left:3px solid var(--accent)}
+.symptom-card.moderate{border-left:3px solid var(--warn)}
+.symptom-card.severe{border-left:3px solid var(--danger)}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.danger-list li::before{content:"⊘";color:var(--danger)}
+.pull-quote{margin:30px 0;padding:22px 26px;border-radius:14px;background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(97,168,255,.04));border-left:4px solid var(--pink);font-family:'Source Serif 4',serif;font-size:19px;line-height:1.55;color:#ffe1ec;font-style:italic}
+.pull-quote::before{content:"\201C";font-size:48px;color:rgba(255,143,182,.4);line-height:0;vertical-align:-18px;margin-right:6px}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,143,182,.15),rgba(126,240,210,.10));border:1px solid rgba(255,143,182,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#ffd1e2}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--primary));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(255,143,182,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,143,182,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,143,182,.15);color:#ffb2cc;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🛡️</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Safety Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="plasmapheresis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Safety Reference · Therapeutic Plasma Exchange</div>
+      <div class="head-title"><span class="accent">TPE Safety Considerations</span></div>
+      <div class="head-sub">The major risks of therapeutic plasma exchange, how to recognize them early, and the monitoring and response strategies that prevent harm. Compiled from ASFA 2023, JCA recent literature, and standard apheresis safety practice.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#overview">01 · Risk Overview</a>
+  <a class="sec-pill" href="#citrate">02 · Citrate Toxicity</a>
+  <a class="sec-pill" href="#hemodynamic">03 · Hemodynamic</a>
+  <a class="sec-pill" href="#fluids">04 · Replacement Fluids</a>
+  <a class="sec-pill" href="#coag">05 · Coagulopathy</a>
+  <a class="sec-pill" href="#access">06 · Vascular Access</a>
+  <a class="sec-pill" href="#drugs">07 · Drug Interactions</a>
+  <a class="sec-pill" href="#peds">08 · Pediatric</a>
+  <a class="sec-pill" href="#emergency">09 · Emergency Response</a>
+  <a class="sec-pill" href="#docs">10 · Documentation</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The safety story in one paragraph</div>
+  <div class="hero-tldr-text">
+    TPE is generally well-tolerated but every session carries <strong>predictable, mostly preventable risks</strong>. The dominant adverse events are <strong>citrate-related hypocalcemia</strong> (the most frequent — perioral numbness, paresthesias, tetany, rarely seizure or arrhythmia), <strong>hypotension</strong> (~5–10% of runs), <strong>allergic / anaphylactic reactions</strong> to plasma-containing replacement fluid (FFP rate ~1–5%), and <strong>coagulopathy</strong> from dilutional loss of clotting factors and fibrinogen with consecutive runs. Vascular access carries the usual catheter risks (infection, bleeding, pneumothorax for central lines). The clinical job during TPE is straightforward: <strong>watch the patient, not the machine</strong> — frequent BP, calcium-symptom screens every 15 minutes, fluid-balance running totals, and rapid response to the first hint of reaction.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">~30–50%</div><div class="stat-label">Patients with mild citrate symptoms</div></div>
+    <div class="stat"><div class="stat-num">5–10%</div><div class="stat-label">Hypotension rate per session</div></div>
+    <div class="stat"><div class="stat-num">1–5%</div><div class="stat-label">Allergic reactions when FFP used</div></div>
+    <div class="stat"><div class="stat-num">&lt; 0.1%</div><div class="stat-label">Serious adverse events (any type)</div></div>
+  </div>
+</div>
+
+<section class="sec" id="overview">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">The Major Risk Profile</div><div class="sec-subtitle">What can go wrong — frequency and severity at a glance</div></div></div>
+  <div class="prose">
+    <p>The body of published TPE safety data — from the WAA registry, the American College of Pathology, ASFA 2023, and large single-center series — converges on a consistent picture: severe complications are rare (well under 1% of sessions) but minor complications are common (up to 50% of patients experience at least one transient symptom). Most are <strong>predictable and reversible with prompt recognition</strong>.</p>
+    <table class="compare-table">
+      <thead><tr><th>Adverse event</th><th>Approximate rate</th><th>Severity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mild citrate symptoms</strong> (perioral numbness, paresthesias)</td><td>30–50%</td><td>Mild · self-limited</td></tr>
+        <tr><td><strong>Hypotension</strong> (transient, intra-procedure)</td><td>5–10%</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Urticarial reaction to FFP</strong></td><td>1–5%</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Severe hypocalcemic symptoms</strong> (tetany, arrhythmia, seizure)</td><td>0.5–2%</td><td>Severe</td></tr>
+        <tr><td><strong>Anaphylactoid reaction</strong> (FFP, ACE-i + albumin)</td><td>0.05–0.5%</td><td>Severe / life-threatening</td></tr>
+        <tr><td><strong>TRALI</strong> (FFP-mediated)</td><td>~1 per 5,000–10,000 units</td><td>Severe / life-threatening</td></tr>
+        <tr><td><strong>Vascular access complication</strong></td><td>1–3% per insertion</td><td>Mild–severe</td></tr>
+        <tr><td><strong>Coagulopathy</strong> (clinical bleeding from depletion)</td><td>&lt; 1% with appropriate spacing</td><td>Variable</td></tr>
+        <tr><td><strong>Air embolism</strong> (with modern detectors)</td><td>Vanishingly rare</td><td>Life-threatening</td></tr>
+        <tr><td><strong>Procedure-related death</strong></td><td>~3 per 10,000 procedures</td><td>Catastrophic</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The 95% rule</span>The vast majority of TPE complications fall into three buckets: <strong>citrate, hypotension, and allergic reactions to plasma</strong>. If your monitoring protocol covers those three reliably, you've covered 95% of what will actually happen. The rest are rare enough to manage by exception.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="citrate">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Citrate Toxicity — The Most Frequent Adverse Event</div><div class="sec-subtitle">Recognition, monitoring, and prevention of hypocalcemia</div></div></div>
+  <div class="prose">
+    <p>Citrate is the workhorse anticoagulant in apheresis. It works by <strong>chelating ionized calcium</strong> at the membrane and centrifuge interface, preventing clotting in the extracorporeal circuit. Citrate is returned to the patient at every cycle. The liver normally metabolizes citrate within minutes, but the rate of return can exceed metabolism — and the net effect is a transient drop in serum ionized calcium.</p>
+    <p>Patients with reduced citrate metabolism are at higher risk: liver disease, hypothermia, shock states, neonates, and patients with hyperventilation (alkalosis further reduces ionized calcium).</p>
+    <div class="symptom-grid">
+      <div class="symptom-card mild">
+        <strong>Mild (very common)</strong>
+        Perioral numbness · tingling in fingers/toes · "metallic taste" · mild anxiety
+      </div>
+      <div class="symptom-card mild">
+        <strong>Moderate</strong>
+        Muscle twitching · facial spasm · hand cramping (Trousseau sign) · cheek-tap sign (Chvostek)
+      </div>
+      <div class="symptom-card severe">
+        <strong>Severe (uncommon, urgent)</strong>
+        Tetany · laryngospasm · QT prolongation → arrhythmia · seizure · cardiac arrest
+      </div>
+      <div class="symptom-card moderate">
+        <strong>Atypical signs</strong>
+        Nausea / vomiting · chills · light-headedness · sense of impending doom
+      </div>
+    </div>
+    <div class="callout callout-watch"><span class="callout-icon">👁</span><div class="callout-body"><span class="callout-label">Monitoring at the bedside</span>Screen every <strong>15 minutes</strong>: <em>"Any numbness or tingling around your mouth or fingers? Any cramping in your hands?"</em> Document baseline + each screen. Citrate symptoms emerge gradually; catching the perioral numbness early prevents progression to tetany.</div></div>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Prevention strategies</span><strong>Loosen the AC ratio</strong> (e.g., 1:13 → 1:15 → 1:18) if patient is symptomatic — this slows citrate delivery rate. <strong>Slow the return rate</strong>. <strong>Prophylactic calcium</strong> (oral or IV gluconate per protocol) is appropriate for high-citrate-load runs, hepatic dysfunction, or known-sensitive patients. Verify the institutional calcium replacement protocol before each run.</div></div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">When citrate becomes dangerous</span>Hepatic dysfunction (cirrhosis, acute liver failure, post-transplant) markedly reduces citrate metabolism. Patients on <strong>multiple consecutive runs</strong> can develop cumulative metabolic alkalosis from citrate-to-bicarbonate conversion. Pre-procedure ionized calcium and bicarbonate values are useful in high-risk patients.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="hemodynamic">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Hemodynamic Safety</div><div class="sec-subtitle">Hypotension, ECV, fluid balance</div></div></div>
+  <div class="prose">
+    <p>Intra-procedure hypotension is the second most common adverse event. Causes vary: <strong>vasovagal response</strong> at venipuncture, <strong>extracorporeal volume (ECV) shift</strong> at start of run, <strong>citrate-induced vasodilation</strong>, <strong>hypocalcemia-related cardiac depression</strong>, or <strong>allergic / anaphylactic reactions</strong>.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The ECV / TBV check is non-negotiable</span>If extracorporeal circuit volume exceeds <strong>15% of total blood volume</strong> (10% for patients &lt; 30 kg), consider blood prime. Most modern apheresis circuits sit safely under this threshold for adults, but it's the first thing to verify in pediatric and small-adult cases.</div></div>
+    <table class="compare-table">
+      <thead><tr><th>Pattern</th><th>Likely cause</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td>BP drop in first 5–10 min</td><td>ECV shift; vasovagal</td><td>Trendelenburg, slow inlet, IV bolus</td></tr>
+        <tr><td>Gradual BP decline over 30+ min</td><td>Fluid balance drift; citrate vasodilation</td><td>Review running balance; consider calcium</td></tr>
+        <tr><td>Sudden BP drop + flushing / dyspnea</td><td>Allergic / anaphylactic</td><td>STOP procedure; treat reaction</td></tr>
+        <tr><td>BP drop + chest pain + diaphoresis</td><td>Cardiac event (rare)</td><td>STOP; cardiac workup; ECG</td></tr>
+      </tbody>
+    </table>
+    <ul class="check-list">
+      <li><strong>BP cycling every 5 min for first 30 min, then every 15 min</strong> once stable. More frequent for hemodynamically borderline patients.</li>
+      <li><strong>Pre-procedure baseline HR, BP, weight</strong>. Compare against intra-procedure trends — absolute values matter less than the delta.</li>
+      <li><strong>Running fluid balance display</strong> in clear view. Goal is isovolemic unless physician orders otherwise.</li>
+      <li><strong>Slow-start protocol</strong> (lower inlet for first 50–100 mL) reduces ECV-shift hypotension dramatically.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="fluids">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Replacement Fluid Reactions</div><div class="sec-subtitle">FFP anaphylaxis, albumin reactions, TRALI</div></div></div>
+  <div class="prose">
+    <p>The risk profile is dramatically different between <strong>albumin</strong> and <strong>plasma (FFP)</strong>. Most non-TTP TPE uses albumin; FFP is reserved for TTP, severe coagulopathy, or specific indications where the replacement itself is the therapy.</p>
+    <table class="compare-table">
+      <thead><tr><th>Reaction type</th><th>Albumin</th><th>FFP</th></tr></thead>
+      <tbody>
+        <tr><td>Urticarial / mild allergic</td><td>Rare (&lt; 0.1%)</td><td>1–3%</td></tr>
+        <tr><td>Anaphylaxis</td><td>Very rare</td><td>0.05–0.5%</td></tr>
+        <tr><td>TRALI (transfusion-related acute lung injury)</td><td>Essentially zero</td><td>~1 per 5,000–10,000 units</td></tr>
+        <tr><td>TACO (circulatory overload)</td><td>Possible if rapid infusion</td><td>Possible</td></tr>
+        <tr><td>Infection transmission</td><td>Negligible (heat-treated)</td><td>Very low but non-zero</td></tr>
+        <tr><td>Citrate load</td><td>Lower</td><td>Higher (FFP itself contains citrate)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Anaphylaxis red flags</span><strong>Sudden hypotension, flushing, urticaria, bronchospasm, angioedema, GI symptoms, sense of impending doom.</strong> Stop the procedure immediately. Maintain access (do not return circuit blood through a compromised line). Activate emergency response. IM epinephrine 0.3–0.5 mg, antihistamines, corticosteroids, fluid resuscitation, and oxygen per institutional anaphylaxis protocol.</div></div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">TRALI vs TACO</span><strong>TRALI:</strong> hypoxemia + bilateral pulmonary infiltrates within 6 hr of plasma — non-cardiogenic. Treat with respiratory support; report to blood bank. <strong>TACO:</strong> volume overload with hypertension, jugular venous distension, pulmonary edema. Treat with diuresis and slowing/stopping infusion.</div></div>
+    <p>Premedications (diphenhydramine, hydrocortisone, ± acetaminophen) are commonly given before FFP-based TPE per institutional protocol. They blunt urticarial reactions but do not prevent anaphylaxis.</p>
+  </div>
+</section>
+
+<section class="sec" id="coag">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Coagulopathy &amp; Bleeding Risk</div><div class="sec-subtitle">Dilutional loss with consecutive runs</div></div></div>
+  <div class="prose">
+    <p>Plasma exchange depletes coagulation factors. A single procedure removes most factors; albumin replacement does not replenish them. The body restores most factors within 24–48 hours, but <strong>fibrinogen takes longer (48–72 hr)</strong> and accumulates depletion across consecutive sessions.</p>
+    <table class="compare-table">
+      <thead><tr><th>Schedule</th><th>Coag impact</th><th>Lab monitoring</th></tr></thead>
+      <tbody>
+        <tr><td>Single TPE, then 48 hr break</td><td>Minimal residual deficit</td><td>Pre/post fibrinogen if &gt; 1 procedure planned</td></tr>
+        <tr><td>2–3 consecutive daily TPEs</td><td>Cumulative factor depletion</td><td>Check fibrinogen, PT/aPTT before each</td></tr>
+        <tr><td>5+ consecutive daily TPEs</td><td>Marked factor depletion (especially fibrinogen)</td><td>Consider FFP component or cryoprecipitate replacement</td></tr>
+        <tr><td>TPE in patient with baseline bleeding risk</td><td>High concern</td><td>Daily fibrinogen, platelet count, clinical bleeding surveillance</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-watch"><span class="callout-icon">👁</span><div class="callout-body"><span class="callout-label">Threshold values to act on</span>Fibrinogen <strong>&lt; 100 mg/dL</strong> → consider FFP or cryoprecipitate before next procedure. Platelet count <strong>&lt; 50,000</strong> (or rapid decline) → discuss with physician before proceeding. Active bleeding → STOP and re-evaluate the indication for continued TPE.</div></div>
+    <p>Procedures or invasive interventions (e.g., line placement, biopsy) within 24 hours of TPE should be timed carefully and may require fresh frozen plasma replacement or delay.</p>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Vascular Access Safety</div><div class="sec-subtitle">Catheter and peripheral access risks</div></div></div>
+  <div class="prose">
+    <p>Access complications are infrequent but can be serious. The choice of access (peripheral vs central) depends on the patient, procedure duration, and how many sessions are planned.</p>
+    <table class="compare-table">
+      <thead><tr><th>Access type</th><th>Specific risks</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Peripheral (two large-bore IVs)</strong></td><td>Infiltration, vasospasm, slower flow</td><td>16–18 g; warm packs; check patency every 30 min</td></tr>
+        <tr><td><strong>Central (IJ, subclavian)</strong></td><td>Pneumothorax, arterial puncture, bleeding, infection (CLABSI), thrombosis</td><td>Ultrasound guidance; chest film if non-IJ; full sterile barrier; minimize dwell time</td></tr>
+        <tr><td><strong>AV fistula / graft</strong></td><td>Recirculation, infiltration, thrombosis</td><td>Single-needle vs two-needle technique; flow check; staff trained in cannulation</td></tr>
+        <tr><td><strong>Tunneled catheter (HD-style)</strong></td><td>Infection, malposition, fibrin sheath</td><td>Strict sterile technique at every access; flush per protocol</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">CLABSI prevention</span>For tunneled or central catheters: hand hygiene before access, sterile barrier precautions, chlorhexidine prep with adequate contact time, dedicated apheresis nurse for line handling, no routine antibiotic locks unless specifically indicated. CLABSI rate goal &lt; 1 per 1,000 line-days.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="drugs">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Drug &amp; Treatment Interactions</div><div class="sec-subtitle">ACE-i bradykinin, IVIG timing, immunosuppression</div></div></div>
+  <div class="prose">
+    <p>Several drug interactions and timing considerations are unique to TPE:</p>
+    <ul class="check-list warn-list">
+      <li><strong>ACE inhibitors + plasma exchange (especially with negatively charged membranes / dextran-sulfate columns):</strong> can cause bradykinin-mediated hypotension, flushing, GI distress, and anaphylactoid reactions. <strong>Hold ACE-i ≥ 24 hr before TPE</strong> (some institutions extend to 48 hr); consider switch to ARB.</li>
+      <li><strong>IVIG given pre-procedure:</strong> TPE will remove a substantial fraction of the dose. Schedule IVIG <em>after</em> the planned TPE course, or at least not within 24 hr before.</li>
+      <li><strong>Rituximab / monoclonal antibodies:</strong> Similar concern — TPE removes a fraction. Time administration to avoid TPE removal of the therapeutic dose.</li>
+      <li><strong>Anticoagulants (warfarin, DOACs):</strong> Consider holding around the procedure based on bleeding risk vs thrombotic risk; individualize with the prescribing physician.</li>
+      <li><strong>Drugs highly protein-bound:</strong> Levels may transiently fall post-TPE. Most clinically silent; significant only for narrow-window drugs (e.g., digoxin, antiseizure agents).</li>
+      <li><strong>Live vaccines:</strong> Avoid within 2 weeks of TPE (immunoglobulin removal may blunt response).</li>
+    </ul>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The ACE-i + plasma exchange warning</span>Some patients on ACE inhibitors experience severe anaphylactoid reactions during apheresis even with standard albumin. The risk is highest with adsorbent columns (dextran sulfate, polyacrylate) but documented across modalities. Verify ACE-i status pre-procedure; document the hold.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Pediatric Safety</div><div class="sec-subtitle">ECV, prime, weight-based thresholds</div></div></div>
+  <div class="prose">
+    <p>Pediatric TPE follows the same principles as adult TPE but with tighter margins. Three considerations dominate:</p>
+    <table class="compare-table">
+      <thead><tr><th>Consideration</th><th>Pediatric standard</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ECV ceiling</strong></td><td>10% of total blood volume (vs 15% adult)</td></tr>
+        <tr><td><strong>Prime decision</strong></td><td>NS prime if ECV &lt; 10% TBV · Albumin or diluted RBC if 10–15% · Strongly diluted RBC if &gt; 15%</td></tr>
+        <tr><td><strong>TBV calculation</strong></td><td>Weight-based pediatric formula: ≤ 5 kg → 90 mL/kg · 5.1–15 kg → 80 mL/kg · 15.1–25 kg → 70 mL/kg · &gt; 25 kg → Nadler</td></tr>
+        <tr><td><strong>Citrate load</strong></td><td>More likely to symptom; aggressive calcium monitoring + replacement</td></tr>
+        <tr><td><strong>Slow start</strong></td><td>Smaller children: extra-slow initiation, calcium drip prophylactic</td></tr>
+        <tr><td><strong>Sedation / immobility</strong></td><td>Procedural sedation may be needed for younger children; coordinate with PICU / anesthesia</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Special pediatric populations</span>Neonates and infants on ECMO, with hepatic dysfunction, or with cardiomyopathy require especially careful planning. Many institutions require attending nephrology / hematology approval for any TPE in patients &lt; 10 kg.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="emergency">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Emergency Response</div><div class="sec-subtitle">When something goes wrong, in what order</div></div></div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Anaphylaxis Response</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP the procedure.</strong> Clamp the patient line; do not return circuit contents.</li>
+      <li><strong>Activate code response.</strong> Call for help, get the crash cart.</li>
+      <li><strong>Maintain airway and oxygenation.</strong> 100% O₂ via non-rebreather if needed.</li>
+      <li><strong>IM epinephrine 0.3–0.5 mg</strong> (0.01 mg/kg pediatric) in lateral thigh. Repeat every 5–15 min as needed.</li>
+      <li><strong>IV access independent of apheresis line.</strong> Rapid normal saline 1–2 L (or 20 mL/kg).</li>
+      <li><strong>Antihistamines + corticosteroids</strong> per institutional anaphylaxis protocol.</li>
+      <li><strong>Documentation:</strong> time of reaction onset, replacement fluid lot/donor, vital signs trend, treatments given.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Severe Hypocalcemic Symptoms (tetany, seizure, arrhythmia)</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP the procedure</strong> or slow inlet to minimum.</li>
+      <li><strong>IV calcium gluconate 1–2 g</strong> over 10–15 min (or per institutional protocol).</li>
+      <li><strong>Continuous cardiac monitoring.</strong> Watch for QT prolongation.</li>
+      <li><strong>Repeat ionized calcium</strong> in 10–15 min.</li>
+      <li><strong>If proceeding:</strong> loosen AC ratio, slow return rate, add prophylactic calcium drip.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Severe Hypotension</div>
+    <ol class="emergency-steps">
+      <li><strong>Trendelenburg position.</strong> Stop return; slow or stop inlet.</li>
+      <li><strong>IV crystalloid bolus</strong> 250–500 mL (or 10 mL/kg pediatric).</li>
+      <li><strong>Identify cause:</strong> ECV shift? Allergic? Hypocalcemia? Cardiac?</li>
+      <li><strong>If hypotension persists:</strong> activate code; consider vasopressor; evaluate for anaphylaxis or cardiac event.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="sec-header"><div class="sec-num">10</div><div><div class="sec-title">Documentation &amp; Communication</div><div class="sec-subtitle">What to record, who to tell, when</div></div></div>
+  <div class="prose">
+    <p>Comprehensive documentation is both a safety tool and a legal record. The minimum acceptable record covers what happened, what was given, what was observed, and what was changed.</p>
+    <ul class="check-list">
+      <li><strong>Pre-procedure baseline:</strong> weight, height, vital signs, ionized calcium (when available), recent labs, current medications (especially ACE-i status), allergies, replacement fluid plan.</li>
+      <li><strong>Intra-procedure log:</strong> vital signs every 5–15 min, fluid balance running totals, symptoms reported by patient, calcium given (route, dose, time), any alarm events, any rate changes.</li>
+      <li><strong>Adverse event documentation:</strong> time of onset, vital signs trend, intervention(s), response, contributing factors, follow-up plan.</li>
+      <li><strong>Post-procedure summary:</strong> total volume processed, replacement given, fluid balance, calcium dose total, patient tolerance, post-procedure vital signs, plan for next session.</li>
+      <li><strong>Handoff communication:</strong> SBAR to receiving nurse including pending labs, next procedure timing, and any safety concerns.</li>
+      <li><strong>Reportable events:</strong> any anaphylaxis, TRALI, severe hypocalcemia, line-related complication, or near-miss should be entered into the institutional safety event system.</li>
+    </ul>
+    <div class="pull-quote">If it wasn't documented, it didn't happen. If it's a near-miss, document the lesson — the next nurse on this patient deserves to know.</div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a TPE session?</div>
+    <div class="cta-sub">Open the TPE Calculator for TBV, plasma volume, replacement, citrate, and calcium estimates — with the safety thresholds covered here baked into the result interpretation.</div>
+  </div>
+  <a class="cta-btn" href="plasmapheresis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Primary safety literature and society guidance</div></div></div>
+  <ol class="ref-list">
+    <li>Connors JM, et al. <strong>ASFA Guidelines on the Use of Therapeutic Apheresis — 9th Special Issue.</strong> J Clin Apher 2023.</li>
+    <li>Mörtzell Henriksson M, et al. <strong>Adverse events in apheresis: An update of the WAA registry data.</strong> Transfus Apher Sci.</li>
+    <li>Lee G, Arepally GM. <strong>Anticoagulation techniques in apheresis: from heparin to citrate and beyond.</strong> J Clin Apher.</li>
+    <li>Ward DM. <strong>Conventional apheresis therapies: a review.</strong> J Clin Apher.</li>
+    <li>Schwartz J, et al. <strong>Guidelines on the use of therapeutic apheresis in clinical practice — evidence-based approach.</strong></li>
+    <li>Reeves HM, Winters JL. <strong>The mechanisms of action of plasma exchange.</strong> Br J Haematol.</li>
+    <li>Kaplan AA. <strong>Therapeutic plasma exchange: a technical and operational review.</strong></li>
+    <li>AABB. <strong>Standards for Blood Banks and Transfusion Services</strong> (current edition).</li>
+    <li>FDA / national hemovigilance. <strong>TRALI risk reduction strategies.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · TPE Safety Considerations</span>
+  <span>Educational reference · Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+</div>
+</div></body></html>

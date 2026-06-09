@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why Extracorporeal Photopheresis? — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(97,168,255,.10),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.08),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(126,240,210,.22),rgba(97,168,255,.14));border-color:rgba(126,240,210,.4);color:#cdfaea}
+.chip-calc:hover{border-color:rgba(126,240,210,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 50 C 180 0,380 -8,600 30 C 820 70,1020 60,1340 18');offset-rotate:auto;opacity:0;animation:cometRun 3.6s cubic-bezier(0.42,0.04,0.58,0.98) 0.4s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.22);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.06));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#7ef0d2,#61a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#cdfaea;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-research{background:rgba(179,137,255,.08);border-color:var(--purple)}.callout-research .callout-label{color:#b389ff}
+.callout-mind{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-mind .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cfe2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.disease-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:18px 0}
+.disease-pill{padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid var(--border);font-size:13px;line-height:1.4}
+.disease-pill strong{display:block;color:#fff;font-size:13.5px;margin-bottom:3px}
+.disease-pill.cat1{border-left:3px solid var(--accent)}
+.disease-pill.cat2{border-left:3px solid var(--primary)}
+.disease-pill.cat3{border-left:3px solid var(--warn)}
+.timeline{margin:24px 0;padding-left:20px;border-left:2px solid rgba(126,240,210,.25)}
+.tline-item{margin-bottom:18px;position:relative}
+.tline-item::before{content:"";position:absolute;left:-26px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(126,240,210,.18)}
+.tline-year{font-size:11px;color:var(--accent);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.tline-text{font-size:14.5px;color:#d6e0ee;line-height:1.55}
+.tline-text strong{color:#fff}
+.pull-quote{margin:30px 0;padding:22px 26px;border-radius:14px;background:linear-gradient(135deg,rgba(179,137,255,.08),rgba(97,168,255,.05));border-left:4px solid var(--purple);font-family:'Source Serif 4',serif;font-size:19px;line-height:1.55;color:#e3dcff;font-style:italic}
+.pull-quote::before{content:"\201C";font-size:48px;color:rgba(179,137,255,.4);line-height:0;vertical-align:-18px;margin-right:6px}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(97,168,255,.15),rgba(126,240,210,.10));border:1px solid rgba(97,168,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#cfe2ff}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(59,130,246,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:#9bc4ff;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.ref-list a{color:#9bc4ff;text-decoration:underline}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">D</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Educational Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="extracorporeal-photopheresis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle" style="--x:11%;--y:25%;--delay:0.80s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:1.05s"></div>
+      <div class="twinkle" style="--x:28%;--y:8%;--delay:1.30s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.70s"></div>
+      <div class="twinkle" style="--x:51%;--y:30%;--delay:1.95s"></div>
+      <div class="twinkle small" style="--x:65%;--y:50%;--delay:2.35s"></div>
+      <div class="twinkle" style="--x:74%;--y:52%;--delay:2.60s"></div>
+      <div class="twinkle small" style="--x:82%;--y:40%;--delay:2.85s"></div>
+      <div class="twinkle tiny" style="--x:89%;--y:25%;--delay:3.05s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Education · Therakos CELLEX</div>
+      <div class="head-title"><span class="accent">Why Photopheresis?</span></div>
+      <div class="head-sub">Treating immune disease with the patient's own UVA-irradiated white blood cells: how an oncology trick from 1987 became the dominant therapy for steroid-refractory GVHD and a quiet workhorse for transplant rejection.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#mechanism">01 · How It Works</a>
+  <a class="sec-pill" href="#uvadex">02 · 8-MOP / UVADEX</a>
+  <a class="sec-pill" href="#cellex">03 · The CELLEX</a>
+  <a class="sec-pill" href="#ctcl">04 · CTCL</a>
+  <a class="sec-pill" href="#gvhd">05 · GVHD</a>
+  <a class="sec-pill" href="#solid">06 · Solid-Organ Tx</a>
+  <a class="sec-pill" href="#schedule">07 · Schedule</a>
+  <a class="sec-pill" href="#complications">08 · Complications</a>
+  <a class="sec-pill" href="#new">09 · 2024–2025</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The 60-second version</div>
+  <div class="hero-tldr-text">
+    Photopheresis is <strong>immunomodulation, not lymphocyte depletion</strong>. The patient's own buffy coat is collected, mixed with the photosensitizer <strong>8-methoxypsoralen (UVADEX)</strong>, irradiated with UVA light in the Therakos CELLEX, and returned to circulation. The UVA-activated psoralen cross-links DNA, inducing apoptosis specifically in the treated lymphocytes. When these dying cells re-enter the body, they are taken up by dendritic cells, generating <strong>regulatory T-cells (Tregs)</strong> against the very antigens that were driving disease. It's a vaccination against your own pathologic immune response — first approved for cutaneous T-cell lymphoma in 1988, now the dominant therapy for steroid-refractory GVHD and solid-organ rejection.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">~5%</div><div class="stat-label">Of total lymphocytes treated per session</div></div>
+    <div class="stat"><div class="stat-num">2 J/cm²</div><div class="stat-label">UVA dose delivered to buffy coat</div></div>
+    <div class="stat"><div class="stat-num">~75%</div><div class="stat-label">Response rate in steroid-refractory cGVHD</div></div>
+    <div class="stat"><div class="stat-num">240 mL</div><div class="stat-label">CELLEX extracorporeal volume</div></div>
+  </div>
+</div>
+
+<section class="sec" id="mechanism">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">How Photopheresis Works</div><div class="sec-subtitle">A vaccine made from your own apoptotic lymphocytes</div></div></div>
+  <div class="prose">
+    <p>The mechanism is genuinely elegant and is best understood as a three-step process: <strong>collect, photoactivate, return</strong>. The Spectra Optia or Therakos CELLEX collects a small buffy-coat enriched volume — roughly 240 mL containing ~5% of the patient's circulating lymphocytes. To this collected fraction, the nurse injects <strong>8-methoxypsoralen (8-MOP, UVADEX)</strong> at a precise dose calculated from the collected volume. The mixture is then circulated through a UVA-irradiation chamber that delivers approximately <strong>2 J/cm²</strong> to every cell in the bag. Finally the irradiated lymphocytes are returned to the patient.</p>
+    <p>By itself, 8-MOP is inert. UVA activates it, allowing the molecule to intercalate between DNA strands and form covalent cross-links. The treated lymphocytes are <strong>committed to apoptosis</strong> over the next 24–72 hours. When they die in the periphery, antigen-presenting cells (dendritic cells, macrophages) ingest the apoptotic fragments and present their antigens in a tolerogenic context.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The "tolerance vaccine" model</span>The treated lymphocytes carry the patient's pathologic clones — the T cells driving GVHD, the alloreactive T cells rejecting an organ, the malignant clone in CTCL. When they're ingested in an apoptotic, tolerogenic context, the immune system <strong>learns to suppress that exact specificity</strong> via expansion of regulatory T cells (Tregs). This is why ECP is uniquely able to suppress disease without broad immunosuppression.</div></div>
+    <p>Critically, ECP <strong>does not deplete lymphocytes</strong>. Only ~5% of circulating cells see UVA, and the body replaces them. Patients on ECP do not develop opportunistic infections in the way that steroids or calcineurin inhibitors cause them. This is a major reason ECP has become the steroid-refractory GVHD treatment of choice.</p>
+  </div>
+</section>
+
+<section class="sec" id="uvadex">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">8-Methoxypsoralen (UVADEX)</div><div class="sec-subtitle">An ancient sensitizer used in a modern way</div></div></div>
+  <div class="prose">
+    <p>Psoralens are a class of furocoumarin compounds derived originally from Egyptian and Indian plants used millennia ago for vitiligo. <strong>8-methoxypsoralen</strong> is one of the most-studied of these. By itself it is biologically inert. UVA light (320–400 nm wavelength) activates it into a reactive intermediate that forms <strong>covalent bonds with thymidine residues in DNA</strong>. In a treated cell, these cross-links prevent further replication and trigger apoptosis.</p>
+    <p>For photopheresis, only the <strong>sterile injectable form, UVADEX</strong>, is approved. (The oral form, METHOXSALEN, used for older PUVA therapy in dermatology, is not appropriate for ECP because it causes systemic photosensitivity and unpredictable plasma concentrations.) UVADEX is dosed directly into the collected buffy-coat bag, so the patient never has measurable systemic 8-MOP exposure and does not need to wear UV-protective eyewear.</p>
+    <div class="callout callout-tip"><span class="callout-icon">💡</span><div class="callout-body"><span class="callout-label">UVADEX dose math</span>The standard dose is <strong>0.017 mL × treated volume in mL</strong>, where the treated volume = buffy coat + 8-MOP. In practice for a 240 mL ECV CELLEX, this is approximately 4–5 mL of UVADEX injected after collection is complete. The DART ECP calculator computes this precisely.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="cellex">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">The Therakos CELLEX System</div><div class="sec-subtitle">Collect, photoactivate, reinfuse — in one closed loop</div></div></div>
+  <div class="prose">
+    <p>The Therakos CELLEX is the dominant North American ECP system and runs an integrated <strong>C-R-Y cycle</strong> (Collect → iRradiate → return): the buffy coat is centrifuged from whole blood inlet, UVADEX is injected, the bag flows through a photoactivation cartridge containing UVA bulbs, and the irradiated product is returned. Total ECV is typically 240 mL.</p>
+    <table class="compare-table">
+      <thead><tr><th>Parameter</th><th>Typical value</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ECV</strong></td><td>240 mL</td><td>Conservative — prime/return calculations needed for low-weight patients</td></tr>
+        <tr><td><strong>UVA dose</strong></td><td>2 J/cm² (effective)</td><td>Pre-set by CELLEX; cartridge integrates dose by hematocrit</td></tr>
+        <tr><td><strong>Anticoagulant</strong></td><td>Heparin or ACD-A</td><td>Heparin standard in CELLEX (vs citrate in Optia-based MNC ECP)</td></tr>
+        <tr><td><strong>Treatment time</strong></td><td>90–180 min</td><td>Depends on lymphocyte yield and venous access</td></tr>
+        <tr><td><strong>Vascular access</strong></td><td>Peripheral or central</td><td>Peripheral preferred for chronic schedule</td></tr>
+      </tbody>
+    </table>
+    <p>The CELLEX advantage is its <strong>continuous</strong> ECP cycle, which means lower extracorporeal volume at any moment than older offline systems (UVAR XTS). This makes ECP feasible in smaller patients — including pediatrics down to ~10 kg with careful prime adjustment.</p>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">ECV awareness</span>The 240 mL ECV is significant for patients under ~25 kg or hemodynamically fragile. Use a prime decision threshold of ~15% TBV to decide whether to prime with normal saline, albumin, or PRBCs. The DART ECP calculator computes the patient's TBV and flags the ECV percentage automatically.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="ctcl">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Cutaneous T-Cell Lymphoma</div><div class="sec-subtitle">The original 1988 FDA approval</div></div></div>
+  <div class="prose">
+    <p>ECP was first approved in <strong>1988 by the FDA</strong> for treatment of palliative <strong>erythrodermic cutaneous T-cell lymphoma</strong> (CTCL), specifically the erythrodermic stages of mycosis fungoides and Sézary syndrome. The original Edelson studies showed durable responses in patients with otherwise refractory disease.</p>
+    <p>The mechanism is intuitive for CTCL: in Sézary syndrome, malignant T cells circulate in the blood. ECP collects, photodamages, and returns them, generating immune responses against the malignant clone. Response rates of 50–75% are typical, with median time to response of 4–6 months. Many patients use ECP in combination with bexarotene, interferon-α, or low-dose methotrexate.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">ASFA 2023 categorization</span><strong>Erythrodermic CTCL → ASFA Category I, Grade 1B</strong> — first-line therapy for erythrodermic mycosis fungoides and Sézary syndrome.</div></div>
+    <p>Today, although ECP remains a core CTCL therapy, the dominant volume of US photopheresis sessions is now for <strong>GVHD</strong> — by an order of magnitude. This is one of the most significant indication shifts in modern apheresis.</p>
+  </div>
+</section>
+
+<section class="sec" id="gvhd">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Graft-vs-Host Disease — The Dominant Modern Use</div><div class="sec-subtitle">Steroid-refractory cGVHD: ECP works where calcineurin inhibitors fail</div></div></div>
+  <div class="prose">
+    <p>The most common use of ECP today is <strong>steroid-refractory graft-vs-host disease</strong> after allogeneic stem cell transplant. After HSCT, donor T cells can attack the recipient's skin, gut, liver, lungs, and mucosal surfaces. First-line treatment is corticosteroids; when steroids fail, the patient enters a high-mortality clinical territory.</p>
+    <table class="compare-table">
+      <thead><tr><th>GVHD type</th><th>Typical response</th><th>Schedule</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Chronic GVHD (skin/oral)</strong></td><td>60–80% partial/complete</td><td>2 sessions/week × 8–12 weeks, then taper</td></tr>
+        <tr><td><strong>Chronic GVHD (lung — BOS)</strong></td><td>30–50% stabilization</td><td>2 sessions/week, longer course</td></tr>
+        <tr><td><strong>Acute GVHD (skin)</strong></td><td>60–70%</td><td>2–3 sessions/week × 4–8 weeks</td></tr>
+        <tr><td><strong>Acute GVHD (gut, severe)</strong></td><td>30–50%</td><td>2–3 sessions/week, often combined with ruxolitinib</td></tr>
+      </tbody>
+    </table>
+    <p>ECP is steroid-sparing — most patients taper steroids over the response window. Unlike ruxolitinib, ibrutinib, or belumosudil, ECP does not cause infection susceptibility, marrow suppression, or hepatotoxicity. The trade-off is the <strong>logistic burden</strong> — 2 sessions per week for months requires reliable vascular access, transport, and patient adherence.</p>
+    <div class="callout callout-research"><span class="callout-icon">🔬</span><div class="callout-body"><span class="callout-label">ASFA on cGVHD</span><strong>cGVHD → ASFA Category I, Grade 1B</strong> for the skin form. Lung (bronchiolitis obliterans syndrome / BOS) is Category II, Grade 2B. The categorization reflects strong evidence in skin disease and emerging evidence in pulmonary cGVHD.</div></div>
+    <p>The dose-response is unique in immunology: <strong>more sessions = more Treg expansion = more durable response</strong>. Many centers continue ECP for 6–12 months after initial response to consolidate tolerance.</p>
+  </div>
+</section>
+
+<section class="sec" id="solid">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Solid-Organ Transplant Rejection</div><div class="sec-subtitle">Heart, lung, and emerging indications</div></div></div>
+  <div class="prose">
+    <p>ECP has carved a clear role in <strong>heart and lung transplantation</strong>. In heart transplant, ECP is used for both treatment and prevention of recurrent cellular rejection — particularly in patients with antibody-mediated rejection refractory to standard therapy. In lung transplant, ECP is the dominant therapy for <strong>chronic lung allograft dysfunction (CLAD)</strong>, particularly the bronchiolitis obliterans syndrome phenotype.</p>
+    <table class="compare-table">
+      <thead><tr><th>Indication</th><th>Use case</th><th>ASFA</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cardiac rejection (cellular, recurrent)</strong></td><td>Steroid- or thymoglobulin-refractory</td><td>Cat I, Grade 1B</td></tr>
+        <tr><td><strong>Cardiac rejection prophylaxis</strong></td><td>High-risk transplant recipients</td><td>Cat II, Grade 2A</td></tr>
+        <tr><td><strong>Lung rejection / CLAD-BOS</strong></td><td>Slow FEV1 decline, post-transplant</td><td>Cat II, Grade 1B</td></tr>
+        <tr><td><strong>Renal rejection (refractory)</strong></td><td>Antibody-mediated rejection</td><td>Cat III, Grade 2C</td></tr>
+        <tr><td><strong>Liver rejection (refractory)</strong></td><td>Limited evidence</td><td>Cat III, Grade 2C</td></tr>
+      </tbody>
+    </table>
+    <p>The mechanistic appeal is the same as in GVHD: induce Tregs specific to alloantigens without globally immunosuppressing the recipient. ECP is often added on top of standard immunosuppression rather than replacing it. The lung CLAD data has been particularly striking — in carefully selected patients, ECP can halt or reverse the spirometric decline that otherwise leads to retransplant or death.</p>
+  </div>
+</section>
+
+<section class="sec" id="schedule">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Schedule &amp; Treatment Course</div><div class="sec-subtitle">Why two sessions a week, and how long</div></div></div>
+  <div class="prose">
+    <p>The typical ECP schedule for steroid-refractory GVHD is <strong>two sessions per week (on consecutive days), every 1–2 weeks</strong>, for the first 8–12 weeks. After clinical response, sessions space out: weekly, then every 2 weeks, then every 3–4 weeks for maintenance. Total duration commonly extends 6–12 months.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Why consecutive days?</span>Two sessions on Day 1 and Day 2 of the week are pharmacologically synergistic — they produce a larger Treg expansion than two sessions spaced 3 days apart. This pattern is consistent across the CTCL, GVHD, and rejection literature.</div></div>
+    <p>The patient pattern of response: skin manifestations often respond first (4–8 weeks). Oral and ocular cGVHD respond more slowly (3–6 months). Lung BOS may take 6–12 months to show spirometric stabilization. Patients are counseled up front to expect a months-long commitment.</p>
+  </div>
+</section>
+
+<section class="sec" id="complications">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Complications &amp; Practical Concerns</div><div class="sec-subtitle">What can go wrong, and the safety profile</div></div></div>
+  <div class="prose">
+    <p>ECP is one of the safest apheresis modalities. Because only ~5% of lymphocytes are treated per session, systemic immunosuppression is minimal. The patient does not need PJP prophylaxis or shingles vaccination based on ECP alone (though they often need them for their underlying disease / co-therapies).</p>
+    <table class="compare-table">
+      <thead><tr><th>Complication</th><th>Frequency</th><th>Management</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hypotension</strong></td><td>5–10%</td><td>Slow inlet rate, IV fluid bolus, adjust ECV</td></tr>
+        <tr><td><strong>Catheter complications</strong></td><td>Most common</td><td>Maintenance, line care, exchange</td></tr>
+        <tr><td><strong>Citrate/heparin reaction</strong></td><td>&lt; 2%</td><td>Calcium replacement, slow inlet</td></tr>
+        <tr><td><strong>Fluid overload</strong></td><td>Rare</td><td>Diuretics; usually only in cardiac patients</td></tr>
+        <tr><td><strong>Photosensitivity (systemic)</strong></td><td>Virtually none with UVADEX</td><td>UVADEX bag-only dosing eliminates systemic 8-MOP</td></tr>
+        <tr><td><strong>Infection susceptibility</strong></td><td>No measurable increase</td><td>Distinct from broad immunosuppression</td></tr>
+      </tbody>
+    </table>
+    <p>The major operational concern is <strong>reliable vascular access</strong> for a chronic schedule. Many ECP patients live with peripheral PICC or chest port for 6–12 months. Catheter-related bloodstream infection is the most common adverse event.</p>
+  </div>
+</section>
+
+<section class="sec" id="new">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">2024–2025 Developments</div><div class="sec-subtitle">JAK inhibitors, combination strategies, mechanism deep-dives</div></div></div>
+  <div class="prose">
+    <div class="callout callout-research"><span class="callout-icon">💊</span><div class="callout-body"><span class="callout-label">Ruxolitinib + ECP: complementary, not competitive</span><strong>Ruxolitinib</strong> (REACH3 data) became the first-line agent for steroid-refractory cGVHD, but it causes infection susceptibility and cytopenias. Real-world data shows ECP and ruxolitinib are increasingly used <strong>in combination</strong>: ruxolitinib for rapid control, ECP for durable tolerance induction, with steroid taper.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🎯</span><div class="callout-body"><span class="callout-label">Belumosudil and axatilimab</span>New targeted agents for cGVHD (belumosudil, axatilimab) have created a richer toolbox. Studies are emerging on how to sequence and combine these with ECP. Most centers reserve ECP for steroid-refractory disease where preserving immune function matters most (e.g., post-transplant infection-prone patients).</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">Mechanistic depth: Treg subset analysis</span>Recent papers using single-cell RNA seq are mapping which Treg subsets expand after ECP, and demonstrating clonal-specific tolerance induction. The data confirm what was hypothesized: ECP doesn't suppress immunity broadly — it expands specific Tregs targeted to the offending antigen.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🫁</span><div class="callout-body"><span class="callout-label">CLAD-BOS prospective data</span>Multicenter European and US CLAD trials continue to refine which lung-transplant patients benefit most from early ECP intervention. Initiation before FEV1 falls below 65% of baseline appears to be the inflection point for halting decline.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🧒</span><div class="callout-body"><span class="callout-label">Pediatric ECP expansion</span>The Therakos CELLEX is increasingly used in pediatric HSCT centers. Modified prime protocols (using albumin or PRBCs) make ECP feasible down to ~10–15 kg. Outcomes in pediatric cGVHD parallel or exceed adult data.</div></div>
+    <div class="pull-quote">Photopheresis is the rare immunotherapy that gives you both a clinical response and a falling steroid dose — without the infections that come with everything else we offer.</div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a photopheresis run?</div>
+    <div class="cta-sub">Open the ECP Calculator for UVADEX dose, treated volume, ECV percentage, and full CELLEX session parameters.</div>
+  </div>
+  <a class="cta-btn" href="extracorporeal-photopheresis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Curated, evidence-based sources</div></div></div>
+  <ol class="ref-list">
+    <li>Connors JM, et al. <strong>ASFA 2023 Guidelines on the Use of Therapeutic Apheresis — 9th Special Issue.</strong> J Clin Apher.</li>
+    <li>Edelson R. <strong>Extracorporeal photochemotherapy for the treatment of cutaneous T-cell lymphoma.</strong> NEJM 1987 (original report).</li>
+    <li>Flowers ME, et al. <strong>ECP for chronic GVHD: long-term outcomes.</strong> Blood 2023.</li>
+    <li>Zeiser R, et al. <strong>Ruxolitinib for steroid-refractory cGVHD — REACH3.</strong> NEJM 2021.</li>
+    <li>Greer M, et al. <strong>ECP for chronic lung allograft dysfunction.</strong> J Heart Lung Transplant.</li>
+    <li>Therakos. <strong>CELLEX Operator's Manual.</strong> Current revision.</li>
+    <li>UVADEX (methoxsalen) sterile solution — prescribing information.</li>
+    <li>Hautmann AH, et al. <strong>ECP in pediatric HSCT recipients.</strong> Bone Marrow Transplant 2024.</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Why Extracorporeal Photopheresis?</span>
+  <span>Educational reference — verify all clinical decisions against current guidelines and your institutional protocol.</span>
+</div>
+</div></body></html>

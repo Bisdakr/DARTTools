@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PD Standards of Practice — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(207,169,95,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--gold),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(207,169,95,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(207,169,95,.22),rgba(126,240,210,.10));border-color:rgba(207,169,95,.4);color:#f0dba8}
+.chip-calc:hover{border-color:rgba(207,169,95,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold-bright);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#f5e2b5 0%,#cfa95f 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(207,169,95,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(207,169,95,.4);color:var(--text);background:rgba(207,169,95,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(207,169,95,.24);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(207,169,95,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--gold-bright);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.hero-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.hero-meta .meta-item{padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.hero-meta .meta-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.13em;font-weight:800;margin-bottom:6px}
+.hero-meta .meta-val{font-size:14px;color:#fff;font-weight:700;line-height:1.45}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(207,169,95,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(207,169,95,.08);border-color:var(--gold-bright)}.callout-key .callout-label{color:var(--gold-bright)}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-clinical{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-clinical .callout-label{color:#7ef0d2}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(207,169,95,.10);color:#f0dba8;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.role-card{padding:16px 18px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:10px}
+.role-card h4{font-size:14px;color:#fff;font-weight:900;margin-bottom:6px;letter-spacing:-.01em}
+.role-card p{font-size:13.5px;line-height:1.6;color:#cdd6e2;margin:0}
+.step-list{list-style:none;padding:0;margin:18px 0;counter-reset:stepnum}
+.step-list li{counter-increment:stepnum;position:relative;padding:14px 14px 14px 56px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;line-height:1.6;color:#d6e0ee}
+.step-list li::before{content:counter(stepnum);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(207,169,95,.30),rgba(126,240,210,.10));color:#f0dba8;display:grid;place-items:center;font-weight:900;font-size:13px;border:1px solid rgba(207,169,95,.40)}
+.step-list li strong{color:#fff;display:inline}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:18px 0}
+.kpi-card{padding:16px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:3px solid var(--gold-bright)}
+.kpi-label{font-size:11px;color:var(--gold-bright);text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-bottom:6px}
+.kpi-value{font-size:18px;color:#fff;font-weight:900;line-height:1.2;margin-bottom:4px}
+.kpi-detail{font-size:12px;color:var(--muted);line-height:1.5}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(207,169,95,.15),rgba(126,240,210,.10));border:1px solid rgba(207,169,95,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#f0dba8}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--gold-bright),var(--accent));color:#1c1402;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(207,169,95,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(207,169,95,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(207,169,95,.15);color:#f0dba8;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.hero-meta{grid-template-columns:1fr}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">📋</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Standards of Practice</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="peritonealdialysis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Standards of Practice · Peritoneal Dialysis</div>
+      <div class="head-title"><span class="accent">PD Standards of Practice</span></div>
+      <div class="head-sub">A USA-aligned standard for performing automated and manual peritoneal dialysis using the institutional <strong>Baxter HomeChoice Pro</strong> cycler (legacy platform) with Dianeal and Extraneal solutions. Aligned with ISPD 2022 Peritonitis Guidelines, ISPD Adequacy Guidelines, CMS Conditions for Coverage for ESRD facilities, and current device labeling.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#purpose">01 · Purpose &amp; Scope</a>
+  <a class="sec-pill" href="#roles">02 · Roles</a>
+  <a class="sec-pill" href="#training">03 · Patient Training</a>
+  <a class="sec-pill" href="#aseptic">04 · Aseptic Technique</a>
+  <a class="sec-pill" href="#cycler">05 · Cycler Setup</a>
+  <a class="sec-pill" href="#homechoice">06 · HomeChoice Operation</a>
+  <a class="sec-pill" href="#capd">07 · CAPD Exchange</a>
+  <a class="sec-pill" href="#exitsite">08 · Exit Site Care</a>
+  <a class="sec-pill" href="#monitoring">09 · Monitoring &amp; Adequacy</a>
+  <a class="sec-pill" href="#peritonitis">10 · Peritonitis Response</a>
+  <a class="sec-pill" href="#adverse">11 · Adverse Events</a>
+  <a class="sec-pill" href="#inpatient">12 · Inpatient / Acute PD</a>
+  <a class="sec-pill" href="#documentation">13 · Documentation &amp; QI</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">Standard of Practice — Overview</div>
+  <div class="hero-tldr-text">
+    Peritoneal Dialysis (PD) uses the patient's own peritoneum as a dialysis membrane, with sterile glucose- or icodextrin-based solutions instilled via a Tenckhoff catheter, dwelling, and draining cyclically. The procedure is primarily home-based, with the patient or caregiver performing exchanges. The dominant safety priority is <strong>aseptic technique to prevent peritonitis</strong> — the ISPD target is <strong>&lt; 0.4 episodes per patient-year</strong>. This SOP describes operations using the institutional <strong>Baxter HomeChoice Pro</strong> legacy cycler (APD) or twin-bag manual exchanges (CAPD), with Dianeal solutions (1.5% yellow, 2.5% green, 4.25% red) and Extraneal (icodextrin, purple) for the long dwell.
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">Standards Reference</div>
+      <div class="meta-val">ISPD 2022 Peritonitis Guidelines<br>ISPD Adequacy Guidelines<br>CMS Conditions for Coverage</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Critical Safety</div>
+      <div class="meta-val">Aseptic technique every connection<br>Peritonitis &lt; 0.4 / patient-year<br>Fill 30–40 mL/kg adult</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Typical Prescription</div>
+      <div class="meta-val">Baxter HomeChoice Pro (legacy)<br>CCPD: 5 cycles × 2 L overnight + last fill<br>Weekly Kt/V ≥ 1.7</div>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="purpose">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Purpose &amp; Scope</div></div></div>
+  <div class="prose">
+    <p><strong>Purpose:</strong> To define the standardized procedure for peritoneal dialysis — patient/caregiver training, daily home performance, exit site care, adequacy monitoring, peritonitis recognition and response — using Baxter cyclers and solutions.</p>
+    <p><strong>Scope:</strong> Adult and pediatric patients with ESRD on PD. Applies to PD clinical staff (RNs, PD coordinators, nephrology technicians), nephrologists, surgeons performing catheter placement, and the patient/caregiver who performs the daily procedure.</p>
+    <p><strong>Regulatory framework:</strong> CMS Conditions for Coverage for ESRD Facilities (42 CFR Part 494); ISPD guidelines; state-specific home dialysis support requirements; CDC NHSN PD-related infection surveillance.</p>
+  </div>
+</section>
+
+<section class="sec" id="roles">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Roles &amp; Responsibilities</div></div></div>
+  <div class="prose">
+    <div class="role-card"><h4>Nephrologist</h4><p>Prescribes PD modality, prescription, and follow-up; monthly visits; manages peritonitis treatment with PD service.</p></div>
+    <div class="role-card"><h4>PD Coordinator / Home Dialysis RN</h4><p>Performs patient and caregiver training (typically 1–2 weeks dedicated curriculum); evaluates competency; manages monthly home assessment; troubleshoots issues; first response to peritonitis call.</p></div>
+    <div class="role-card"><h4>Surgical / Interventional Radiology Catheter Placement</h4><p>Performs Tenckhoff catheter placement under controlled conditions; provides post-placement instructions; available for catheter complications.</p></div>
+    <div class="role-card"><h4>Patient / Caregiver</h4><p>Performs the daily procedure per training; daily exit site care; recognizes and reports symptoms; maintains supply inventory; attends clinic visits.</p></div>
+    <div class="role-card"><h4>Renal Dietitian</h4><p>Nutritional counseling especially with dextrose load and protein loss; monitors albumin and weight.</p></div>
+    <div class="role-card"><h4>Pharmacy / Supply Service</h4><p>Coordinates monthly supply delivery; manages prescriptions for solutions and topical agents (mupirocin/gentamicin exit-site prophylaxis).</p></div>
+  </div>
+</section>
+
+<section class="sec" id="training">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Patient / Caregiver Training</div></div></div>
+  <div class="prose">
+    <p>Patient and caregiver training is the single largest determinant of peritonitis rates and PD success. Initial training is typically 5–10 sessions over 1–2 weeks; competency must be demonstrated and documented before independent home performance.</p>
+    <ol class="step-list">
+      <li><strong>Pre-training assessment.</strong> Cognitive capacity, manual dexterity, vision, home environment (dedicated clean room, electricity, no pets in workspace during exchange).</li>
+      <li><strong>Curriculum delivery.</strong> Anatomy / how PD works, aseptic technique, exchange procedure (manual and cycler as applicable), exit-site care, peritonitis recognition, mechanical complications, dietary considerations, supply management, contact information.</li>
+      <li><strong>Competency demonstration.</strong> Patient/caregiver performs full procedure with PD nurse observation; specific behaviors validated (hand hygiene, mask use, sterile field maintenance, flush-before-fill, exit-site care).</li>
+      <li><strong>Documentation.</strong> Training record signed by patient, caregiver if applicable, and PD nurse. Competency checklist completed.</li>
+      <li><strong>Retraining triggers.</strong> Any peritonitis episode; technique audit failure; significant change in cognitive/physical status; per institutional periodic re-evaluation schedule.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="aseptic">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Aseptic Technique — The Non-Negotiable Foundation</div></div></div>
+  <div class="prose">
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">No Native Bacterial Flora in the Peritoneum</span>Any organism introduced has a near-free run of the cavity. Aseptic technique at every connection is the single most cost-effective intervention to prevent peritonitis. The institutional / ISPD target is &lt; 0.4 episodes per patient-year. Repeat peritonitis predicts technique failure and modality change.</div></div>
+    <ul class="check-list">
+      <li><strong>Dedicated clean room or area.</strong> No pets, no open windows during exchange. Pet exposure has been linked to Pasteurella peritonitis outbreaks.</li>
+      <li><strong>Hand hygiene.</strong> Surgical scrub ≥ 1 minute with antimicrobial soap, dry with single-use paper towel, then alcohol-based hand rub.</li>
+      <li><strong>Surgical mask.</strong> On patient AND caregiver during the connection step. Speech-droplet S. salivarius peritonitis is documented.</li>
+      <li><strong>Sterile field.</strong> Disinfect the work surface. Assemble all supplies before opening the catheter or transfer set.</li>
+      <li><strong>Flush-before-fill.</strong> Drain ~100 mL through the drain line before infusing — clears any contaminant introduced at connection.</li>
+      <li><strong>Daily exit-site care.</strong> Cleansing with chlorhexidine or povidone-iodine; mupirocin or gentamicin cream applied per protocol.</li>
+      <li><strong>Catheter handling.</strong> Never reuse a transfer set; replace per institutional schedule (typically every 6 months); always cap when disconnected.</li>
+      <li><strong>No sharps near the catheter.</strong> Avoid scissors near catheter; no fingers in bag opening; do not touch the spike connector.</li>
+    </ul>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The Cardinal Rule</span><strong>When in doubt, don't connect.</strong> If sterility is compromised, a new bag and new transfer set cost less than a peritonitis admission. Document the discard event and replace.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="cycler">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Cycler (APD) Setup &amp; Operation</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Cycler placement.</strong> Stable surface, near patient's bed; plugged in; verify functioning. Patient should have backup battery awareness for power outage.</li>
+      <li><strong>Cassette &amp; tubing setup.</strong> Open new cassette package; verify intact; install per cycler instructions (HomeChoice, HomeChoice Claria, or Amia varies in workflow).</li>
+      <li><strong>Solution bag connection.</strong> Verify bag dextrose (color: yellow 1.5%, green 2.5%, red 4.25%) or Extraneal (purple) against the prescription. Two-check before opening port.</li>
+      <li><strong>Patient catheter connection.</strong> Strict aseptic technique. Mask, hand hygiene, sterile field. Per cycler model workflow.</li>
+      <li><strong>Verify prescription.</strong> Total volume, fill volume, cycles, dwell time, last-fill volume and solution. Cycler displays and the patient confirms the order.</li>
+      <li><strong>Initiate program.</strong> Cycler runs the prescribed cycles overnight. Initial drain → fill (first cycle) → dwell → drain → fill (next cycle) → ... → last fill (CCPD) or dry (NIPD).</li>
+      <li><strong>Patient monitors for alarms.</strong> Sleep alarms generally tolerable; significant alarms (drain failure, leak, equipment) require response per training.</li>
+      <li><strong>Morning disconnection.</strong> Aseptic technique. Cycler cycle complete; last-fill verified. Patient disconnects per training, caps catheter.</li>
+    </ol>
+    <div class="callout callout-tip"><span class="callout-icon">💡</span><div class="callout-body"><span class="callout-label">HomeChoice Pro Program Card</span>The institutional HomeChoice Pro is the legacy platform — no Sharesource cloud connectivity. Prescriptions are programmed onto a program card via Baxter PD Link software at the clinic and physically loaded into the cycler. Therapy logs are downloaded from the program card at each clinic visit for clinician review. Patients should be trained to call the PD nurse for any unexpected alarms or events between visits.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="homechoice">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">HomeChoice Pro Operation — Step-by-Step Reference</div><div class="sec-subtitle">Baxter HomeChoice Pro (institutional legacy platform)</div></div></div>
+  <div class="prose">
+    <p>The institutional cycler is the <strong>Baxter HomeChoice Pro</strong> — the legacy platform without cloud connectivity. This unit has been the workhorse of automated PD for over two decades and remains supported by Baxter for service and consumables. Newer generations (Claria with Sharesource cloud, Amia with touchscreen) exist but are not the institutional standard. This section describes the standard operating sequence for the HomeChoice Pro.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Pre-Setup Verification</h4>
+    <ul class="check-list">
+      <li><strong>Verify prescription</strong> against the cycler programming card (HomeChoice Pro uses the program card; clinician programs the card from the prescription, then loads card into cycler). Total volume, fill volume, cycles, dwell time, last fill, last-fill solution.</li>
+      <li><strong>Inspect cycler external surfaces</strong> — clean, no visible damage.</li>
+      <li><strong>Confirm cassette and tubing in date.</strong> Inspect package integrity before opening.</li>
+      <li><strong>Solution bags</strong> — verify dextrose strength (color), expiration, intact seal.</li>
+      <li><strong>Heater bag</strong> — connect heater bag warm cycle 1–2 hours before connection if solution requires warming (typically NS-temperature or close).</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Cassette Installation Sequence (HomeChoice Pro)</h4>
+    <ol class="step-list">
+      <li><strong>Open the cassette package on the clean work surface.</strong> Inspect for integrity; do not use if seal compromised.</li>
+      <li><strong>Open the cycler door.</strong> Confirm cassette orientation on the chassis.</li>
+      <li><strong>Insert the cassette into the cycler.</strong> Press firmly until seated; close the door fully. Cycler will alarm if not properly seated.</li>
+      <li><strong>Hang solution bag(s)</strong> on the appropriate hooks per prescription. Connect heater bag to its dedicated port.</li>
+      <li><strong>Spike solution bags</strong> using sterile technique. For first solution bag: aseptic technique mandatory; subsequent bags can be staged.</li>
+      <li><strong>Run "Setup" cycle on cycler.</strong> Cycler auto-primes the lines; verify no kinks; address any priming alarms.</li>
+      <li><strong>Connect patient catheter</strong> after setup complete, per aseptic technique (mask, hand hygiene, sterile field).</li>
+      <li><strong>Run "Initial Drain"</strong> — cycler drains any residual peritoneal fluid before first fill. Verify drain bag accumulation.</li>
+      <li><strong>Cycler proceeds through programmed cycles automatically.</strong> Patient monitors and addresses alarms.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Program Card Workflow (HomeChoice Pro)</h4>
+    <ul class="check-list">
+      <li><strong>Program card</strong> is the patient-specific prescription delivery medium. Clinician programs the prescription using Baxter PD Link software at the unit; card is then physically transported to the patient (or programmed during clinic visit).</li>
+      <li><strong>Card insertion at the cycler</strong> before each session; cycler reads the prescription automatically.</li>
+      <li><strong>Therapy log</strong> stored on the program card; clinician downloads the log at the next clinic visit to review cycle completion, drain volumes, and alarms.</li>
+      <li><strong>No remote monitoring</strong> — institutional process requires patient/caregiver to call PD nurse for any abnormal events or alarms.</li>
+      <li><strong>Verification at every session</strong> — patient or caregiver should be trained to confirm card prescription matches current order before starting therapy.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Common Alarms and Response</h4>
+    <table class="compare-table">
+      <thead><tr><th>Alarm</th><th>Likely cause</th><th>Patient action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>"Check Cassette"</strong></td><td>Cassette not fully seated, door not closed</td><td>Open door, reseat cassette, close door firmly.</td></tr>
+        <tr><td><strong>"Drain Problem" / "Low Drain"</strong></td><td>Catheter malposition, constipation, kink in line, fibrin in catheter</td><td>Reposition (lie on opposite side, sit up, walk around), check line for kinks. If persistent, contact PD nurse.</td></tr>
+        <tr><td><strong>"Fill Problem" / "Low Fill"</strong></td><td>Patient position blocking line, line kink, catheter migration</td><td>Reposition; uncross legs; check line.</td></tr>
+        <tr><td><strong>"Heater Problem"</strong></td><td>Heater bag not connected properly or too cold</td><td>Reconnect heater bag; allow more pre-warm time.</td></tr>
+        <tr><td><strong>"Power Failure"</strong></td><td>Outage</td><td>Cycler has backup battery (~2 hours); if outage prolonged, disconnect per training and notify PD nurse.</td></tr>
+        <tr><td><strong>"Solution Empty"</strong></td><td>End of bag detected</td><td>Cycler auto-pauses; verify bag truly empty; replace per training.</td></tr>
+      </tbody>
+    </table>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Cycler Daily Maintenance</h4>
+    <ul class="check-list">
+      <li><strong>Wipe cycler exterior</strong> with damp cloth or institutional cleaner after each use.</li>
+      <li><strong>Clean drain bag area</strong> immediately if spillage; standard household cleaner sufficient.</li>
+      <li><strong>Verify cassette and tubing</strong> are discarded per institutional waste protocol (typically household trash; medical waste only if visibly bloody).</li>
+      <li><strong>Backup battery check monthly</strong> — verify cycler operates on battery if AC power removed briefly.</li>
+      <li><strong>Annual professional servicing</strong> by Baxter service technician.</li>
+    </ul>
+    <div class="callout callout-tip"><span class="callout-icon">💡</span><div class="callout-body"><span class="callout-label">Program Card Therapy Log Review</span>The HomeChoice Pro stores cycle data on the program card. PD nurses should download the therapy log at every clinic visit and review for: cycle completion rates, drain alarm frequency, prescription compliance, UF trends, alarms by date and shift. Document the review and any prescription adjustments in the patient record. Without cloud connectivity, in-person download is the only access — make clinic visits count.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="capd">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">CAPD Manual Exchange</div></div></div>
+  <div class="prose">
+    <p>For patients on Continuous Ambulatory Peritoneal Dialysis, daily exchanges are performed manually using the twin-bag system.</p>
+    <ol class="step-list">
+      <li><strong>Prepare environment.</strong> Clean dedicated area; mask on; close windows; no pets.</li>
+      <li><strong>Hand hygiene.</strong></li>
+      <li><strong>Verify solution bag</strong> (dextrose, expiration, intact seal).</li>
+      <li><strong>Open the twin-bag system on sterile field.</strong></li>
+      <li><strong>Connect twin-bag transfer set to patient catheter</strong> using aseptic technique.</li>
+      <li><strong>Open drain (Y-line drain).</strong> Drain previous fill from cavity.</li>
+      <li><strong>Flush before fill.</strong> Open the fresh bag, allow ~100 mL to flow through the drain line to discard any contaminants.</li>
+      <li><strong>Begin fill.</strong> Allow gravity infusion of the new solution into the cavity (typically 10–15 min for 2 L).</li>
+      <li><strong>Clamp lines, disconnect.</strong> Cap catheter.</li>
+      <li><strong>Document drain volume, fill volume, dwell start time.</strong></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="exitsite">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Exit Site Care</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Daily inspection.</strong> Look for erythema, drainage, tenderness, crusting around the catheter exit.</li>
+      <li><strong>Cleansing.</strong> Per institutional protocol — typically chlorhexidine 2% or povidone-iodine solution; gentle non-scrubbing motion.</li>
+      <li><strong>Antimicrobial cream.</strong> Apply mupirocin or gentamicin cream to exit site per ISPD recommendation. Reduces exit-site infection and peritonitis rates.</li>
+      <li><strong>Catheter immobilization.</strong> Secure catheter to prevent traction on the exit site (taping, immobilization devices).</li>
+      <li><strong>Showering.</strong> Permitted after exit-site healing (typically 4–6 weeks post-placement); cover exit-site appropriately.</li>
+      <li><strong>Swimming / bathing.</strong> Restricted unless in clean chlorinated water with appropriate cover; consult PD team.</li>
+      <li><strong>Reporting concerns.</strong> Any redness, pain, drainage, or change in exit appearance — contact PD nurse same day.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="monitoring">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Monitoring &amp; Adequacy</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Monthly clinic visit</strong> — Vital signs, weight, abdominal exam, exit-site inspection, lab review.</li>
+      <li><strong>Monthly labs</strong> — Comprehensive metabolic panel, phosphorus, magnesium, albumin, hemoglobin, ferritin, transferrin saturation, parathyroid hormone, lipid panel periodically.</li>
+      <li><strong>Adequacy testing every 4–6 months</strong> — Weekly Kt/V urea (PD + residual renal); target ≥ 1.7. Weekly creatinine clearance ≥ 50 L/1.73 m².</li>
+      <li><strong>Peritoneal equilibration test (PET)</strong> — At 1 month after PD start; annually thereafter. Classifies as high, high-average, low-average, low transporter.</li>
+      <li><strong>Residual renal function</strong> — 24-hour urine collection periodically.</li>
+      <li><strong>Fluid balance / blood pressure</strong> — Daily home weights; report weight gain &gt; 1 kg unexpected.</li>
+      <li><strong>Net UF tracking.</strong> Cycler log review; recent decline in UF may indicate membrane failure.</li>
+      <li><strong>Glycemic / metabolic surveillance.</strong> HbA1c if diabetic; lipid panel; weight; counsel on red bag conservation.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="peritonitis">
+  <div class="sec-header"><div class="sec-num">10</div><div><div class="sec-title">Peritonitis — Recognition &amp; Response</div></div></div>
+  <div class="prose">
+    <p>Peritonitis presents with the triad: <strong>cloudy effluent, abdominal pain, fever</strong>. Cloudy effluent alone — even without pain — should prompt immediate evaluation. ISPD defines peritonitis as ≥ 2 of: typical clinical features; effluent WBC &gt; 100/µL with &gt; 50% neutrophils; positive effluent culture.</p>
+    <ol class="step-list">
+      <li><strong>Patient contacts PD service immediately</strong> for cloudy effluent.</li>
+      <li><strong>Bring effluent bag to clinic / ED for diagnostic sampling.</strong></li>
+      <li><strong>Cell count with differential and culture sent.</strong></li>
+      <li><strong>Empiric intraperitoneal antibiotics started without waiting for culture.</strong> Per ISPD 2022 — Gram-positive coverage (vancomycin or first-generation cephalosporin) + Gram-negative coverage (third-generation cephalosporin or aminoglycoside) IP. Per institutional protocol.</li>
+      <li><strong>Re-culture and adjust antibiotics at 48–72 hr.</strong></li>
+      <li><strong>Duration of treatment</strong> — 14–21 days typically based on organism.</li>
+      <li><strong>Catheter removal indicated for</strong>: refractory bacterial peritonitis (no improvement by day 5), relapsing peritonitis, fungal peritonitis, mycobacterial peritonitis, bowel perforation, recurrent peritonitis with the same organism, severe exit-site/tunnel infection.</li>
+      <li><strong>Patient retraining</strong> after each peritonitis episode — technique audit, training refresher.</li>
+    </ol>
+    <table class="compare-table">
+      <thead><tr><th>Organism category</th><th>Likely source</th><th>Empiric coverage</th></tr></thead>
+      <tbody>
+        <tr><td>Gram-positive (Staph aureus, coag-neg Staph, Strep)</td><td>Skin / touch contamination</td><td>Vancomycin or cefazolin IP</td></tr>
+        <tr><td>Gram-negative (E. coli, Klebsiella, Pseudomonas)</td><td>Bowel translocation; constipation</td><td>Ceftazidime or aminoglycoside IP</td></tr>
+        <tr><td>Fungal (Candida)</td><td>Prior antibiotic courses; immunosuppressed</td><td>Catheter removal mandatory; IV antifungal</td></tr>
+        <tr><td>Polymicrobial</td><td>Bowel perforation</td><td>Surgical consult; broad-spectrum IV + IP</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="adverse">
+  <div class="sec-header"><div class="sec-num">11</div><div><div class="sec-title">Other Adverse Event Response</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Event</th><th>Recognition</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Exit-site infection</strong></td><td>Erythema, drainage, tenderness at exit</td><td>Culture; institute or escalate antimicrobial cream; PO antibiotics per organism; monitor for progression to tunnel infection.</td></tr>
+        <tr><td><strong>Tunnel infection</strong></td><td>Tunnel tenderness, induration</td><td>Aggressive antibiotic course; surgical consult; catheter removal often needed.</td></tr>
+        <tr><td><strong>Drain failure / catheter malfunction</strong></td><td>Slow / incomplete drainage</td><td>Laxatives (constipation a frequent contributor); reposition; surgical / IR consult for catheter manipulation.</td></tr>
+        <tr><td><strong>Dialysate leak</strong></td><td>Subcutaneous swelling, scrotal / labial edema</td><td>Reduce fill volume; supine fills; surgical consult.</td></tr>
+        <tr><td><strong>Hernia</strong></td><td>Bulging at umbilicus, inguinal, or incisional site</td><td>Surgical consult; consider lower fills or APD-only post-op.</td></tr>
+        <tr><td><strong>Hydrothorax</strong></td><td>Dyspnea, pleural effusion (high glucose in fluid confirms)</td><td>Drain peritoneum; thoracentesis; pleurodesis if recurrent.</td></tr>
+        <tr><td><strong>Intra-abdominal hypertension</strong> (over-fill)</td><td>Respiratory distress, hypotension</td><td>Drain immediately; reduce future fill volumes.</td></tr>
+        <tr><td><strong>Bowel perforation</strong></td><td>Severe abdominal pain, feculent effluent, polymicrobial growth</td><td>STOP all dialysate; emergent surgical consult; CT abdomen; broad-spectrum IV antibiotics; catheter removal usually required.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="inpatient">
+  <div class="sec-header"><div class="sec-num">12</div><div><div class="sec-title">Inpatient / Acute Peritoneal Dialysis</div><div class="sec-subtitle">Hospitalized chronic PD patient · urgent-start PD · acute inpatient management</div></div></div>
+  <div class="prose">
+    <p>Inpatient PD covers three distinct scenarios: (1) <strong>the chronic home-PD patient admitted for non-PD reasons</strong> who needs continued therapy in hospital, (2) the <strong>chronic PD patient admitted for peritonitis or mechanical complication</strong>, and (3) <strong>urgent-start PD</strong> in a newly-placed catheter patient. Each requires different staffing and workflow.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">The Chronic Home-PD Patient — Hospitalization for Non-PD Reasons</h4>
+    <ul class="check-list">
+      <li><strong>Continue the patient's home prescription</strong> whenever possible; the patient or family is often the expert on their own cycler. Do not improvise.</li>
+      <li><strong>Verify the patient's home supplies have been brought</strong> or coordinate with Baxter for hospital delivery; substituting solutions can introduce errors.</li>
+      <li><strong>Inpatient nursing must be PD-competent</strong> or under PD-team supervision. Many hospital floor nurses are not PD-trained; the PD program may need to staff the room during cycler runs, especially overnight.</li>
+      <li><strong>Maintain aseptic technique at every connection</strong> — hospitalization is a high-risk peritonitis period due to unfamiliar environment, repeated connections, and contact with hospital flora.</li>
+      <li><strong>Hold home prescription for surgery or radiology procedures</strong> per surgical / nephrology coordination; drain the cavity for abdominal procedures.</li>
+      <li><strong>Coordinate medication review</strong> — many IV medications administered in hospital have unclear clearance on PD; consult pharmacy.</li>
+      <li><strong>Monitor exit-site daily</strong> by hospital nursing; report any new findings to PD team.</li>
+      <li><strong>Discharge coordination</strong> — confirm patient is well-trained to resume home therapy; provide written instructions; PD nurse follow-up call within 48 hours.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Hospitalization for Peritonitis</h4>
+    <ul class="check-list">
+      <li><strong>Admit based on severity</strong> — mild peritonitis often managed outpatient with IP antibiotics; admission for sepsis, hypotension, severe abdominal pain, fungal peritonitis, refractory bacterial peritonitis, or social/care concerns.</li>
+      <li><strong>Empiric IP antibiotics started promptly</strong> per ISPD 2022 — typically vancomycin + ceftazidime or aminoglycoside.</li>
+      <li><strong>Daily clinical assessment</strong>: pain, fever, abdominal exam, effluent appearance, urine output, electrolyte trends.</li>
+      <li><strong>Repeat cell count and culture at 48–72 hours.</strong> If no improvement, escalate / consider catheter removal.</li>
+      <li><strong>Catheter removal preparation</strong> — if removal indicated, coordinate surgery / IR; pre-arrange temporary HD access (femoral catheter typical).</li>
+      <li><strong>Post-treatment retraining</strong> required before resuming home PD.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Urgent-Start PD (Inpatient AKI / New ESRD)</h4>
+    <ul class="check-list">
+      <li><strong>Indication:</strong> AKI or new ESRD requiring renal replacement, where PD is preferred over HD (e.g., cardiac dysfunction, vascular access challenges, patient preference, residual function preservation).</li>
+      <li><strong>Tenckhoff catheter placement</strong> by surgical or IR service; urgent-start protocols permit initiating PD within 24–72 hours of placement.</li>
+      <li><strong>Initial low-volume supine fills</strong> (500–1000 mL) for first 1–2 days to allow exit-site healing and reduce leak risk.</li>
+      <li><strong>Gradual fill volume escalation</strong> to target prescription over 1–2 weeks.</li>
+      <li><strong>Concurrent training</strong> initiated during inpatient stay where feasible; full training continues outpatient.</li>
+      <li><strong>Coordinate with PD program</strong> for outpatient transition planning, supplies, and training continuation.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Acute / Intermittent PD (IPD) for Inpatient AKI</h4>
+    <ul class="check-list">
+      <li><strong>Acute PD</strong> (high-volume cycler PD over 24 hours) is occasionally used for inpatient AKI when HD is not feasible (e.g., pediatric ICU, no HD access available, hemodynamic instability with CRRT contraindication).</li>
+      <li><strong>Cycler set to short dwell, frequent cycles, high total volume</strong> — clearance lower per session than HD but continuous.</li>
+      <li><strong>ICU nursing must be PD-competent</strong> or PD program provides bedside support 24/7.</li>
+      <li><strong>Monitor for over-fill, leak, drain failure;</strong> coordinate with primary team for procedure timing.</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Hospital-Acquired Peritonitis Risk</span>Hospitalized PD patients have elevated peritonitis risk from: (1) unfamiliar environment with non-PD-trained staff, (2) more frequent connections and disconnections, (3) hospital flora exposure, (4) coexisting illness compromising immune response. <strong>Limit non-PD-team connections wherever possible</strong> and prioritize aseptic technique audits at the bedside.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="documentation">
+  <div class="sec-header"><div class="sec-num">13</div><div><div class="sec-title">Documentation &amp; Quality Indicators</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Training record.</strong> Curriculum sessions, competency demonstration, retraining events.</li>
+      <li><strong>Monthly clinic note.</strong> Prescription compliance, exit-site status, weight, BP, symptoms, labs.</li>
+      <li><strong>Daily home record.</strong> Cycler download (Claria/Amia via Sharesource); manual log for CAPD patients (drain volumes, dwell times, daily weights, BP).</li>
+      <li><strong>Peritonitis events.</strong> Time, presentation, culture results, treatment, outcome, retraining performed.</li>
+      <li><strong>Exit-site infections.</strong> Time, culture, treatment.</li>
+      <li><strong>Mechanical events.</strong> Hernia, leak, hydrothorax, catheter malfunction.</li>
+      <li><strong>Adequacy testing.</strong> Kt/V, creatinine clearance, PET results.</li>
+      <li><strong>Modality change events.</strong> Transfer to HD or transplant; tracked for QI.</li>
+    </ul>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Peritonitis rate</div><div class="kpi-value">&lt; 0.4 / pt-yr</div><div class="kpi-detail">ISPD 2022 target</div></div>
+      <div class="kpi-card"><div class="kpi-label">Weekly Kt/V</div><div class="kpi-value">≥ 1.7</div><div class="kpi-detail">ISPD adequacy target (PD + residual)</div></div>
+      <div class="kpi-card"><div class="kpi-label">Exit-site infection rate</div><div class="kpi-value">Tracked monthly</div><div class="kpi-detail">Per ISPD definitions</div></div>
+      <div class="kpi-card"><div class="kpi-label">Training competency</div><div class="kpi-value">100%</div><div class="kpi-detail">Documented competency before home performance</div></div>
+      <div class="kpi-card"><div class="kpi-label">Retraining after peritonitis</div><div class="kpi-value">100%</div><div class="kpi-detail">Documented for every episode</div></div>
+      <div class="kpi-card"><div class="kpi-label">Technique survival</div><div class="kpi-value">Tracked annually</div><div class="kpi-detail">% remaining on PD at 1, 2, 3 years</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a PD prescription?</div>
+    <div class="cta-sub">Open the PD Calculator to apply this SOP — fill safety, mode math, last-fill reconciliation, bag plan.</div>
+  </div>
+  <a class="cta-btn" href="peritonealdialysis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>Li PK, et al. <strong>ISPD Peritonitis Guidelines: 2022 Update.</strong> Perit Dial Int.</li>
+    <li>Brown EA, et al. <strong>ISPD Cardiovascular and Metabolic Guidelines for Adult PD.</strong> Perit Dial Int 2024.</li>
+    <li>Warady BA, Schaefer F, et al. <strong>ISPD Pediatric PD Adequacy Guidelines.</strong> Perit Dial Int.</li>
+    <li>Crabtree JH, et al. <strong>ISPD Catheter-related Infections Recommendations.</strong></li>
+    <li>2020 ISPD/EuroPD <strong>Prescription of PD: Goal-Directed Therapy.</strong></li>
+    <li>CMS. <strong>Conditions for Coverage for ESRD Facilities</strong> (42 CFR Part 494).</li>
+    <li>Baxter. <strong>Amia, HomeChoice Claria, HomeChoice Pro Operator's Manuals</strong> (current revisions).</li>
+    <li>Baxter. <strong>Dianeal and Extraneal Prescribing Information</strong> (current revisions).</li>
+    <li>CDC NHSN. <strong>Dialysis Event Surveillance Protocol.</strong></li>
+    <li>ANNA. <strong>Nephrology Nursing: Scope and Standards of Practice</strong> (current edition).</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · PD Standards of Practice</span>
+  <span>Educational reference · Verify against institutional policy and current device IFU · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

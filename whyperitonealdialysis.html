@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why Peritoneal Dialysis? — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(97,168,255,.10),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.08),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(126,240,210,.22),rgba(97,168,255,.14));border-color:rgba(126,240,210,.4);color:#cdfaea}
+.chip-calc:hover{border-color:rgba(126,240,210,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 50 C 180 0,380 -8,600 30 C 820 70,1020 60,1340 18');offset-rotate:auto;opacity:0;animation:cometRun 3.6s cubic-bezier(0.42,0.04,0.58,0.98) 0.4s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.22);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.06));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#7ef0d2,#61a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#cdfaea;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-research{background:rgba(179,137,255,.08);border-color:var(--purple)}.callout-research .callout-label{color:#b389ff}
+.callout-mind{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-mind .callout-label{color:#ff8fb6}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cfe2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.bag-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
+.bag-card{padding:18px;border-radius:14px;background:rgba(255,255,255,.025);border:2px solid;text-align:center}
+.bag-card.yellow{border-color:rgba(255,224,90,.6);background:linear-gradient(180deg,rgba(255,224,90,.10),rgba(255,224,90,.02))}
+.bag-card.green{border-color:rgba(126,240,140,.6);background:linear-gradient(180deg,rgba(126,240,140,.10),rgba(126,240,140,.02))}
+.bag-card.red{border-color:rgba(255,120,120,.6);background:linear-gradient(180deg,rgba(255,120,120,.10),rgba(255,120,120,.02))}
+.bag-card.purple{border-color:rgba(179,137,255,.6);background:linear-gradient(180deg,rgba(179,137,255,.10),rgba(179,137,255,.02))}
+.bag-pct{font-size:28px;font-weight:900;letter-spacing:-.04em;color:#fff;line-height:1;margin-bottom:6px}
+.bag-name{font-size:14px;font-weight:800;margin-bottom:8px;color:#fff}
+.bag-card.yellow .bag-name{color:#ffe16a}
+.bag-card.green .bag-name{color:#9beba5}
+.bag-card.red .bag-name{color:#ffa0a0}
+.bag-card.purple .bag-name{color:#c8acff}
+.bag-use{font-size:12px;color:#cdd6e2;line-height:1.5}
+.timeline{margin:24px 0;padding-left:20px;border-left:2px solid rgba(126,240,210,.25)}
+.tline-item{margin-bottom:18px;position:relative}
+.tline-item::before{content:"";position:absolute;left:-26px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(126,240,210,.18)}
+.tline-year{font-size:11px;color:var(--accent);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.tline-text{font-size:14.5px;color:#d6e0ee;line-height:1.55}
+.tline-text strong{color:#fff}
+.pull-quote{margin:30px 0;padding:22px 26px;border-radius:14px;background:linear-gradient(135deg,rgba(179,137,255,.08),rgba(97,168,255,.05));border-left:4px solid var(--purple);font-family:'Source Serif 4',serif;font-size:19px;line-height:1.55;color:#e3dcff;font-style:italic}
+.pull-quote::before{content:"\201C";font-size:48px;color:rgba(179,137,255,.4);line-height:0;vertical-align:-18px;margin-right:6px}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(97,168,255,.15),rgba(126,240,210,.10));border:1px solid rgba(97,168,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#cfe2ff}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(59,130,246,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:#9bc4ff;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.ref-list a{color:#9bc4ff;text-decoration:underline}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}.bag-grid{grid-template-columns:repeat(2,1fr)}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">D</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Educational Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="peritonealdialysis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle" style="--x:11%;--y:25%;--delay:0.80s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:1.05s"></div>
+      <div class="twinkle" style="--x:28%;--y:8%;--delay:1.30s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.70s"></div>
+      <div class="twinkle" style="--x:51%;--y:30%;--delay:1.95s"></div>
+      <div class="twinkle small" style="--x:65%;--y:50%;--delay:2.35s"></div>
+      <div class="twinkle" style="--x:74%;--y:52%;--delay:2.60s"></div>
+      <div class="twinkle small" style="--x:82%;--y:40%;--delay:2.85s"></div>
+      <div class="twinkle tiny" style="--x:89%;--y:25%;--delay:3.05s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Education · Baxter HomeChoice / Amia</div>
+      <div class="head-title"><span class="accent">Why Peritoneal Dialysis?</span></div>
+      <div class="head-sub">Using the patient's own peritoneum as a living dialysis membrane — physiology, modalities, color-coded Dianeal solutions, Baxter cyclers, aseptic technique, peritonitis prevention, and the future of home dialysis.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#mechanism">01 · How It Works</a>
+  <a class="sec-pill" href="#history">02 · History</a>
+  <a class="sec-pill" href="#modalities">03 · Modalities</a>
+  <a class="sec-pill" href="#machines">04 · Baxter Machines</a>
+  <a class="sec-pill" href="#solutions">05 · Solution Colors</a>
+  <a class="sec-pill" href="#dextrose">06 · Dextrose Physics</a>
+  <a class="sec-pill" href="#lowfill">07 · Standard vs Low-fill</a>
+  <a class="sec-pill" href="#peds">08 · Pediatrics</a>
+  <a class="sec-pill" href="#aseptic">09 · Aseptic Technique</a>
+  <a class="sec-pill" href="#peritonitis">10 · Peritonitis</a>
+  <a class="sec-pill" href="#adequacy">11 · Adequacy</a>
+  <a class="sec-pill" href="#new">12 · 2024–2025</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The 60-second version</div>
+  <div class="hero-tldr-text">
+    Peritoneal dialysis turns the patient's own <strong>peritoneal membrane</strong> into a dialyzer. A surgically placed Tenckhoff catheter delivers sterile, glucose-loaded fluid into the abdominal cavity. The dialysate dwells for a programmed period — small solutes (urea, K, creatinine) diffuse from blood vessels in the peritoneum into the dialysate; water follows the osmotic gradient created by dextrose. The spent fluid is drained out, replaced, and the cycle repeats. Done at home overnight on a <strong>Baxter cycler</strong>, PD restores enough kidney function for the patient to work, travel, sleep in their own bed, and avoid the thrice-weekly hemodialysis schedule. About <strong>10% of US dialysis patients</strong> are on PD; uptake is rising under value-based payment reform.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">~1.5 m²</div><div class="stat-label">Effective adult peritoneal surface area</div></div>
+    <div class="stat"><div class="stat-num">≥1.7</div><div class="stat-label">Target weekly Kt/V for PD adequacy</div></div>
+    <div class="stat"><div class="stat-num">30–40</div><div class="stat-label">mL/kg target adult fill volume</div></div>
+    <div class="stat"><div class="stat-num">800–1100</div><div class="stat-label">mL/m² BSA pediatric fill target</div></div>
+  </div>
+</div>
+
+<section class="sec" id="mechanism">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">How Peritoneal Dialysis Works</div><div class="sec-subtitle">Three physical processes happening inside your abdomen</div></div></div>
+  <div class="prose">
+    <p>The peritoneum is a thin serous membrane that lines the abdominal cavity and covers most of the abdominal organs. Highly vascularized — with capillary loops sitting just under its mesothelial surface — it is, fortuitously, a near-perfect dialysis membrane. Total surface area in adults is roughly <strong>1–2 m²</strong> (comparable to a synthetic dialyzer), and the membrane is freely permeable to small solutes while retaining proteins.</p>
+    <p>PD works through three simultaneous processes:</p>
+    <table class="compare-table">
+      <thead><tr><th>Process</th><th>What it does</th><th>Driven by</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Diffusion</strong></td><td>Small solutes (urea, K, creatinine, phosphate) move from blood into dialysate</td><td>Concentration gradient</td></tr>
+        <tr><td><strong>Osmosis (ultrafiltration)</strong></td><td>Water moves from blood into dialysate; carries dissolved solute with it</td><td>Osmotic gradient (dextrose or icodextrin)</td></tr>
+        <tr><td><strong>Convection</strong></td><td>Middle molecules (β2-microglobulin) move with the water flow</td><td>Bulk fluid movement</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The peritoneum is the dialyzer</span>The fundamental difference from hemodialysis is that <strong>no synthetic membrane is involved</strong>. The patient's own peritoneum does the filtering. This means PD's clearance capacity is fixed by the patient's anatomy and physiology — you can't swap in a "bigger filter." You can only change the fill volume, dwell time, and number of cycles.</div></div>
+    <p>A <strong>Tenckhoff catheter</strong> — a silicone tube with two Dacron cuffs anchored in the subcutaneous tunnel and around the muscle layer — delivers dialysate into and out of the cavity. The catheter exits through a tunnel that, when healed, forms a biological seal against infection. Daily exit-site care is therefore non-negotiable.</p>
+  </div>
+</section>
+
+<section class="sec" id="history">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">A Brief History</div><div class="sec-subtitle">From WWII desperation to in-home automation</div></div></div>
+  <div class="prose">
+    <div class="timeline">
+      <div class="tline-item"><div class="tline-year">1923</div><div class="tline-text">German physician Georg Ganter performs the first human PD using saline lavage of the peritoneum — abandoned as crude and infection-prone.</div></div>
+      <div class="tline-item"><div class="tline-year">1946</div><div class="tline-text">Frank, Seligman & Fine perform PD in acute uremia survivors at Boston City Hospital — first reproducible clinical PD.</div></div>
+      <div class="tline-item"><div class="tline-year">1968</div><div class="tline-text"><strong>Henry Tenckhoff</strong> in Seattle develops the cuffed silicone catheter that bears his name — the breakthrough that made chronic PD feasible by preventing pericatheter leaks and infection.</div></div>
+      <div class="tline-item"><div class="tline-year">1976</div><div class="tline-text"><strong>Popovich and Moncrief</strong> publish the principle of <strong>CAPD</strong> (Continuous Ambulatory PD) — four daily manual exchanges that keep dialysis running 24/7 without a machine.</div></div>
+      <div class="tline-item"><div class="tline-year">1980s</div><div class="tline-text"><strong>Twin-bag systems</strong> introduced — separate drain and fill bags reduce peritonitis rates dramatically. Y-set and flush-before-fill technique become the standard.</div></div>
+      <div class="tline-item"><div class="tline-year">1990s</div><div class="tline-text">Baxter <strong>HomeChoice</strong> automated cycler launches — enables CCPD (Continuous Cycling PD) at home overnight. Patients reclaim their days.</div></div>
+      <div class="tline-item"><div class="tline-year">2003</div><div class="tline-text"><strong>Extraneal (icodextrin)</strong> FDA-approved — first non-glucose osmotic agent for sustained UF over long dwells.</div></div>
+      <div class="tline-item"><div class="tline-year">2014</div><div class="tline-text"><strong>Baxter Amia</strong> launches with touchscreen interface and Sharesource cloud connectivity — clinicians can adjust prescriptions remotely.</div></div>
+      <div class="tline-item"><div class="tline-year">2019</div><div class="tline-text">CMS Advancing American Kidney Health Initiative — major incentives for home dialysis. US PD enrollment grows for the first time in decades.</div></div>
+      <div class="tline-item"><div class="tline-year">2023</div><div class="tline-text"><strong>ISPD updated guidelines</strong> on peritonitis prevention, biocompatible solutions, and adequacy — endorsing weekly Kt/V ≥ 1.7 plus residual function and patient-reported outcomes.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="modalities">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">PD Modalities — The Five Flavors</div><div class="sec-subtitle">CAPD, CCPD/APD, NIPD, Tidal, IPD</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Modality</th><th>How it runs</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CAPD</strong><br><span style="color:var(--muted);font-size:12px">Continuous Ambulatory PD</span></td><td>4–5 manual exchanges/day; ~2L each; long overnight dwell. No machine.</td><td>Patients who want autonomy, no electricity needed, ambulatory lifestyle.</td></tr>
+        <tr><td><strong>CCPD / APD</strong><br><span style="color:var(--muted);font-size:12px">Continuous Cycling PD</span></td><td>Cycler runs 8–10 hr overnight (3–6 cycles) + daytime "last fill" dwell.</td><td>Working adults, school-age children — frees daytime.</td></tr>
+        <tr><td><strong>NIPD</strong><br><span style="color:var(--muted);font-size:12px">Nocturnal Intermittent PD</span></td><td>Cycler runs overnight only — dry day, no daytime dwell.</td><td>High-transporter membrane phenotype; patients with hernia, leak, or back pain from daytime fill.</td></tr>
+        <tr><td><strong>Tidal PD</strong></td><td>Each cycle drains only 40–80% of the previous fill, then refills. Cavity is never empty.</td><td>Slow drainers; pain at end-drain; small-solute clearance optimization; long therapy windows.</td></tr>
+        <tr><td><strong>IPD</strong><br><span style="color:var(--muted);font-size:12px">Intermittent PD</span></td><td>Inpatient acute setting — high-volume continuous exchanges over 24 hr.</td><td>Acute kidney injury, urgent-start PD before chronic prescription is set.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-tip"><span class="callout-icon">💡</span><div class="callout-body"><span class="callout-label">Why Tidal exists</span>Some patients have <strong>pain at end-drain</strong> — the catheter tip suctions against the peritoneum when the cavity is emptied. Tidal mode leaves a residual volume in the cavity, eliminating that pain. It also keeps diffusion going during what would otherwise be drain time, modestly improving small-solute clearance.</div></div>
+    <p>Mode selection is dynamic. A patient may start on CAPD during training, switch to CCPD when they return to work, add a daytime icodextrin exchange when residual UF falls, and convert to NIPD if they develop a hernia. The DART PD calculator supports all five.</p>
+  </div>
+</section>
+
+<section class="sec" id="machines">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Baxter Cyclers — HomeChoice, Claria, Amia</div><div class="sec-subtitle">Three generations, one ecosystem</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Generation</th><th>Capabilities</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HomeChoice Pro</strong></td><td>Original PD cycler · 100–3000 mL fill range · supports CCPD, NIPD, Tidal, IPD</td><td>Legacy workhorse; no remote monitoring but full mode support.</td></tr>
+        <tr><td><strong>HomeChoice Claria</strong></td><td>Adds <strong>Sharesource cloud</strong> · 60 mL minimum fill (low-fill capable) · same modes</td><td>Remote prescription view + therapy log download for clinician oversight.</td></tr>
+        <tr><td><strong>Amia</strong></td><td>Touchscreen interface · 60 mL minimum fill · Sharesource integration · simplified user setup</td><td>Reduced cognitive load for patients; voice + visual prompts; better pediatric/elderly fit.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Sharesource changed the game</span>Before Sharesource, clinicians saw only the data the patient brought to clinic visits. Now they can see <strong>every cycle, every drain volume, every alarm</strong> — in near-real-time. Prescription changes can be pushed to the cycler remotely. Early data showed reduction in hospitalizations and faster identification of drainage problems before they became peritonitis.</div></div>
+    <p>All three cyclers use the same <strong>Dianeal solution bags</strong> and the same prescription concepts (fill volume, dwell time, cycles, last fill). Switching machines doesn't change the patient's clinical prescription — only the user experience and remote-monitoring capability.</p>
+  </div>
+</section>
+
+<section class="sec" id="solutions">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Color-Coded Solutions</div><div class="sec-subtitle">The four Baxter bags every PD nurse memorizes</div></div></div>
+  <div class="prose">
+    <p>Baxter Dianeal and Extraneal solutions are <strong>color-coded by dextrose strength</strong> — a visual safeguard against the wrong bag being hung at 3 AM. Memorize these four.</p>
+    <div class="bag-grid">
+      <div class="bag-card yellow">
+        <div class="bag-pct">1.5%</div>
+        <div class="bag-name">Dianeal Yellow</div>
+        <div class="bag-use">Light UF · gentlest on glucose load · for stable patients with low UF requirements.</div>
+      </div>
+      <div class="bag-card green">
+        <div class="bag-pct">2.5%</div>
+        <div class="bag-name">Dianeal Green</div>
+        <div class="bag-use">Moderate UF · the workhorse · standard daily prescription for most adults.</div>
+      </div>
+      <div class="bag-card red">
+        <div class="bag-pct">4.25%</div>
+        <div class="bag-name">Dianeal Red</div>
+        <div class="bag-use">Maximum dextrose UF · hypertonic · use sparingly · watch glycemia.</div>
+      </div>
+      <div class="bag-card purple">
+        <div class="bag-pct">Ico</div>
+        <div class="bag-name">Extraneal Purple</div>
+        <div class="bag-use">Icodextrin colloid · sustained UF for long dwells · once daily maximum.</div>
+      </div>
+    </div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The bag color is a safety net</span>The colors are not aesthetic — they are an <strong>error-prevention system</strong>. When a tired night-shift nurse reaches into a supply room with three different strengths, the color tells the brain what's about to be hung. Always read the label too — but color is the first check.</div></div>
+    <p>Baxter also makes <strong>Physioneal</strong> — a pH-neutral, low-GDP (glucose degradation product) bicarbonate/lactate buffered Dianeal alternative. Better biocompatibility, may preserve peritoneal membrane long-term. Available in 1.36% (≈1.5%), 2.27% (≈2.5%), and 3.86% (≈4.25%) strengths.</p>
+    <div class="callout callout-research"><span class="callout-icon">🧪</span><div class="callout-body"><span class="callout-label">Nutrineal & Amino Acid PD</span><strong>Nutrineal</strong> uses 1.1% amino acid mixture as the osmotic agent instead of dextrose — a niche option for malnourished PD patients who can use the osmolarity for UF while absorbing protein. Once-daily maximum due to acid-base concerns.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="dextrose">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Dextrose Physics — Why Bag Strength = Fluid Pull</div><div class="sec-subtitle">How an osmotic gradient becomes ultrafiltration</div></div></div>
+  <div class="prose">
+    <p>Dextrose is the osmotic engine of conventional PD solutions. The mechanism is direct: dialysate dextrose creates an osmolar concentration far higher than plasma. Water moves across the peritoneal membrane <strong>from blood into the cavity</strong> down that gradient, dragging dissolved solute with it. The net water removal — <strong>ultrafiltration (UF)</strong> — is what relieves fluid overload.</p>
+    <table class="compare-table">
+      <thead><tr><th>Solution</th><th>Osmolarity (mOsm/L)</th><th>Typical UF over 4 hr dwell</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1.5% (Yellow)</strong></td><td>~346</td><td>~100–200 mL</td></tr>
+        <tr><td><strong>2.5% (Green)</strong></td><td>~396</td><td>~300–400 mL</td></tr>
+        <tr><td><strong>4.25% (Red)</strong></td><td>~485</td><td>~500–700 mL</td></tr>
+        <tr><td><strong>Icodextrin (Purple)</strong></td><td>~284 (iso-osmolar)</td><td>~400–600 mL over 8–16 hr (sustained)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The dextrose problem</span>Glucose is small and rapidly absorbed across the peritoneum. Within 2–4 hours, much of the dextrose has crossed into the patient's blood — destroying the osmotic gradient and stopping (or reversing) UF. This is why dextrose-based dwells get <strong>shorter</strong>, not longer, for maximum UF.</div></div>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Why icodextrin for long dwells</span>Icodextrin is a <strong>glucose polymer</strong> (starch-derived). Too large to cross the peritoneum quickly, it creates a sustained colloid osmotic gradient over 8–16 hours. Unlike dextrose, UF does not collapse halfway through. Limit: once per 24 hr because of slow lymphatic clearance.</div></div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Glycemic load — a real consideration</span>A patient on 4.25% bags daily absorbs <strong>100–200 g of glucose per day</strong>. Over time this contributes to insulin resistance, weight gain, dyslipidemia, and peritoneal membrane fibrosis. Conserve red bags for true UF emergencies; icodextrin substitutes for many long-dwell red bag use cases.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="lowfill">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Standard vs Low-Fill Mode</div><div class="sec-subtitle">The same machine, different fill ceiling</div></div></div>
+  <div class="prose">
+    <p>Baxter's HomeChoice Claria and Amia cyclers support a <strong>low-fill mode</strong> that allows fills as small as <strong>60 mL</strong> per cycle. Why does this matter?</p>
+    <table class="compare-table">
+      <thead><tr><th>Mode</th><th>Fill range</th><th>Typical use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Standard mode</strong></td><td>100 mL → 3000 mL per cycle</td><td>Adults, older children</td></tr>
+        <tr><td><strong>Low-fill mode</strong></td><td>60 mL → 1500 mL per cycle</td><td>Infants, neonates, very small children (down to ~3 kg)</td></tr>
+      </tbody>
+    </table>
+    <p>The pump pressures, drain detection algorithms, and minimum drain volumes are tuned differently in low-fill mode. Selecting the wrong mode for a small patient can lead to under-drain alarms, drain pain, or incomplete therapy.</p>
+    <div class="callout callout-tip"><span class="callout-icon">💡</span><div class="callout-body"><span class="callout-label">How to choose</span>Low-fill is typically selected for any patient where the prescribed fill is <strong>under ~500 mL per cycle</strong>. The DART PD calculator's weight-based fill safety check flags pediatric ranges where low-fill should be considered.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Pediatric Peritoneal Dialysis</div><div class="sec-subtitle">BSA-based fills, low-fill cyclers, and weight thresholds</div></div></div>
+  <div class="prose">
+    <p>PD is the dominant chronic dialysis modality for infants and small children — the technical challenges of vascular access make hemodialysis impractical below ~10 kg, while the peritoneum scales well to any body size.</p>
+    <table class="compare-table">
+      <thead><tr><th>Age / size</th><th>Fill target</th><th>Cycler mode</th></tr></thead>
+      <tbody>
+        <tr><td>Neonate (&lt; 5 kg)</td><td>10–20 mL/kg start; titrate to 30–40 mL/kg</td><td>Low-fill, small-bag manual exchanges initially</td></tr>
+        <tr><td>Infant (5–10 kg)</td><td>20–30 mL/kg start; 30–40 mL/kg goal</td><td>Low-fill cycler</td></tr>
+        <tr><td>Toddler / Child (&gt; 10 kg)</td><td><strong>800–1100 mL/m² BSA</strong> goal (ISPD)</td><td>Standard or low-fill depending on volume</td></tr>
+        <tr><td>Adolescent</td><td>1100–1400 mL/m² BSA (adult-equivalent)</td><td>Standard mode</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">BSA, not weight, for kids</span>Once a child is &gt; 10 kg, prescribing by <strong>mL/m² body surface area</strong> outperforms mL/kg because BSA correlates more closely with peritoneal surface area. The DART PD calculator computes BSA via the Mosteller equation and uses 800–1100 mL/m² as the pediatric safety band.</div></div>
+    <p>Special pediatric considerations: avoid icodextrin in infants (insufficient data and acid-base concerns); start with shorter dwells (45–60 min) and scale up; consider a fluoroscopy-guided Tenckhoff placement to verify catheter position; and never skip the daily fill-volume tolerance check (look for respiratory distress, abdominal distension, or vomiting that signals over-fill).</p>
+  </div>
+</section>
+
+<section class="sec" id="aseptic">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Aseptic Technique — The Non-Negotiable</div><div class="sec-subtitle">Why PD is a war against peritonitis</div></div></div>
+  <div class="prose">
+    <p>The peritoneum has <strong>no resident bacterial flora</strong>. Any bug introduced — usually via the catheter at the connection-disconnection step — has a near-free run of the cavity. Peritonitis is the leading reason patients drop out of PD. Every connection is therefore performed under strict aseptic technique.</p>
+    <ul class="check-list">
+      <li><strong>Dedicated, clean room.</strong> No pets, no open windows during exchange. Pet dander and droplet contamination from animal exposure are linked to peritonitis outbreaks (especially with <em>Pasteurella</em>).</li>
+      <li><strong>Hand hygiene.</strong> Surgical scrub for ≥ 1 minute with antimicrobial soap, dry with single-use paper towel, then alcohol-based hand rub.</li>
+      <li><strong>Surgical mask (and patient mask).</strong> Both patient and caregiver wear masks during connection — droplets from speech are a documented source of <em>Streptococcus salivarius</em> peritonitis.</li>
+      <li><strong>Sterile field.</strong> Disinfect work surface; assemble all supplies before opening the catheter.</li>
+      <li><strong>Flush-before-fill.</strong> Drain the bag's first ~100 mL through the drain line before infusing — clears any contaminant introduced at connection.</li>
+      <li><strong>Exit-site care.</strong> Daily cleansing with chlorhexidine or povidone-iodine; mupirocin or gentamicin cream prophylactically. Inspect site every exchange.</li>
+      <li><strong>Catheter handling.</strong> Never reuse a transfer set; replace per institutional schedule (typically every 6 months). Always cap when disconnected.</li>
+      <li><strong>Sharps and equipment.</strong> No scissors near the catheter. No fingers in the bag opening. Avoid touch contamination of the spike.</li>
+    </ul>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The cardinal rule of PD nursing</span><strong>When in doubt, don't connect.</strong> If sterility is compromised, a new bag and new transfer set cost less than a peritonitis admission. Document and replace.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peritonitis">
+  <div class="sec-header"><div class="sec-num">10</div><div><div class="sec-title">Peritonitis — Recognition &amp; Response</div><div class="sec-subtitle">The single most common PD complication</div></div></div>
+  <div class="prose">
+    <p>Peritonitis presents with the triad: <strong>cloudy effluent</strong>, <strong>abdominal pain</strong>, and <strong>fever</strong>. Cloudy effluent alone — even without pain — should prompt immediate evaluation. ISPD guidelines define peritonitis as ≥ 2 of: typical clinical features, effluent WBC &gt; 100/µL with &gt; 50% neutrophils, and positive effluent culture.</p>
+    <table class="compare-table">
+      <thead><tr><th>Organism category</th><th>Typical source</th><th>Empiric coverage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Gram-positive</strong> (Staph aureus, coag-negative Staph, Strep)</td><td>Skin/touch contamination</td><td>Vancomycin or cefazolin IP</td></tr>
+        <tr><td><strong>Gram-negative</strong> (E. coli, Klebsiella, Pseudomonas)</td><td>Bowel translocation; severe constipation</td><td>Ceftazidime or aminoglycoside IP</td></tr>
+        <tr><td><strong>Fungal</strong> (Candida)</td><td>Prior antibiotic courses; severely immunosuppressed</td><td>Catheter removal mandatory; antifungal IV</td></tr>
+        <tr><td><strong>Polymicrobial</strong></td><td>Bowel perforation</td><td>Surgical consult; broad-spectrum IV + IP</td></tr>
+      </tbody>
+    </table>
+    <p>Empiric IP antibiotics cover both Gram-positive and Gram-negative organisms (commonly vancomycin + ceftazidime), administered intraperitoneally in the dialysate at therapeutic concentrations. Most peritonitis resolves with 14–21 days of treatment. <strong>Catheter removal is required for</strong> refractory bacterial peritonitis (no response by day 5), recurrent peritonitis, fungal peritonitis, or mycobacterial peritonitis.</p>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The peritonitis rate target</span>ISPD recommends &lt; <strong>0.4 episodes per patient-year</strong>. Units exceeding 0.5 should review their training, exchange technique, and exit-site protocols. Repeat peritonitis is associated with technique failure and conversion to hemodialysis.</div></div>
+    <p>Prevention investments — exit-site mupirocin, mask use, dedicated exchange space, patient retraining — consistently outperform treatment investments dollar-for-dollar.</p>
+  </div>
+</section>
+
+<section class="sec" id="adequacy">
+  <div class="sec-header"><div class="sec-num">11</div><div><div class="sec-title">Adequacy — Weekly Kt/V and the PET</div><div class="sec-subtitle">How we know PD is enough</div></div></div>
+  <div class="prose">
+    <p>PD adequacy is measured as <strong>weekly Kt/V urea</strong>. The 2020 ISPD guidelines target <strong>weekly Kt/V ≥ 1.7</strong> from PD plus residual renal function combined. Patient-reported outcomes (well-being, sleep, appetite, work capacity) are now weighted equally with the Kt/V number in modern practice.</p>
+    <table class="compare-table">
+      <thead><tr><th>Adequacy metric</th><th>Target</th><th>What it measures</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Weekly Kt/V urea</strong></td><td>≥ 1.7</td><td>Urea clearance × time / body water (PD + residual)</td></tr>
+        <tr><td><strong>Weekly creatinine clearance</strong></td><td>≥ 50 L/1.73m²</td><td>Adequate small-solute clearance</td></tr>
+        <tr><td><strong>Net daily UF</strong></td><td>&gt; 750 mL (anuric) or sufficient for fluid balance</td><td>Fluid removal adequacy</td></tr>
+        <tr><td><strong>Residual urine</strong></td><td>Preserved as long as possible</td><td>Highest-value clearance — protect it</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">PET — Peritoneal Equilibration Test</span>The <strong>PET</strong> classifies a patient's peritoneum as <strong>high, high-average, low-average, or low transporter</strong>. High transporters absorb glucose quickly (UF collapses fast) and benefit from short dwells (CCPD/NIPD). Low transporters maintain gradients longer and tolerate long dwells (CAPD with long overnight dwell). The PET typically performed at 1 month after PD start and repeated annually.</div></div>
+    <p>Residual renal function (any urine output) is the single most valuable predictor of PD success. Strategies to preserve it: avoid nephrotoxins, use ACE inhibitors/ARBs as tolerated, avoid hypotensive dialysis sessions, and consider iso-osmolar icodextrin to minimize osmotic stress on the kidneys.</p>
+  </div>
+</section>
+
+<section class="sec" id="new">
+  <div class="sec-header"><div class="sec-num">12</div><div><div class="sec-title">2024–2025 Developments</div><div class="sec-subtitle">Where PD is going</div></div></div>
+  <div class="prose">
+    <div class="callout callout-research"><span class="callout-icon">🏠</span><div class="callout-body"><span class="callout-label">Home dialysis policy wind at PD's back</span>CMS's <strong>End-Stage Renal Disease Treatment Choices (ETC) model</strong> and bundled payment reforms continue to financially incentivize home modalities. US PD prevalence has grown for ten consecutive years — the longest growth streak in PD's history. New centers are opening dedicated PD training programs.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🧪</span><div class="callout-body"><span class="callout-label">Biocompatible solutions becoming standard</span><strong>Physioneal</strong>, <strong>Balance</strong>, and similar pH-neutral, low-GDP, bicarbonate-buffered solutions show preserved peritoneal membrane function on serial PET testing. Adoption is now standard in Europe and growing in the US.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🤖</span><div class="callout-body"><span class="callout-label">Sharesource AI prescription support</span>Baxter is rolling out <strong>AI-assisted prescription optimization</strong> in Sharesource — analyzing UF trends, drain alarms, and patient-reported outcomes to suggest prescription tweaks before the patient develops fluid overload or under-clearance.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🔬</span><div class="callout-body"><span class="callout-label">Urgent-start PD pathways</span>The traditional 2-week wait between catheter placement and PD initiation is being challenged by <strong>urgent-start PD</strong> protocols (low-volume, supine fills starting 24–72 hours after placement). Data show comparable peritonitis rates and substantial savings vs starting hemodialysis as a bridge.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">PD as bridge to transplant</span>The kidney transplant queue has lengthened. PD's preservation of residual renal function and lower vascular access burden make it the preferred bridging modality for transplant candidates — particularly in younger patients.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">📱</span><div class="callout-body"><span class="callout-label">Patient-reported outcomes get teeth</span>The <strong>SONG-PD</strong> initiative (Standardized Outcomes in Nephrology — PD) has standardized PROs across PD trials. Sleep quality, social participation, and "ability to travel" are now formally measured alongside lab values.</div></div>
+    <div class="pull-quote">Peritoneal dialysis is the oldest modern dialysis modality and quietly the most futuristic — the patient runs their own treatment in their own bedroom while a cloud platform watches every cycle.</div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to build a PD prescription?</div>
+    <div class="cta-sub">Open the PD Order Builder for weight-based fill safety, cycler/mode math, last-fill reconciliation, and a read-back order summary.</div>
+  </div>
+  <a class="cta-btn" href="peritonealdialysis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Curated, evidence-based sources</div></div></div>
+  <ol class="ref-list">
+    <li>Li PK, et al. <strong>ISPD Peritonitis Guidelines: 2022 Update.</strong> Perit Dial Int.</li>
+    <li>Brown EA, et al. <strong>ISPD Cardiovascular and Metabolic Guidelines for Adult PD.</strong> Perit Dial Int 2024.</li>
+    <li>Warady BA, Schaefer F, et al. <strong>ISPD Pediatric PD Adequacy Guidelines.</strong> Perit Dial Int.</li>
+    <li>Popovich RP, Moncrief JW, et al. <strong>The definition of a novel portable/wearable equilibrium peritoneal dialysis technique.</strong> ASAIO 1976 (foundational paper).</li>
+    <li>Tenckhoff H. <strong>Catheter design for chronic peritoneal dialysis.</strong> 1968.</li>
+    <li>2020 ISPD/EuroPD <strong>Prescription of PD: Targeting High-Quality Goal-Directed Therapy.</strong></li>
+    <li>Baxter. <strong>Amia / HomeChoice Claria Operator's Manual.</strong> Current revisions.</li>
+    <li>Baxter. <strong>Dianeal and Extraneal Prescribing Information.</strong> Current revision.</li>
+    <li>Mehrotra R, et al. <strong>The current state of peritoneal dialysis.</strong> JASN.</li>
+    <li>SONG-PD Initiative. <strong>Standardized Outcomes in PD.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Why Peritoneal Dialysis?</span>
+  <span>Educational reference — verify all clinical decisions against current guidelines and your institutional protocol.</span>
+</div>
+</div></body></html>

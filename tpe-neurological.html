@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TPE Neurological Indications — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--purple-bright:#caa8ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(179,137,255,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--purple),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(179,137,255,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--purple-bright);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#e8dbff 0%,#b389ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(179,137,255,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(179,137,255,.4);color:var(--text);background:rgba(179,137,255,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(179,137,255,.24);background:linear-gradient(135deg,rgba(179,137,255,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(179,137,255,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--purple-bright);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(179,137,255,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(179,137,255,.08);border-color:var(--purple-bright)}.callout-key .callout-label{color:var(--purple-bright)}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-clinical{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-clinical .callout-label{color:#7ef0d2}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(179,137,255,.10);color:#e0c8ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.disease-card{margin:20px 0;padding:22px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:4px solid var(--purple-bright)}
+.disease-card-title{font-size:18px;color:#fff;font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+.disease-card-cat{padding:3px 10px;border-radius:999px;font-size:10.5px;font-weight:900;letter-spacing:.05em;background:rgba(179,137,255,.20);color:var(--purple-bright);text-transform:uppercase}
+.disease-card-cat.c1{background:rgba(126,240,210,.20);color:#7ef0d2}
+.disease-card-cat.c2{background:rgba(97,168,255,.20);color:#a5cdff}
+.disease-card-cat.c3{background:rgba(255,205,112,.20);color:#ffcd70}
+.disease-card-detail{font-size:14px;color:#cdd6e2;line-height:1.65;margin-top:8px}
+.disease-card-detail strong{color:#fff}
+.disease-card-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.disease-card-meta div{padding:10px;border-radius:10px;background:rgba(0,0,0,.18)}
+.disease-card-meta-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:800;margin-bottom:4px}
+.disease-card-meta-val{font-size:13px;color:#fff;font-weight:600;line-height:1.4}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(179,137,255,.15);color:var(--purple-bright);display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🧠</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Universal Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Universal Reference · TPE Neurological Indications</div>
+      <div class="head-title"><span class="accent">TPE for Neurological Disease</span></div>
+      <div class="head-sub">Detailed reference for plasma exchange in the most common autoimmune neurological indications: Guillain-Barré syndrome, myasthenia gravis crisis, CIDP, anti-NMDA receptor encephalitis, NMOSD, ANCA-associated vasculitis with CNS, autoimmune encephalitis spectrum, and acute disseminated encephalomyelitis.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#overview">01 · Overview</a>
+  <a class="sec-pill" href="#gbs">02 · GBS</a>
+  <a class="sec-pill" href="#mg">03 · MG Crisis</a>
+  <a class="sec-pill" href="#cidp">04 · CIDP</a>
+  <a class="sec-pill" href="#nmda">05 · Anti-NMDAR</a>
+  <a class="sec-pill" href="#nmosd">06 · NMOSD</a>
+  <a class="sec-pill" href="#anca">07 · ANCA-Vasculitis CNS</a>
+  <a class="sec-pill" href="#other">08 · Other Encephalitides</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — Antibody Removal in Neuroautoimmunity</div>
+  <div class="hero-tldr-text">
+    Plasma exchange removes pathogenic IgG antibodies, immune complexes, complement, and inflammatory cytokines from circulation. In neurological autoimmune disease, this provides rapid disease modification when steroids and IVIG alone are insufficient. The Spectra Optia TPE procedure typically uses <strong>1.0–1.5 plasma volume exchange per session, 5–7 sessions on alternating days</strong>, with albumin or albumin/FFP replacement depending on indication. Time-to-treatment matters: <strong>earlier is better</strong> for GBS, MG crisis, and acute NMOSD attacks.
+  </div>
+</div>
+
+<section class="sec" id="overview">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Overview of TPE in Neurological Disease</div></div></div>
+  <div class="prose">
+    <p>TPE's role in neurology is built on the principle of removing circulating autoantibodies that drive neuromuscular junction disease (MG), demyelination (GBS, CIDP, NMOSD, MS relapse), or synaptic / neuronal autoimmunity (NMDAR, LGI1, GABA-B encephalitis). It is a bridge therapy: while immunomodulation begins, TPE provides rapid symptomatic improvement.</p>
+    <table class="compare-table">
+      <thead><tr><th>Parameter</th><th>Standard TPE Approach</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Plasma volume exchanged</strong></td><td>1.0–1.5 PV per session (removes ~63% of IgG with 1 PV; ~78% with 1.5 PV)</td></tr>
+        <tr><td><strong>Frequency</strong></td><td>Alternate-day typically; daily acceptable in critical illness</td></tr>
+        <tr><td><strong>Number of sessions</strong></td><td>5–7 sessions for most neurological indications</td></tr>
+        <tr><td><strong>Replacement fluid</strong></td><td>5% albumin standard; FFP added if coagulopathy, bleeding risk, or specific indications (e.g., TTP, CAPS)</td></tr>
+        <tr><td><strong>Vascular access</strong></td><td>Peripheral if adequate veins; central catheter for ICU patients or repeated courses</td></tr>
+        <tr><td><strong>Anticoagulation</strong></td><td>Citrate (ACD-A) at 15:1 inlet ratio; heparin alternative if citrate-intolerant</td></tr>
+        <tr><td><strong>Concurrent immunomodulation</strong></td><td>Steroids and/or immunosuppression usually started concurrently; IVIG and TPE generally not given simultaneously (TPE removes IVIG)</td></tr>
+        <tr><td><strong>Monitoring</strong></td><td>Disease-specific clinical scores, complete blood count, fibrinogen, ionized calcium, electrolytes between sessions</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">TPE vs. IVIG</span>For most neurological indications, TPE and IVIG are roughly equivalent in efficacy. TPE acts faster (improvement often within 24–48 hours) but requires vascular access and equipment. IVIG is administered as standard infusion but takes longer to act and is contraindicated in IgA deficiency. <strong>Do not give simultaneously</strong>; if sequencing, give IVIG <em>after</em> TPE so it is not removed.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="gbs">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Guillain-Barré Syndrome (GBS)</div></div></div>
+  <div class="prose">
+    <div class="disease-card">
+      <div class="disease-card-title">Guillain-Barré Syndrome <span class="disease-card-cat c1">ASFA Cat I</span></div>
+      <div class="disease-card-detail">
+        Acute inflammatory demyelinating polyradiculoneuropathy (AIDP) and variants (AMAN, Miller-Fisher). Autoantibody-mediated; often post-infectious (Campylobacter, CMV, EBV, COVID-19, Zika). Ascending weakness, areflexia, dysautonomia, respiratory failure in 25–30%.
+      </div>
+      <div class="disease-card-meta">
+        <div><div class="disease-card-meta-label">Treatment Course</div><div class="disease-card-meta-val">5 sessions over 10–14 days</div></div>
+        <div><div class="disease-card-meta-label">Plasma Volume</div><div class="disease-card-meta-val">1.0–1.5 PV per session</div></div>
+        <div><div class="disease-card-meta-label">Replacement</div><div class="disease-card-meta-val">5% albumin</div></div>
+        <div><div class="disease-card-meta-label">Window</div><div class="disease-card-meta-val">Within 2–4 weeks of onset; sooner = better</div></div>
+      </div>
+    </div>
+    <div class="callout callout-clinical"><span class="callout-icon">🧪</span><div class="callout-body"><span class="callout-label">Outcomes Data</span>Cochrane meta-analyses demonstrate TPE significantly hastens recovery in GBS — reduced time on ventilator, time to walk independently, time to recover from disability. Effect equivalent to IVIG. Either is standard of care; institution / availability often drives choice.</div></div>
+    <ul class="check-list">
+      <li><strong>Severity criteria:</strong> Patients unable to walk unaided, rapidly progressive disease, respiratory compromise, autonomic instability.</li>
+      <li><strong>Do not combine with IVIG</strong> — Adds cost and risk without added benefit.</li>
+      <li><strong>Watch for dysautonomia</strong> — Hypotension during TPE; arrhythmias. Continuous telemetry recommended.</li>
+      <li><strong>Treatment-related fluctuation</strong> — A subset (~5–10%) deteriorate after initial improvement; may need re-treatment.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="mg">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Myasthenia Gravis (Crisis &amp; Pre-Thymectomy)</div></div></div>
+  <div class="prose">
+    <div class="disease-card">
+      <div class="disease-card-title">MG Crisis &amp; Pre-Thymectomy <span class="disease-card-cat c1">ASFA Cat I</span></div>
+      <div class="disease-card-detail">
+        Autoantibodies to acetylcholine receptor (AChR), MuSK, or LRP4. Crisis = respiratory failure requiring ventilation or impending. Pre-thymectomy = elective stabilization before thymus surgery.
+      </div>
+      <div class="disease-card-meta">
+        <div><div class="disease-card-meta-label">Treatment Course</div><div class="disease-card-meta-val">5–7 sessions over 7–14 days</div></div>
+        <div><div class="disease-card-meta-label">Plasma Volume</div><div class="disease-card-meta-val">1.0–1.5 PV per session</div></div>
+        <div><div class="disease-card-meta-label">Replacement</div><div class="disease-card-meta-val">5% albumin</div></div>
+        <div><div class="disease-card-meta-label">Onset of Effect</div><div class="disease-card-meta-val">Often within 24–48 hr</div></div>
+      </div>
+    </div>
+    <ul class="check-list">
+      <li><strong>Crisis recognition:</strong> NIF &lt; −20 cm H₂O, FVC &lt; 15 mL/kg, bulbar dysfunction, single-breath count &lt; 20.</li>
+      <li><strong>Monitor for cholinergic exacerbation</strong> — Pyridostigmine often held during TPE.</li>
+      <li><strong>Coordinate with immunology / neurology</strong> — Most patients continue or start immunosuppression (steroids, mycophenolate, eculizumab, rituximab).</li>
+      <li><strong>Eculizumab</strong> — For refractory AChR-positive generalized MG; coordinate vaccination (meningococcal) before initiation.</li>
+      <li><strong>MuSK-MG</strong> — Often more responsive to TPE / rituximab than IVIG.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="cidp">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Chronic Inflammatory Demyelinating Polyradiculoneuropathy (CIDP)</div></div></div>
+  <div class="prose">
+    <div class="disease-card">
+      <div class="disease-card-title">CIDP <span class="disease-card-cat c1">ASFA Cat I</span></div>
+      <div class="disease-card-detail">
+        Chronic or relapsing demyelinating polyneuropathy; progression &gt; 8 weeks (distinguishes from GBS). Stepwise or progressive weakness; symmetric or asymmetric. IVIG, steroids, TPE all first-line.
+      </div>
+      <div class="disease-card-meta">
+        <div><div class="disease-card-meta-label">Treatment Course</div><div class="disease-card-meta-val">5–6 sessions over 2–3 weeks; maintenance every 4–8 weeks</div></div>
+        <div><div class="disease-card-meta-label">Plasma Volume</div><div class="disease-card-meta-val">1.0–1.5 PV per session</div></div>
+        <div><div class="disease-card-meta-label">Replacement</div><div class="disease-card-meta-val">5% albumin</div></div>
+        <div><div class="disease-card-meta-label">Long-Term</div><div class="disease-card-meta-val">Maintenance courses if disease relapses</div></div>
+      </div>
+    </div>
+    <ul class="check-list">
+      <li><strong>Initial therapy:</strong> IVIG most common first-line; TPE alternative.</li>
+      <li><strong>Maintenance:</strong> Some patients require ongoing periodic TPE every 4–8 weeks to maintain remission.</li>
+      <li><strong>Combination:</strong> TPE + steroids may have additive benefit in refractory cases.</li>
+      <li><strong>Variants:</strong> MMN (multifocal motor neuropathy) — IVIG preferred over TPE (TPE may worsen).</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="nmda">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Anti-NMDA Receptor Encephalitis</div></div></div>
+  <div class="prose">
+    <div class="disease-card">
+      <div class="disease-card-title">Anti-NMDAR Encephalitis <span class="disease-card-cat c1">ASFA Cat I</span></div>
+      <div class="disease-card-detail">
+        Autoimmune encephalitis driven by IgG antibodies to the GluN1 subunit of the NMDA receptor. Often paraneoplastic (ovarian teratoma in young women); also post-infectious (HSV). Psychiatric symptoms → seizures → dyskinesias → autonomic instability → coma.
+      </div>
+      <div class="disease-card-meta">
+        <div><div class="disease-card-meta-label">Treatment Course</div><div class="disease-card-meta-val">5–7 sessions over 10–14 days; may extend</div></div>
+        <div><div class="disease-card-meta-label">Plasma Volume</div><div class="disease-card-meta-val">1.0–1.5 PV per session</div></div>
+        <div><div class="disease-card-meta-label">Replacement</div><div class="disease-card-meta-val">5% albumin</div></div>
+        <div><div class="disease-card-meta-label">Concurrent</div><div class="disease-card-meta-val">Steroids + tumor removal; rituximab / cyclophosphamide second-line</div></div>
+      </div>
+    </div>
+    <ul class="check-list">
+      <li><strong>Recovery is slow</strong> — Months to years; TPE provides initial improvement.</li>
+      <li><strong>Tumor screening</strong> — Pelvic ultrasound / MRI for teratoma; testicular ultrasound in males; whole-body PET if no source found.</li>
+      <li><strong>ICU coordination</strong> — Patients often require prolonged ICU care for dyskinesias, autonomic crisis, status epilepticus.</li>
+      <li><strong>Relapse risk</strong> — 12–25% over years; long-term immunosuppression often required.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="nmosd">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Neuromyelitis Optica Spectrum Disorder (NMOSD)</div></div></div>
+  <div class="prose">
+    <div class="disease-card">
+      <div class="disease-card-title">NMOSD Acute Attack <span class="disease-card-cat c2">ASFA Cat II</span></div>
+      <div class="disease-card-detail">
+        Autoimmune demyelinating disease with autoantibodies to aquaporin-4 (AQP4) or MOG. Severe optic neuritis, transverse myelitis. TPE used for severe attacks not responding to high-dose steroids.
+      </div>
+      <div class="disease-card-meta">
+        <div><div class="disease-card-meta-label">Treatment Course</div><div class="disease-card-meta-val">5–7 sessions over 7–14 days</div></div>
+        <div><div class="disease-card-meta-label">Plasma Volume</div><div class="disease-card-meta-val">1.0–1.5 PV per session</div></div>
+        <div><div class="disease-card-meta-label">Replacement</div><div class="disease-card-meta-val">5% albumin</div></div>
+        <div><div class="disease-card-meta-label">Window</div><div class="disease-card-meta-val">Within 5–7 days of attack onset for best outcome</div></div>
+      </div>
+    </div>
+    <ul class="check-list">
+      <li><strong>First-line:</strong> IV methylprednisolone 1 g daily × 5 days.</li>
+      <li><strong>TPE added</strong> for severe attacks (severe vision loss, profound paresis) or no improvement after 3–5 days of steroids.</li>
+      <li><strong>Maintenance:</strong> Long-term immunosuppression to prevent relapse — rituximab, eculizumab, satralizumab, inebilizumab now FDA-approved.</li>
+      <li><strong>Demyelinating MS relapse:</strong> Same TPE approach for steroid-refractory severe MS attacks (ASFA Cat II).</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="anca">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">ANCA-Associated Vasculitis with CNS Involvement</div></div></div>
+  <div class="prose">
+    <div class="disease-card">
+      <div class="disease-card-title">ANCA-Associated Vasculitis (with Severe Disease) <span class="disease-card-cat c1">ASFA Cat I (DAH/Cr&gt;5.7)</span></div>
+      <div class="disease-card-detail">
+        Granulomatosis with polyangiitis (GPA), microscopic polyangiitis (MPA), eosinophilic GPA. TPE specifically for diffuse alveolar hemorrhage and severe renal involvement (Cr &gt; 5.7 mg/dL or RPGN); CNS involvement less clearly studied but TPE used in select severe cases.
+      </div>
+      <div class="disease-card-meta">
+        <div><div class="disease-card-meta-label">Treatment Course</div><div class="disease-card-meta-val">7 sessions over 14 days</div></div>
+        <div><div class="disease-card-meta-label">Plasma Volume</div><div class="disease-card-meta-val">~60 mL/kg per session</div></div>
+        <div><div class="disease-card-meta-label">Replacement</div><div class="disease-card-meta-val">5% albumin; FFP if active bleeding</div></div>
+        <div><div class="disease-card-meta-label">Concurrent</div><div class="disease-card-meta-val">Rituximab or cyclophosphamide + steroids</div></div>
+      </div>
+    </div>
+    <ul class="check-list">
+      <li><strong>PEXIVAS trial</strong> updated practice: TPE no longer routine for all severe ANCA; reserved for DAH and severe renal disease per current guidance.</li>
+      <li><strong>CNS vasculitis:</strong> Limited data; TPE considered in life-threatening or steroid-refractory cases.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="other">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Other Autoimmune Encephalitis Subtypes</div></div></div>
+  <div class="prose">
+    <p>The expanding spectrum of autoantibody-mediated encephalitis (LGI1, CASPR2, GABA-B, AMPA, GAD-65, GFAP) generally responds to immunomodulation. TPE is used when steroids and IVIG are insufficient, or as first-line in severe disease.</p>
+    <div class="disease-card">
+      <div class="disease-card-title">LGI1 Encephalitis</div>
+      <div class="disease-card-detail">Faciobrachial dystonic seizures; subacute cognitive decline. First-line: high-dose steroids; TPE if refractory.</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-card-title">CASPR2 Encephalitis</div>
+      <div class="disease-card-detail">Morvan syndrome (encephalopathy + peripheral nerve hyperexcitability); TPE / IVIG / steroids + tumor search.</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-card-title">GABA-B Receptor Encephalitis</div>
+      <div class="disease-card-detail">Severe seizures, status epilepticus; often paraneoplastic (small cell lung cancer). TPE / IVIG / steroids + tumor treatment.</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-card-title">Acute Disseminated Encephalomyelitis (ADEM) <span class="disease-card-cat c2">ASFA Cat II</span></div>
+      <div class="disease-card-detail">Post-infectious or post-vaccine demyelinating encephalomyelitis. Steroids first-line; TPE for refractory severe cases.</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-card-title">PANDAS / PANS</div>
+      <div class="disease-card-detail">Pediatric autoimmune neuropsychiatric disorders; TPE Category III. Coordinate with pediatric neurology / immunology.</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-card-title">Stiff-Person Syndrome</div>
+      <div class="disease-card-detail">GAD-65 antibodies (or amphiphysin paraneoplastic); IVIG first-line; TPE in refractory cases.</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>Connelly-Smith L, et al. <strong>Guidelines on the Use of Therapeutic Apheresis in Clinical Practice — Evidence-Based Approach from the Writing Committee of the American Society for Apheresis: The Ninth Special Issue.</strong> J Clin Apher 2023.</li>
+    <li>Hughes RA, et al. <strong>Plasma exchange for Guillain-Barré syndrome.</strong> Cochrane Database Syst Rev.</li>
+    <li>Gajdos P, et al. <strong>Plasma exchange for myasthenia gravis.</strong> Cochrane Database Syst Rev.</li>
+    <li>Wingerchuk DM, et al. <strong>International consensus diagnostic criteria for neuromyelitis optica spectrum disorders.</strong> Neurology.</li>
+    <li>Dalmau J, et al. <strong>Anti-NMDA-receptor encephalitis: case series and analysis of the effects of antibodies.</strong> Lancet Neurol.</li>
+    <li>Walgaard C, et al. <strong>Second IVIG course in Guillain-Barré syndrome with poor prognosis (SID-GBS).</strong></li>
+    <li>Walsh M, et al. <strong>Plasma Exchange and Glucocorticoids in Severe ANCA-Associated Vasculitis (PEXIVAS).</strong> N Engl J Med.</li>
+    <li>American Academy of Neurology. <strong>Practice Parameters on Plasmapheresis in Neurologic Disorders.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · TPE Neurological Indications</span>
+  <span>Educational reference · Verify against ASFA 2023, AAN guidelines, and institutional protocol · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

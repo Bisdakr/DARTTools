@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HD Standards of Practice — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(207,169,95,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--gold),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(207,169,95,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(207,169,95,.22),rgba(126,240,210,.10));border-color:rgba(207,169,95,.4);color:#f0dba8}
+.chip-calc:hover{border-color:rgba(207,169,95,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold-bright);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#f5e2b5 0%,#cfa95f 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(207,169,95,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(207,169,95,.4);color:var(--text);background:rgba(207,169,95,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(207,169,95,.24);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(207,169,95,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--gold-bright);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.hero-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.hero-meta .meta-item{padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.hero-meta .meta-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.13em;font-weight:800;margin-bottom:6px}
+.hero-meta .meta-val{font-size:14px;color:#fff;font-weight:700;line-height:1.45}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(207,169,95,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(207,169,95,.08);border-color:var(--gold-bright)}.callout-key .callout-label{color:var(--gold-bright)}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-clinical{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-clinical .callout-label{color:#7ef0d2}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(207,169,95,.10);color:#f0dba8;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.role-card{padding:16px 18px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:10px}
+.role-card h4{font-size:14px;color:#fff;font-weight:900;margin-bottom:6px;letter-spacing:-.01em}
+.role-card p{font-size:13.5px;line-height:1.6;color:#cdd6e2;margin:0}
+.step-list{list-style:none;padding:0;margin:18px 0;counter-reset:stepnum}
+.step-list li{counter-increment:stepnum;position:relative;padding:14px 14px 14px 56px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;line-height:1.6;color:#d6e0ee}
+.step-list li::before{content:counter(stepnum);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(207,169,95,.30),rgba(126,240,210,.10));color:#f0dba8;display:grid;place-items:center;font-weight:900;font-size:13px;border:1px solid rgba(207,169,95,.40)}
+.step-list li strong{color:#fff;display:inline}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:18px 0}
+.kpi-card{padding:16px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:3px solid var(--gold-bright)}
+.kpi-label{font-size:11px;color:var(--gold-bright);text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-bottom:6px}
+.kpi-value{font-size:18px;color:#fff;font-weight:900;line-height:1.2;margin-bottom:4px}
+.kpi-detail{font-size:12px;color:var(--muted);line-height:1.5}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(207,169,95,.15),rgba(126,240,210,.10));border:1px solid rgba(207,169,95,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#f0dba8}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--gold-bright),var(--accent));color:#1c1402;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(207,169,95,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(207,169,95,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(207,169,95,.15);color:#f0dba8;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.hero-meta{grid-template-columns:1fr}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">📋</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Standards of Practice</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="hemodialysis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Standards of Practice · Hemodialysis</div>
+      <div class="head-title"><span class="accent">HD Standards of Practice</span></div>
+      <div class="head-sub">A USA-aligned standard for performing in-center hemodialysis using Fresenius Medical Care platforms (2008T, 2008K, 2008K@home). Aligned with KDOQI 2015 Hemodialysis Adequacy Guideline, KDIGO 2020 Vascular Access Guideline, CMS Conditions for Coverage for ESRD facilities, AAMI/ISO water quality standards, and current device labeling.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#purpose">01 · Purpose &amp; Scope</a>
+  <a class="sec-pill" href="#roles">02 · Roles</a>
+  <a class="sec-pill" href="#preprocedure">03 · Pre-Procedure</a>
+  <a class="sec-pill" href="#access">04 · Vascular Access</a>
+  <a class="sec-pill" href="#setup">05 · Machine Setup &amp; Prime</a>
+  <a class="sec-pill" href="#initiation">06 · Initiation</a>
+  <a class="sec-pill" href="#monitoring">07 · Monitoring</a>
+  <a class="sec-pill" href="#ufr">08 · UFR Safety</a>
+  <a class="sec-pill" href="#termination">09 · Termination</a>
+  <a class="sec-pill" href="#postprocedure">10 · Post-Procedure</a>
+  <a class="sec-pill" href="#adverse">11 · Adverse Events</a>
+  <a class="sec-pill" href="#water">12 · Water Treatment &amp; Quality</a>
+  <a class="sec-pill" href="#disinfection">13 · Machine Disinfection</a>
+  <a class="sec-pill" href="#infectious">14 · Infectious Patient Protocols</a>
+  <a class="sec-pill" href="#clabsi">15 · CLABSI Management</a>
+  <a class="sec-pill" href="#inpatient">16 · Hospital / Inpatient HD</a>
+  <a class="sec-pill" href="#documentation">17 · Documentation &amp; QI</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">Standard of Practice — Overview</div>
+  <div class="hero-tldr-text">
+    Hemodialysis (HD) provides intermittent extracorporeal solute and fluid removal for patients with end-stage kidney disease and selected acute kidney injury. This SOP describes in-center hemodialysis using <strong>Fresenius 2008T or 2008K series</strong> platforms with Optiflux or Revaclear dialyzers and bicarbonate dialysate. The dominant intra-session safety threshold is the <strong>KDOQI ultrafiltration rate ceiling of &lt; 13 mL/kg/hr</strong>, above which mortality and end-organ stunning increase sharply. Vascular access hierarchy: <strong>AV fistula &gt; AV graft &gt; tunneled central catheter</strong>. CLABSI prevention is the dominant long-term safety priority for catheter-dependent patients.
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">Standards Reference</div>
+      <div class="meta-val">KDOQI 2015 Adequacy<br>KDIGO 2020 Vascular Access<br>CMS Conditions for Coverage<br>AAMI/ISO Water Quality</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Critical Safety Thresholds</div>
+      <div class="meta-val">UFR &lt; 13 mL/kg/hr (KDOQI)<br>spKt/V ≥ 1.4 (KDOQI target)<br>Pediatric ECV ≤ 10% TBV</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Typical Prescription</div>
+      <div class="meta-val">3 sessions/week × 4 hr<br>BFR 350–450 mL/min adult<br>Dialysate flow 600–800 mL/min</div>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="purpose">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Purpose &amp; Scope</div></div></div>
+  <div class="prose">
+    <p><strong>Purpose:</strong> To define the standardized procedure for in-center maintenance hemodialysis (and applicable inpatient acute hemodialysis) using Fresenius Medical Care delivery systems.</p>
+    <p><strong>Scope:</strong> Applies to adult and pediatric ESRD patients on maintenance HD, and inpatient AKI patients receiving intermittent HD. All licensed dialysis nurses, dialysis technicians (per state regulations), nephrologists, water treatment staff, and biomedical staff.</p>
+    <p><strong>Regulatory framework:</strong> CMS Conditions for Coverage for ESRD Facilities (42 CFR Part 494); state-specific nursing and technician practice acts; AAMI/ISO 23500 water quality standards; OSHA bloodborne pathogen requirements; CDC dialysis-event surveillance protocols.</p>
+  </div>
+</section>
+
+<section class="sec" id="roles">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Roles &amp; Responsibilities</div></div></div>
+  <div class="prose">
+    <div class="role-card"><h4>Nephrologist</h4><p>Reviews monthly orders (prescription, K bath, dialysate composition, dialyzer, heparin, ESA, target weight); rounds at least monthly; manages adequacy.</p></div>
+    <div class="role-card"><h4>Dialysis Charge Nurse / Primary RN</h4><p>Verifies pre-procedure assessment; supervises technicians per scope; cannulates access (or supervises trained technician); manages alarms and adverse events; documents.</p></div>
+    <div class="role-card"><h4>Patient Care Technician (PCT) / Dialysis Technician</h4><p>Per state scope: performs machine setup and prime, cannulates access (if certified), monitors vital signs, performs treatment per nursing supervision; does not adjust prescription parameters.</p></div>
+    <div class="role-card"><h4>Water Treatment Technician</h4><p>Verifies AAMI-grade water; daily chlorine/chloramine test before treatment; weekly endotoxin and culture per protocol.</p></div>
+    <div class="role-card"><h4>Renal Dietitian</h4><p>Monitors nutritional status; phosphorus / potassium / fluid education; coordinates with prescribing physician.</p></div>
+    <div class="role-card"><h4>Social Worker</h4><p>Vocational, transplant readiness, psychological support, financial counseling.</p></div>
+    <div class="role-card"><h4>Biomedical / Equipment Technician</h4><p>Maintains delivery system per manufacturer; runs calibration; tracks dialyzer prime / reuse protocols.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="preprocedure">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Pre-Procedure Verification &amp; Assessment</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Two-identifier patient ID.</strong></li>
+      <li><strong>Order verification.</strong> Read back: dialyzer brand and surface area, tubing set, K bath, Ca bath, Na, HCO3, temperature, BFR, dialysate flow, treatment time, UF goal, heparin order.</li>
+      <li><strong>Pre-dialysis assessment.</strong> Vital signs, pre-weight, target weight, interdialytic weight gain, fluid status, access inspection, symptom review (chest pain, dyspnea, recent illness, missed treatments).</li>
+      <li><strong>Calculate UFR.</strong> UFR = UF goal / time / weight. <strong>If UFR &gt; 13 mL/kg/hr, do not proceed at the prescribed time — extend treatment or reduce UF goal in consultation with nephrologist.</strong></li>
+      <li><strong>Anti-hypertensive review.</strong> Per institutional protocol, common practice is to hold AM anti-hypertensives on dialysis days for hypotension-prone patients. Document instruction.</li>
+      <li><strong>Pre-dialysis labs (per monthly schedule).</strong> Confirm recent BUN, creatinine, K, Ca, phosphorus, Mg, albumin, Hgb, ferritin, transferrin saturation, parathyroid hormone.</li>
+      <li><strong>Water quality check.</strong> Daily total chlorine/chloramine test must be acceptable before treatment initiation.</li>
+      <li><strong>Machine pre-treatment self-test passed.</strong> Conductivity, temperature, pressure, dialysate flow self-tests.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Vascular Access Management</div></div></div>
+  <div class="prose">
+    <p>Access hierarchy per KDIGO 2020: <strong>AV fistula preferred &gt; AV graft &gt; tunneled central venous catheter</strong>. Each session requires inspection and skilled cannulation/connection.</p>
+    <table class="compare-table">
+      <thead><tr><th>Access</th><th>Inspection &amp; cannulation</th><th>CLABSI / infection surveillance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AV Fistula</strong></td><td>Inspect skin: erythema, edema, hematoma, aneurysm. Palpate thrill, auscultate bruit. Buttonhole or rope-ladder cannulation per protocol. Two needles (or single-needle technique for difficult access).</td><td>Site cleaning with chlorhexidine; sterile technique; surveillance for stenosis (Kt/V drop, prolonged bleeding, abnormal venous pressure).</td></tr>
+        <tr><td><strong>AV Graft</strong></td><td>Same inspection. Cannulation requires care due to graft material. Avoid same-spot puncture.</td><td>Similar surveillance; higher infection rate than fistula.</td></tr>
+        <tr><td><strong>Tunneled Central Catheter</strong></td><td>Sterile gloves and mask at every connection. Chlorhexidine prep with dry time. Aspirate heparin lock; verify blood return on each lumen; flush with NS before connecting.</td><td>Daily exit-site assessment; CHG-impregnated dressing where indicated; antibiotic lock if institutional protocol; CDC NHSN CLABSI surveillance.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">CLABSI Prevention Bundle</span>For all tunneled catheter patients: (1) hand hygiene; (2) chlorhexidine prep with appropriate dry time; (3) sterile field at every access; (4) dedicated apheresis nurse at the access step; (5) prompt transition to fistula whenever possible. CDC NHSN CLABSI rate target &lt; 1 per 1,000 line-days; institutional benchmarks may be tighter.</div></div>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Catheter Removal Advocacy — Every Shift, Every Patient</span>Every dialysis catheter is a potential CLABSI. The dialysis RN should <strong>actively advocate for catheter removal</strong> at every encounter when the catheter is no longer needed — for example, when the patient is approaching discharge, when an AV fistula has matured, when the patient is transitioning to peritoneal dialysis or recovering renal function. Communication: SBAR to the nephrologist or primary team, <em>"This catheter has been in for X days. Plan for removal — what is needed to remove?"</em> Final decision per physician discretion, but the advocacy is a nursing responsibility.</div></div>
+    <ul class="check-list">
+      <li><strong>Daily catheter need assessment.</strong> Is the catheter still needed today? If not, document the conversation with the primary team about removal timing.</li>
+      <li><strong>Maturation surveillance.</strong> For patients with maturing AVF, track maturation progress; remove the catheter as soon as the fistula is reliably cannulating.</li>
+      <li><strong>Modality change.</strong> Patients transitioning from HD to PD or to transplant should have the catheter removed once dialysis support is no longer required.</li>
+      <li><strong>Recovery from AKI.</strong> Document declining BUN/creatinine without HD support; coordinate removal with the primary team.</li>
+      <li><strong>End-of-life / comfort care.</strong> Catheter removal may be part of comfort care; coordinate with palliative care service.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="setup">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Machine Setup &amp; Prime</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Power on; run self-test.</strong> Verify conductivity, temperature, pressure within range.</li>
+      <li><strong>Install dialyzer.</strong> Confirm brand, size match to patient prescription (e.g., Optiflux F180NR for standard adult). Install per orientation (arrows match blood flow direction).</li>
+      <li><strong>Install tubing set.</strong> Confirm size match (Husky / Pediatric / Adult). Verify all tubing connections per orientation diagram.</li>
+      <li><strong>Hang priming solution.</strong> Standard 1 L bag NS 0.9%. For pediatric or large-circuit prime decision per institutional ECV/TBV policy, use albumin or PRBC prime.</li>
+      <li><strong>Set dialysate parameters.</strong> K bath (1, 2, 3, or 4 mEq/L per order; standard 2 mEq/L); Ca bath (2.25–3.0 mEq/L); Na (137–140 mEq/L); HCO3 (32–35 mEq/L); temperature (35.5–36.5°C).</li>
+      <li><strong>Set machine flow parameters.</strong> Dialysate flow 600–800 mL/min standard; BFR per prescription (target 350–450 adult).</li>
+      <li><strong>Program UF goal and treatment time.</strong> Verify UFR &lt; 13 mL/kg/hr calculation again at programming.</li>
+      <li><strong>Run automated prime.</strong> Saline prime fills the circuit; verify no air, no leaks, no pressure issues.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="initiation">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Initiation</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Final pre-treatment verifications</strong> — patient identifications, access patency, parameter readback.</li>
+      <li><strong>Cannulate access.</strong> Sterile technique. Confirm needle position with blood return on both arterial and venous needles.</li>
+      <li><strong>Connect.</strong> Attach arterial line (red) to arterial needle; venous line (blue) to venous needle.</li>
+      <li><strong>Heparin bolus (if heparinized).</strong> Per order — typical 1,000–3,000 U IV bolus through arterial line at initiation; continuous infusion as ordered.</li>
+      <li><strong>Initiate blood flow slowly.</strong> 100–150 mL/min for first 5 minutes; verify hemodynamic stability and absence of access alarms.</li>
+      <li><strong>Advance to target BFR.</strong> 300–450 mL/min per prescription.</li>
+      <li><strong>Begin UF and dialysate per program.</strong></li>
+      <li><strong>Initial pressure documentation.</strong> Arterial pressure, venous pressure, transmembrane pressure recorded.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="monitoring">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Intra-Treatment Monitoring</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Parameter</th><th>Frequency</th><th>Action if abnormal</th></tr></thead>
+      <tbody>
+        <tr><td><strong>BP, HR</strong></td><td>Q30 min standard; Q15 min if hypotension-prone or first treatment</td><td>IDH algorithm — stop/reduce UF, Trendelenburg, IV bolus, reassess dry weight</td></tr>
+        <tr><td><strong>Symptom screen (cramps, nausea, lightheadedness, chest pain)</strong></td><td>Q30 min</td><td>Treat symptomatically; cramps: 0.9% or 3% saline bolus, calcium</td></tr>
+        <tr><td><strong>Access site, line integrity</strong></td><td>Q30 min</td><td>Infiltration / displacement: stop, reassess; bleeding: hold pressure</td></tr>
+        <tr><td><strong>Arterial / venous pressures, TMP</strong></td><td>Q30 min documented</td><td>Rising venous pressure → recirculation, stenosis, infiltration; rising arterial → access dysfunction</td></tr>
+        <tr><td><strong>Conductivity, temperature</strong></td><td>Continuous machine display</td><td>Alarm-driven response per machine prompt</td></tr>
+        <tr><td><strong>Heparin level (if monitored)</strong></td><td>Per protocol</td><td>Adjust per ACT or aPTT</td></tr>
+        <tr><td><strong>CritLine HCT trend (if used)</strong></td><td>Continuous</td><td>Steep rise (&gt; 5% in 30 min) → near dry weight, reduce/stop UF</td></tr>
+        <tr><td><strong>Patient comfort, LOC</strong></td><td>Continuous</td><td>AMS → stop, full evaluation, possibly disequilibrium</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="ufr">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">UFR Safety — The Critical Threshold</div></div></div>
+  <div class="prose">
+    <p>UFR is calculated as: <strong>UFR (mL/kg/hr) = UF goal (mL) / time (hr) / weight (kg)</strong>.</p>
+    <table class="compare-table">
+      <thead><tr><th>UFR</th><th>Risk band</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>&lt; 10 mL/kg/hr</td><td>Safe</td><td>Standard monitoring</td></tr>
+        <tr><td>10–13 mL/kg/hr</td><td>KDIGO caution</td><td>Closer BP monitoring; reassess dry weight</td></tr>
+        <tr><td>&gt; 13 mL/kg/hr</td><td>KDOQI ceiling exceeded</td><td><strong>Do not exceed</strong> — extend treatment time, OR reduce UF goal, OR add session. Discuss with nephrologist before exceeding.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Interdialytic Counseling</span>UFR safety begins between sessions. Patient education on sodium and fluid restriction (target interdialytic weight gain &lt; 2.5 kg) reduces UFR pressure at the next session. Renal dietitian involvement is part of UFR safety.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="termination">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Termination &amp; Rinseback</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Verify time and UF goal met.</strong></li>
+      <li><strong>Slow blood flow rate.</strong></li>
+      <li><strong>Reinfusion via saline rinseback</strong> — clamp arterial line, attach NS to inlet, slowly rinse circuit blood back to patient via venous line. Verify no air, watch for hemodynamic response.</li>
+      <li><strong>Final vital signs and post-weight.</strong></li>
+      <li><strong>Discontinue access.</strong> Remove needles or disconnect catheter per access type protocol. Apply pressure to needle sites for ≥ 10 minutes; tunneled catheter: heparin lock per protocol.</li>
+      <li><strong>Final assessment.</strong> Post-dialysis weight, BP, symptom check, access inspection.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="postprocedure">
+  <div class="sec-header"><div class="sec-num">10</div><div><div class="sec-title">Post-Treatment</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Patient education</strong> — Sit up slowly; report any persistent hypotension, dizziness, ongoing bleeding from access, chest pain, dyspnea; verify next session.</li>
+      <li><strong>Documentation completion</strong> — All session parameters, vital signs, weight change, adverse events.</li>
+      <li><strong>Pharmacy / med administration</strong> — Post-dialysis injections (ESA, iron, anti-hypertensives) per order.</li>
+      <li><strong>Schedule next session.</strong></li>
+      <li><strong>Monthly labs review at next session</strong> — Adequacy, ferritin, PTH per CMS / KDOQI cadence.</li>
+      <li><strong>Long-term tracking</strong> — Kt/V, URR, weight stability, access health, hospitalization events.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="adverse">
+  <div class="sec-header"><div class="sec-num">11</div><div><div class="sec-title">Adverse Event Response</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Event</th><th>Recognition</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Intradialytic Hypotension</strong></td><td>SBP drop &gt; 20 mmHg or MAP drop &gt; 10 mmHg + symptoms</td><td>1. Stop UF; 2. Trendelenburg; 3. IV NS bolus 100–250 mL; 4. Reassess; 5. If persistent: stop dialysis, full evaluation.</td></tr>
+        <tr><td><strong>Cramps</strong></td><td>Patient reports muscle cramping</td><td>1. Stop UF; 2. 0.9% or 3% NS bolus 100–250 mL; 3. Calcium gluconate IV; 4. Adjust dry weight estimate.</td></tr>
+        <tr><td><strong>Air embolism</strong></td><td>Sudden respiratory distress, hypoxia, cyanosis</td><td>1. STOP all flow; 2. Clamp venous line; 3. Left lateral decubitus, Trendelenburg; 4. 100% O2; 5. Activate code; 6. Consider hyperbaric.</td></tr>
+        <tr><td><strong>Anaphylactoid (first-use)</strong></td><td>Flushing, hypotension, dyspnea within first 30 min</td><td>1. STOP dialysis; 2. Do not return circuit blood; 3. IM epinephrine 0.3–0.5 mg; 4. Standard anaphylaxis protocol; 5. Switch dialyzer brand.</td></tr>
+        <tr><td><strong>Disequilibrium</strong></td><td>Headache, nausea, AMS, seizure during/after first treatments</td><td>1. STOP dialysis; 2. Mannitol per protocol; 3. Supportive; 4. Neuro consult; 5. Adjust first treatments per protocol.</td></tr>
+        <tr><td><strong>Suspected dialyzer reaction (type B)</strong></td><td>Chest/back pain, dyspnea 30–60 min in</td><td>1. Symptomatic management; 2. Often resolves; 3. Consider dialyzer change if recurrent.</td></tr>
+        <tr><td><strong>Access bleeding / dislodgement</strong></td><td>Visible bleeding from needle site</td><td>1. STOP; 2. Hold direct pressure; 3. Assess access; 4. Notify physician.</td></tr>
+        <tr><td><strong>CLABSI suspicion</strong></td><td>Fever, chills, hypotension during/after session in catheter patient</td><td>1. Blood cultures peripheral + catheter; 2. Empiric IV antibiotics; 3. Possible catheter removal; 4. CDC NHSN report. (See Section 15)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="water">
+  <div class="sec-header"><div class="sec-num">12</div><div><div class="sec-title">Water Treatment &amp; Water Quality</div><div class="sec-subtitle">RO, pH, chlorine/chloramine, TDS, AAMI/ISO compliance</div></div></div>
+  <div class="prose">
+    <p>Hemodialysis water is a <strong>drug delivery vehicle</strong>. Each patient is exposed to approximately <strong>120 liters of dialysate per treatment</strong>, in direct osmotic contact with their blood across the dialyzer membrane. Contaminants — chlorine, chloramine, endotoxin, bacteria, metals — that would be insignificant in drinking water cause hemolysis, methemoglobinemia, pyrogenic reactions, and chronic toxicity in dialysis. AAMI/ISO 23500 sets the global standard; CMS Conditions for Coverage adopt and enforce these requirements in the United States.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Water Treatment Train</h4>
+    <p>City water (or well water) enters the water room and passes through, in sequence:</p>
+    <ol class="step-list">
+      <li><strong>Backflow preventer and pre-filter (sediment).</strong> Removes particulates; required by plumbing code.</li>
+      <li><strong>Carbon tanks (dual-tank in series).</strong> Removes <strong>chlorine and chloramine</strong> by adsorption. The single most critical step — chloramine breakthrough causes hemolysis. Two tanks in series provide redundancy: the worker tank does the work; the polisher tank catches breakthrough.</li>
+      <li><strong>Water softener.</strong> Removes calcium and magnesium (hard water minerals) by ion exchange to protect downstream RO membranes.</li>
+      <li><strong>Reverse Osmosis (RO).</strong> Removes 95–99% of dissolved solids, bacteria, endotoxin, and most chemical contaminants. The RO product water is the primary dialysate source.</li>
+      <li><strong>Ultraviolet (UV) light disinfection.</strong> Bacterial kill at the RO outlet.</li>
+      <li><strong>Ultrafilters (endotoxin retention) at point of use.</strong> Final endotoxin polishing immediately before the dialysis machine.</li>
+      <li><strong>Distribution loop.</strong> Stainless steel or PEX plumbing, looped (no dead legs), continuous recirculation to prevent biofilm formation.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:18px;margin-bottom:8px">Daily / Per-Shift Water Testing</h4>
+    <table class="compare-table">
+      <thead><tr><th>Test</th><th>Acceptable limit (AAMI/ISO)</th><th>Frequency</th><th>If exceeded</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Total Chlorine</strong> (chlorine + chloramine)</td><td>&lt; 0.1 mg/L</td><td>Daily before first treatment AND every 4 hours during operation, at the worker carbon tank outlet</td><td><strong>STOP treatment immediately.</strong> Do not dialyze until resolved. Switch carbon tanks; recheck. Notify medical director.</td></tr>
+        <tr><td><strong>Free Chlorine</strong></td><td>&lt; 0.5 mg/L</td><td>Daily / per shift</td><td>Same — STOP if exceeded.</td></tr>
+        <tr><td><strong>Chloramine</strong></td><td>&lt; 0.1 mg/L</td><td>Daily / per shift</td><td>Same — chloramine is the most dangerous; can cause acute hemolysis.</td></tr>
+        <tr><td><strong>pH</strong> of product water</td><td>5–7 typical (per system)</td><td>Daily</td><td>Investigate; may indicate RO issue.</td></tr>
+        <tr><td><strong>Conductivity</strong> of RO product</td><td>&lt; 25 µS/cm (target &lt; 10)</td><td>Continuous</td><td>RO membrane degradation; service.</td></tr>
+        <tr><td><strong>Total Dissolved Solids (TDS)</strong></td><td>&lt; 100 ppm typical</td><td>Daily</td><td>RO performance check.</td></tr>
+        <tr><td><strong>Temperature</strong></td><td>Per manufacturer (typically &lt; 30°C)</td><td>Continuous</td><td>Higher temps support biofilm; investigate.</td></tr>
+        <tr><td><strong>Bacterial Culture</strong></td><td>&lt; 100 CFU/mL standard; &lt; 50 CFU/mL action; &lt; 0.1 CFU/mL ultrapure</td><td>Monthly (or more frequent per protocol)</td><td>Disinfect distribution loop; reculture.</td></tr>
+        <tr><td><strong>Endotoxin (LAL)</strong></td><td>&lt; 0.25 EU/mL standard; &lt; 0.125 EU/mL action; &lt; 0.03 EU/mL ultrapure</td><td>Monthly</td><td>Investigate; ultrafilter integrity check.</td></tr>
+        <tr><td><strong>Chemical analysis</strong> (metals, fluoride, nitrate, etc.)</td><td>Per AAMI table</td><td>Annual or per RO membrane change</td><td>Source water issue; vendor consultation.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Chloramine Breakthrough — Stop Immediately</span>If total chlorine or chloramine test result exceeds the AAMI limit at any point during the day, <strong>immediately stop all dialysis treatments in progress and do not initiate any new treatments.</strong> Notify the dialysis charge nurse, medical director, and water treatment technician. Chloramine causes acute hemolysis with potentially fatal hyperkalemia and AKI. Patients exposed should have stat CBC, ABG, electrolytes, and continued monitoring.</div></div>
+    <h4 style="color:#fff;margin-top:18px;margin-bottom:8px">Documentation</h4>
+    <ul class="check-list">
+      <li><strong>Daily water log:</strong> Date, time, technician initials, results for each test, action taken if any.</li>
+      <li><strong>Monthly summary</strong> reviewed by water treatment technician and medical director.</li>
+      <li><strong>Calibration records</strong> for testing reagents (chlorine test kits, pH meter, conductivity meter).</li>
+      <li><strong>Annual chemistry analysis</strong> reviewed and filed.</li>
+      <li><strong>Carbon tank change-out log.</strong></li>
+      <li><strong>RO membrane integrity log.</strong></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="disinfection">
+  <div class="sec-header"><div class="sec-num">13</div><div><div class="sec-title">Machine Disinfection &amp; Maintenance</div><div class="sec-subtitle">Heat, bleach, acid — daily, weekly, monthly</div></div></div>
+  <div class="prose">
+    <p>Hemodialysis delivery systems harbor bacterial biofilm in their dialysate fluid pathway if not regularly disinfected. The internal pathway contains warm bicarbonate solution — an ideal growth medium. Each modern machine (Fresenius 2008T/2008K) has built-in disinfection cycles for heat, chemical (bleach), and acid (descale) cleaning.</p>
+    <table class="compare-table">
+      <thead><tr><th>Disinfection</th><th>Agent</th><th>Frequency</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Heat disinfection</strong></td><td>Hot water (≥ 80°C / 176°F)</td><td>Typically daily between patients or end-of-day</td><td>Bacterial kill in fluid pathway; preferred method for routine disinfection. No chemical residue.</td></tr>
+        <tr><td><strong>Chemical (bleach)</strong></td><td>Sodium hypochlorite 0.5–1% (5,000–10,000 ppm)</td><td>Weekly or per institutional schedule</td><td>Broad-spectrum disinfection; biofilm penetration; supplements heat.</td></tr>
+        <tr><td><strong>Acid descale</strong></td><td>Citric acid (warm) or peracetic acid blend</td><td>Monthly or per manufacturer recommendation</td><td>Removes calcium / mineral deposits (scale) that protect biofilm and reduce flow.</td></tr>
+        <tr><td><strong>External surface</strong></td><td>EPA-registered disinfectant wipes (e.g., bleach wipes for blood contact, quat for other surfaces)</td><td>Between each patient — wipe machine exterior, chair, IV pole, scale</td><td>Standard precautions; infection control.</td></tr>
+        <tr><td><strong>Bicarb tank cleaning</strong></td><td>Per manufacturer protocol</td><td>Per shift / daily</td><td>Bicarbonate tanks accumulate scale and biofilm; daily empty/clean essential.</td></tr>
+      </tbody>
+    </table>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Verification</h4>
+    <ul class="check-list">
+      <li><strong>Disinfection cycle completion</strong> verified before next patient (machine displays "ready").</li>
+      <li><strong>Residual chemical test</strong> after bleach or acid disinfection — verify residual is below detectable limit before next treatment.</li>
+      <li><strong>Logged in machine disinfection record</strong> — date, time, type, technician initials.</li>
+      <li><strong>Periodic culture verification</strong> per institutional protocol — sample dialysate from the machine outlet; culture results must meet AAMI standards for dialysate (&lt; 200 CFU/mL).</li>
+      <li><strong>Filter changes</strong> — bicarbonate and acid concentrate filters per manufacturer schedule; documented.</li>
+      <li><strong>Annual preventive maintenance</strong> by biomedical service — calibration, pressure transducer check, conductivity meter check, alarm verification.</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Residual Bleach</span>After bleach disinfection, residual hypochlorite must be flushed completely. A residual chlorine test on the next-treatment dialysate is mandatory before initiating treatment. Even small residual bleach causes hemolysis.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="infectious">
+  <div class="sec-header"><div class="sec-num">14</div><div><div class="sec-title">Infectious Patient Protocols</div><div class="sec-subtitle">Hepatitis B, HCV, HIV, MDRO; serologic surveillance</div></div></div>
+  <div class="prose">
+    <p>Dialysis units have a long history of bloodborne pathogen transmission events. CDC and CMS define specific surveillance and isolation protocols. Hepatitis B is the highest-priority bloodborne pathogen given its environmental survival and historical outbreak record.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Hepatitis B (HBV)</h4>
+    <ul class="check-list">
+      <li><strong>HBsAg status verified at admission and monthly</strong> for all non-immune patients (anti-HBs &lt; 10 mIU/mL).</li>
+      <li><strong>HBV vaccination</strong> for all susceptible patients — accelerated 4-dose schedule (0, 1, 2, 6 months) at double the standard adult dose; verify post-vaccination anti-HBs.</li>
+      <li><strong>Anti-HBs annual surveillance</strong> for vaccinated patients — booster if titer falls below 10 mIU/mL.</li>
+      <li><strong>HBsAg-positive patients require dedicated machine, dedicated staff, dedicated supplies, and a physically separated room or section</strong> per CDC. The machine is not used for any HBsAg-negative patient.</li>
+      <li><strong>Staff handling HBsAg+ patients</strong> do not cross-cover other patients during the same shift.</li>
+      <li><strong>All staff vaccinated against HBV</strong> with documented anti-HBs titer; post-exposure protocol available 24/7.</li>
+      <li><strong>Strict standard precautions</strong> at all times for all patients — gloves, eye protection, gown if splash anticipated.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Hepatitis C (HCV)</h4>
+    <ul class="check-list">
+      <li><strong>HCV antibody at admission and every 6 months;</strong> HCV RNA if antibody-positive.</li>
+      <li><strong>No mandatory dedicated machines for HCV+ patients</strong> per CDC (unlike HBV) — standard precautions suffice. However, separation is institutionally optional.</li>
+      <li><strong>Coordinate with hepatology</strong> for direct-acting antiviral treatment; most HCV+ dialysis patients now achieve sustained virologic response.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">HIV</h4>
+    <ul class="check-list">
+      <li><strong>HIV testing per patient consent and institutional schedule.</strong></li>
+      <li><strong>No dedicated machine required</strong> per CDC — standard precautions suffice; coordinate ARV therapy with infectious disease.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">MDRO (MRSA, VRE, CRE, etc.)</h4>
+    <ul class="check-list">
+      <li><strong>Surveillance cultures</strong> per institutional protocol — often nasal MRSA screening at admission.</li>
+      <li><strong>Contact precautions</strong> for known carriers; cohort or isolation per CDC guidance.</li>
+      <li><strong>Enhanced environmental cleaning</strong> between patients in dedicated areas.</li>
+    </ul>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Never Share Supplies Between Patients</span>Multi-dose vials are not shared between patients in dialysis. Heparin vials, saline flush vials, and any injectable supplies must be dedicated to a single patient. Disposable supplies (alcohol wipes, gauze, tape) must not be carried between patient stations. Mobile carts must be cleaned between patient stations.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="clabsi">
+  <div class="sec-header"><div class="sec-num">15</div><div><div class="sec-title">Catheter-Related Bloodstream Infection (CLABSI) Management</div><div class="sec-subtitle">Recognition, antibiotic salvage, line holiday, removal criteria</div></div></div>
+  <div class="prose">
+    <p>The CDC and IDSA frameworks define dialysis catheter-related bloodstream infection management. Catheter salvage with antibiotic lock therapy is attempted when feasible; catheter removal is required for specific organisms and clinical scenarios.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Recognition</h4>
+    <ul class="check-list">
+      <li><strong>Symptoms during or shortly after treatment:</strong> fever, chills, rigors, hypotension, leukocytosis. May present subtly in chronic patients — any unexplained instability in a catheter patient should trigger evaluation.</li>
+      <li><strong>Exit-site infection (ESI):</strong> erythema, drainage, tenderness at exit; may or may not have systemic symptoms.</li>
+      <li><strong>Tunnel infection:</strong> erythema and tenderness extending along the tunnel tract; more advanced infection.</li>
+      <li><strong>Bacteremia without obvious exit:</strong> blood cultures positive without external site findings; differential time-to-positivity (catheter vs peripheral) helps confirm catheter as source.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Initial Response Protocol</h4>
+    <ol class="step-list">
+      <li><strong>Blood cultures, two sets.</strong> One peripheral, one from each catheter lumen (paired). Note differential time-to-positivity — catheter-positive ≥ 2 hours earlier than peripheral supports catheter as source.</li>
+      <li><strong>Empiric IV antibiotics</strong> initiated promptly per institutional protocol — typical regimen: <strong>vancomycin (load 25 mg/kg, then per pharmacy)</strong> + Gram-negative coverage (cefepime, piperacillin-tazobactam, or carbapenem per institutional antibiogram). Often given at the start of dialysis to take advantage of long inter-dialytic interval; vancomycin dosed post-HD per pharmacy.</li>
+      <li><strong>Notify ID consultation</strong> per institutional CLABSI protocol; vascular access team notified.</li>
+      <li><strong>Continue dialysis through the line</strong> while attempting salvage — unless catheter must be removed (see below).</li>
+      <li><strong>Document NHSN CLABSI event</strong> per CDC surveillance protocol.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Catheter Salvage with Antibiotic Lock Therapy (ALT)</h4>
+    <p>For patients without absolute removal indications, attempt salvage:</p>
+    <ul class="check-list">
+      <li><strong>Antibiotic lock therapy (ALT):</strong> high-concentration antibiotic solution (vancomycin, gentamicin, ceftazidime, or organism-specific agent) instilled into each catheter lumen at the end of each treatment, dwells in the lumen between treatments, aspirated and discarded at next treatment start.</li>
+      <li><strong>Concurrent systemic antibiotics</strong> for 10–14 days minimum (longer for resistant organisms).</li>
+      <li><strong>Repeat blood cultures</strong> 48–72 hours after antibiotic initiation; if persistently positive, escalate to catheter removal.</li>
+      <li><strong>Surveillance:</strong> daily clinical assessment, weekly cultures during therapy, end-of-therapy cultures, and post-therapy surveillance.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Catheter Removal — Absolute Indications</h4>
+    <table class="compare-table">
+      <thead><tr><th>Indication</th><th>Rationale</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Septic shock or severe sepsis</strong></td><td>Source control imperative; salvage delays definitive treatment.</td></tr>
+        <tr><td><strong>Tunnel infection or septic phlebitis</strong></td><td>Salvage rarely successful; risk of progression.</td></tr>
+        <tr><td><strong>Endocarditis or metastatic infection</strong></td><td>Source control plus prolonged systemic antibiotics.</td></tr>
+        <tr><td><strong>Persistent bacteremia &gt; 48–72 hours</strong> despite appropriate antibiotics</td><td>Salvage failed; source persists.</td></tr>
+        <tr><td><strong>Fungemia (Candida, etc.)</strong></td><td>Fungal biofilm not penetrated by lock therapy.</td></tr>
+        <tr><td><strong>Specific organisms:</strong> S. aureus, Pseudomonas, MDRO with limited options</td><td>High salvage failure rate; high metastatic infection rate.</td></tr>
+        <tr><td><strong>Mycobacterial infection</strong></td><td>Rare; salvage failure standard.</td></tr>
+      </tbody>
+    </table>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Line Holiday — When to Wait Before Replacing</h4>
+    <p>After removal of an infected catheter, a "line holiday" (period of no central catheter) is often appropriate to allow source clearance before placing a new catheter. Approaches:</p>
+    <ul class="check-list">
+      <li><strong>Catheter removed; treat 48–72 hours via temporary access (peripheral / arterial / temporary non-tunneled line).</strong> Allows blood cultures to clear and biofilm site to heal.</li>
+      <li><strong>Blood cultures repeated 48–72 hours after removal;</strong> must be negative before new tunneled catheter placement.</li>
+      <li><strong>New catheter placed at a different anatomic site</strong> when possible (e.g., contralateral IJ).</li>
+      <li><strong>Avoid catheter exchange over a guidewire in infected line</strong> — exchanging over the wire in the same site carries higher recurrence risk than full removal and new site placement.</li>
+      <li><strong>Coordinate fistula or graft creation</strong> if not already in progress.</li>
+    </ul>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The Hierarchy of Catheter Decisions</span>When in doubt: <strong>remove the catheter</strong>. The longest catheter retention bias in dialysis carries CLABSI, metastatic infection, and mortality consequences. Salvage attempts are appropriate in select patients (no removal indications, organism amenable to ALT, no metastatic infection signs), but the threshold for removal should be lower than higher. Re-confirm with the medical director and the patient.</div></div>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Exit-Site and Tunnel Infection (Without Bacteremia)</h4>
+    <ul class="check-list">
+      <li><strong>Exit-site infection (ESI):</strong> culture exit site, topical mupirocin or chlorhexidine, oral antibiotics per organism, increased frequency of dressing change, daily inspection.</li>
+      <li><strong>Tunnel infection:</strong> IV antibiotics, infectious disease consultation; catheter removal often required if no rapid resolution.</li>
+      <li><strong>Distinguish ESI from CLABSI:</strong> ESI without bacteremia generally does not require removal if responding to therapy; tunnel infection has lower salvage success and usually requires removal.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="inpatient">
+  <div class="sec-header"><div class="sec-num">16</div><div><div class="sec-title">Hospital / Inpatient Hemodialysis Considerations</div><div class="sec-subtitle">Acute HD, ICU support, transfer logistics, and isolation rooms</div></div></div>
+  <div class="prose">
+    <p>Inpatient hemodialysis differs from outpatient maintenance dialysis in several important ways. Acute and ICU patients are sicker, often with multi-organ dysfunction; medication adjustments are dynamic; the hemodynamic margin is narrower; isolation requirements and equipment transport add complexity.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Acute (Inpatient New-Start) Hemodialysis</h4>
+    <ul class="check-list">
+      <li><strong>Indications</strong> follow the classic AEIOU framework — Acidosis (pH &lt; 7.10), Electrolytes (K &gt; 6.5 with ECG changes), Intoxication, Overload (refractory pulmonary edema), Uremia (encephalopathy, pericarditis).</li>
+      <li><strong>First-treatment caution</strong> — In severely uremic patients (BUN &gt; 150), risk of disequilibrium syndrome; prescribe shorter time (1.5–2 hours), low BFR (150–200 mL/min), smaller dialyzer, low UF. Increase gradually over the first 2–3 treatments.</li>
+      <li><strong>Hemodynamic support</strong> — Coordinate with ICU team for vasopressor titration during HD; midodrine PO or IV phenylephrine drip may be needed.</li>
+      <li><strong>Heparin alternatives</strong> — Bleeding patients: no heparin (saline flushes) or regional citrate per institutional protocol; HIT patients: argatroban.</li>
+      <li><strong>Drug dosing</strong> — Stat pharmacy consult; many ICU drugs require renal-replacement-specific dosing.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">ICU Bedside HD vs Transport to Dialysis Unit</h4>
+    <ul class="check-list">
+      <li><strong>Bedside HD</strong> preferred for hemodynamically unstable patients (vasopressor-dependent, on mechanical ventilation, post-operative). Requires portable RO system or appropriate plumbing; coordinate with ICU charge nurse and water treatment service.</li>
+      <li><strong>Transport to dialysis unit</strong> appropriate for stable inpatients on telemetry or step-down; verify oxygen needs, IV access, transport monitoring per institutional policy.</li>
+      <li><strong>Telemetry / continuous monitoring</strong> in transport for at-risk patients.</li>
+      <li><strong>Code-status verification</strong> before transport.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Isolation Room HD</h4>
+    <ul class="check-list">
+      <li><strong>Contact precautions</strong> (C. diff, MDRO carriers, draining wounds) — dedicated machine for the duration of admission; staff gown/glove; enhanced cleaning between treatments.</li>
+      <li><strong>Droplet precautions</strong> (influenza, COVID-19, RSV) — appropriate PPE; consider portable HEPA if available.</li>
+      <li><strong>Airborne precautions</strong> (TB, measles) — negative-pressure room; N95 respirator; coordinate with infection prevention.</li>
+      <li><strong>Multi-Drug-Resistant Organism (MDRO) screening</strong> — per institutional admission protocol; results determine room assignment.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Communication &amp; Care Coordination</h4>
+    <ul class="check-list">
+      <li><strong>Nephrology consultation</strong> coordinates the dialysis prescription with the primary admitting service.</li>
+      <li><strong>Pharmacist on rounds</strong> for medication review.</li>
+      <li><strong>Vascular access team</strong> for AVF planning, IR catheter placement, and removal coordination.</li>
+      <li><strong>Discharge planning</strong> — Transition to outpatient HD unit; AVF maturation timeline; PD or transplant consideration.</li>
+      <li><strong>End-of-life discussions</strong> — Withdrawal of dialysis is a recognized palliative decision; coordinate with palliative care, family, and primary team.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="documentation">
+  <div class="sec-header"><div class="sec-num">17</div><div><div class="sec-title">Documentation &amp; Quality Indicators</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Pre / post weight, BP, target weight.</strong></li>
+      <li><strong>UFR calculation documented; if &gt; 13 mL/kg/hr, justification + physician notification.</strong></li>
+      <li><strong>Treatment parameters.</strong> BFR, dialysate flow, dialysate composition (K, Ca, Na, HCO3, temp), heparin, dialyzer.</li>
+      <li><strong>Vital signs at frequency.</strong></li>
+      <li><strong>Symptoms, interventions, response.</strong></li>
+      <li><strong>Adverse events.</strong></li>
+      <li><strong>Communication.</strong> Patient response, next session.</li>
+      <li><strong>Monthly QI metrics.</strong> Kt/V, URR, IDH rate, missed treatments, weight trends, lab adequacy, vascular access health, CLABSI / blood-stream infection per CDC NHSN.</li>
+    </ul>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">UFR ceiling compliance</div><div class="kpi-value">100%</div><div class="kpi-detail">No treatments exceed 13 mL/kg/hr without physician justification</div></div>
+      <div class="kpi-card"><div class="kpi-label">spKt/V target</div><div class="kpi-value">≥ 1.4</div><div class="kpi-detail">KDOQI 2015 standard</div></div>
+      <div class="kpi-card"><div class="kpi-label">CLABSI rate</div><div class="kpi-value">&lt; 1 / 1000 line-days</div><div class="kpi-detail">CDC NHSN target</div></div>
+      <div class="kpi-card"><div class="kpi-label">Fistula prevalence</div><div class="kpi-value">≥ 80% goal</div><div class="kpi-detail">Of long-term ESRD patients (vs catheter)</div></div>
+      <div class="kpi-card"><div class="kpi-label">Missed treatment rate</div><div class="kpi-value">Tracked monthly</div><div class="kpi-detail">Outreach for patterns of missed sessions</div></div>
+      <div class="kpi-card"><div class="kpi-label">Water quality</div><div class="kpi-value">100%</div><div class="kpi-detail">Daily chlorine/chloramine acceptable; monthly endotoxin/culture per protocol</div></div>
+      <div class="kpi-card"><div class="kpi-label">Monthly HBsAg</div><div class="kpi-value">100%</div><div class="kpi-detail">Non-immune patients screened monthly; per CDC dialysis surveillance</div></div>
+      <div class="kpi-card"><div class="kpi-label">HBV vaccination response</div><div class="kpi-value">≥ 90%</div><div class="kpi-detail">Anti-HBs ≥ 10 mIU/mL post-vaccination series</div></div>
+      <div class="kpi-card"><div class="kpi-label">Catheter removal time</div><div class="kpi-value">Tracked</div><div class="kpi-detail">Days from "no longer needed" → actual removal</div></div>
+      <div class="kpi-card"><div class="kpi-label">CLABSI salvage success</div><div class="kpi-value">Tracked</div><div class="kpi-detail">% of attempted salvage cases with sustained negative cultures</div></div>
+      <div class="kpi-card"><div class="kpi-label">Machine disinfection</div><div class="kpi-value">100%</div><div class="kpi-detail">Heat / bleach / acid cycles per schedule; logged and verified</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a hemodialysis session?</div>
+    <div class="cta-sub">Open the HD Calculator to apply this SOP — circuit volume, ECV %, UFR safety, dialyzer reference.</div>
+  </div>
+  <a class="cta-btn" href="hemodialysis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>KDOQI 2015 Clinical Practice Guideline for Hemodialysis Adequacy.</li>
+    <li>KDIGO 2020 Vascular Access Guideline.</li>
+    <li>Flythe JE, et al. <strong>Rapid fluid removal during dialysis and CV mortality.</strong> Kidney Int.</li>
+    <li>Eknoyan G, et al. <strong>HEMO trial.</strong> NEJM 2002.</li>
+    <li>Locatelli F, et al. <strong>MPO trial.</strong> JASN 2009.</li>
+    <li>Blankestijn PJ, et al. <strong>CONVINCE trial — HDF.</strong> NEJM 2023.</li>
+    <li>CMS. <strong>Conditions for Coverage for ESRD Facilities</strong> (42 CFR Part 494).</li>
+    <li>AAMI / ISO 23500. <strong>Water Quality Standards for Hemodialysis.</strong></li>
+    <li>CDC NHSN. <strong>Dialysis Event Surveillance Protocol.</strong></li>
+    <li>Fresenius Medical Care. <strong>2008 Series Hemodialysis Delivery System Operator's Manual</strong> (current revision).</li>
+    <li>ANNA. <strong>Nephrology Nursing: Scope and Standards of Practice</strong> (current edition).</li>
+    <li>CDC. <strong>Recommendations for Preventing Transmission of Infections Among Chronic Hemodialysis Patients.</strong> MMWR Recomm Rep.</li>
+    <li>CDC. <strong>Updated U.S. Public Health Service Guidelines for the Management of Occupational Exposures to HBV, HCV, and HIV and Recommendations for Postexposure Prophylaxis.</strong></li>
+    <li>IDSA. <strong>Clinical Practice Guidelines for the Diagnosis and Management of Intravascular Catheter-Related Infection.</strong> Mermel LA, et al. Clin Infect Dis.</li>
+    <li>CDC NHSN. <strong>Bloodstream Infection Event (Central Line-Associated Bloodstream Infection [CLABSI]) Protocol.</strong></li>
+    <li>Vassalotti JA, et al. <strong>Fistula First Breakthrough Initiative — National Vascular Access Improvements Initiative.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · HD Standards of Practice</span>
+  <span>Educational reference · Verify against institutional policy and current device IFU · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

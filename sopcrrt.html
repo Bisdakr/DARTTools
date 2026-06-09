@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRRT Standards of Practice — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(207,169,95,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--gold),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(207,169,95,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(207,169,95,.22),rgba(126,240,210,.10));border-color:rgba(207,169,95,.4);color:#f0dba8}
+.chip-calc:hover{border-color:rgba(207,169,95,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold-bright);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#f5e2b5 0%,#cfa95f 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(207,169,95,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(207,169,95,.4);color:var(--text);background:rgba(207,169,95,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(207,169,95,.24);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(207,169,95,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--gold-bright);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.hero-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.hero-meta .meta-item{padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.hero-meta .meta-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.13em;font-weight:800;margin-bottom:6px}
+.hero-meta .meta-val{font-size:14px;color:#fff;font-weight:700;line-height:1.45}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(207,169,95,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(207,169,95,.08);border-color:var(--gold-bright)}.callout-key .callout-label{color:var(--gold-bright)}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-clinical{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-clinical .callout-label{color:#7ef0d2}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(207,169,95,.10);color:#f0dba8;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.role-card{padding:16px 18px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:10px}
+.role-card h4{font-size:14px;color:#fff;font-weight:900;margin-bottom:6px;letter-spacing:-.01em}
+.role-card p{font-size:13.5px;line-height:1.6;color:#cdd6e2;margin:0}
+.step-list{list-style:none;padding:0;margin:18px 0;counter-reset:stepnum}
+.step-list li{counter-increment:stepnum;position:relative;padding:14px 14px 14px 56px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;line-height:1.6;color:#d6e0ee}
+.step-list li::before{content:counter(stepnum);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(207,169,95,.30),rgba(126,240,210,.10));color:#f0dba8;display:grid;place-items:center;font-weight:900;font-size:13px;border:1px solid rgba(207,169,95,.40)}
+.step-list li strong{color:#fff;display:inline}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:18px 0}
+.kpi-card{padding:16px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:3px solid var(--gold-bright)}
+.kpi-label{font-size:11px;color:var(--gold-bright);text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-bottom:6px}
+.kpi-value{font-size:18px;color:#fff;font-weight:900;line-height:1.2;margin-bottom:4px}
+.kpi-detail{font-size:12px;color:var(--muted);line-height:1.5}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(207,169,95,.15),rgba(126,240,210,.10));border:1px solid rgba(207,169,95,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#f0dba8}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--gold-bright),var(--accent));color:#1c1402;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(207,169,95,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(207,169,95,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(207,169,95,.15);color:#f0dba8;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.hero-meta{grid-template-columns:1fr}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">📋</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Standards of Practice</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="crrt.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Standards of Practice · Continuous Renal Replacement Therapy</div>
+      <div class="head-title"><span class="accent">CRRT Standards of Practice</span></div>
+      <div class="head-sub">A USA-aligned standard for performing continuous renal replacement therapy using Baxter Prismaflex and Prismax platforms in the intensive care unit. Aligned with KDIGO 2012 Acute Kidney Injury Guideline, RICH trial findings (Zarbock et al., JAMA 2020) on regional citrate anticoagulation, RENAL/ATN/STARRT-AKI dose and timing evidence, AACN critical-care nursing standards, and current device labeling.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#purpose">01 · Purpose &amp; Scope</a>
+  <a class="sec-pill" href="#roles">02 · Roles</a>
+  <a class="sec-pill" href="#preprocedure">03 · Pre-Initiation</a>
+  <a class="sec-pill" href="#access">04 · Vascular Access</a>
+  <a class="sec-pill" href="#anticoag">05 · Anticoagulation Strategy</a>
+  <a class="sec-pill" href="#setup">06 · Circuit Setup</a>
+  <a class="sec-pill" href="#initiation">07 · Initiation</a>
+  <a class="sec-pill" href="#monitoring">08 · 24/7 Monitoring</a>
+  <a class="sec-pill" href="#handoff">09 · Shift Handoff</a>
+  <a class="sec-pill" href="#filter">10 · Filter Change / Termination</a>
+  <a class="sec-pill" href="#adverse">11 · Adverse Events</a>
+  <a class="sec-pill" href="#clabsi">12 · CLABSI Management</a>
+  <a class="sec-pill" href="#documentation">13 · Documentation &amp; QI</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">Standard of Practice — Overview</div>
+  <div class="hero-tldr-text">
+    Continuous Renal Replacement Therapy (CRRT) provides slow, continuous solute and fluid removal for critically ill ICU patients with acute kidney injury who cannot tolerate intermittent hemodialysis. This SOP describes the procedure using Baxter <strong>Prismaflex</strong> or <strong>Prismax</strong> platforms with the M-series filter sets. The standard effluent dose target per <strong>KDIGO 2012 is 20–25 mL/kg/hr</strong>; the dominant intra-procedure issue is filter clotting from hemoconcentration; <strong>regional citrate anticoagulation (RCA)</strong> is preferred over heparin per KDIGO Grade 2B and supported by the RICH trial. Because CRRT runs continuously (24/7), <strong>shift handoff is a defined safety event</strong>, requiring structured SBAR communication, hourly fluid balance verification, and rigorous documentation.
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">Standards Reference</div>
+      <div class="meta-val">KDIGO 2012 AKI Guideline<br>RICH trial (JAMA 2020)<br>STARRT-AKI (NEJM 2020)</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Key Targets</div>
+      <div class="meta-val">Effluent dose 20–25 mL/kg/hr<br>FFR &lt; 25% (filter safety)<br>Total/iCa ratio &lt; 2.5 (RCA)</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Typical Adult Setup</div>
+      <div class="meta-val">CVVHDF (most common)<br>BFR 150–200 mL/min<br>M100/M150 filter set</div>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="purpose">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Purpose &amp; Scope</div></div></div>
+  <div class="prose">
+    <p><strong>Purpose:</strong> To define the standardized procedure for continuous renal replacement therapy in adult and pediatric ICU patients with acute kidney injury, severe fluid overload, severe electrolyte disturbance, intoxication, or other indications where slow continuous extracorporeal solute and fluid management is preferred over intermittent hemodialysis.</p>
+    <p><strong>Scope:</strong> Critical care registered nurses with documented CRRT competency, intensivists, nephrologists, ICU pharmacists, biomedical / equipment staff. Generally one nurse per CRRT patient (1:1 nursing ratio during initiation; 1:2 acceptable during steady-state per institutional policy).</p>
+    <p><strong>Indications recognized:</strong> AKI with severe acidosis, severe hyperkalemia refractory to medical therapy, refractory fluid overload, severe uremia, intoxication (salicylate, ethylene glycol, methanol, metformin, valproate, lithium), hyperammonemia (hepatic failure, urea cycle defects, post-organ transplant), severe rhabdomyolysis. Per KDIGO 2012 staging and indication framework.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Timing — STARRT-AKI Lesson</span>The STARRT-AKI trial (NEJM 2020, n=3,019) showed no mortality benefit of early initiation. Wait for absolute indications (severe acidosis pH &lt; 7.10, K &gt; 6.5 with ECG changes, refractory volume overload with pulmonary edema, intoxication, severe uremia with encephalopathy / pericarditis) rather than pre-emptively starting on lab numbers alone.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="roles">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Roles &amp; Responsibilities</div></div></div>
+  <div class="prose">
+    <div class="role-card"><h4>Intensivist / Nephrologist</h4><p>Determines indication; specifies modality (CVVHDF / CVVHD / CVVH / SCUF), effluent dose, anticoagulation strategy, replacement fluid composition, net UF goal; coordinates with hematology if citrate accumulation concern; daily review.</p></div>
+    <div class="role-card"><h4>CRRT-Competent ICU RN (Primary)</h4><p>Operates the CRRT machine; performs hourly fluid balance verification; manages alarms; titrates citrate / calcium per protocol; documents; communicates pressure trends and clinical response.</p></div>
+    <div class="role-card"><h4>Pharmacy / ICU Pharmacist</h4><p>Drug dose adjustment for CRRT clearance; antibiotic dosing (often higher / extended infusion); sedative selection; therapeutic drug monitoring as indicated.</p></div>
+    <div class="role-card"><h4>Biomedical / Equipment Technician</h4><p>Maintains machine per manufacturer; calibration; alarm response support; consumable inventory.</p></div>
+    <div class="role-card"><h4>Nephrology Consultation (when nephrology not primary)</h4><p>Prescription review; chronic CKD/ESRD planning; transition planning.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="preprocedure">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Pre-Initiation Verification</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Two-identifier patient ID.</strong></li>
+      <li><strong>Order verification.</strong> Modality, prescribed dose (mL/kg/hr), pre/post replacement ratio, dialysate flow, BFR, anticoagulation strategy and dosing, net UF goal, replacement fluid composition.</li>
+      <li><strong>Calculate effluent dose target.</strong> Effluent (mL/hr) = weight (kg) × prescribed dose (mL/kg/hr). Confirm within KDIGO 20–25 mL/kg/hr range unless specific indication for higher.</li>
+      <li><strong>Pre-procedure labs.</strong> Comprehensive metabolic panel including ionized calcium, magnesium, phosphorus, lactate, baseline blood gas; CBC; PT/PTT, fibrinogen; type and screen if blood prime considered.</li>
+      <li><strong>Vascular access verification.</strong> Confirm large-bore (11–14 Fr adult; 5–7 Fr pediatric) dual-lumen central venous catheter; verify position by recent radiograph if newly placed; confirm patency on each lumen with blood return.</li>
+      <li><strong>RCA candidacy assessment.</strong> Hepatic function (Child-Pugh, MELD if cirrhosis); shock state with severe perfusion compromise; lactate. If hepatic failure or severe shock — RCA still possible but requires close monitoring of total/iCa ratio. Some institutions use heparin in severe hepatic failure.</li>
+      <li><strong>Baseline vital signs, weight, hemodynamic status.</strong> Vasopressor doses documented.</li>
+      <li><strong>Pharmacy consult initiated.</strong> All current medications reviewed for CRRT clearance adjustment.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Vascular Access</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Site</th><th>Considerations</th><th>Catheter</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Right Internal Jugular</strong></td><td>Preferred — lowest CLABSI rate, best flow geometry</td><td>11–14 Fr dual-lumen, 15–20 cm length</td></tr>
+        <tr><td><strong>Femoral</strong></td><td>Acceptable in emergency; higher CLABSI rate; limits mobility; preferred for cardiac arrest / unstable patient where IJ placement difficult</td><td>11–14 Fr dual-lumen, 24+ cm length</td></tr>
+        <tr><td><strong>Left Internal Jugular</strong></td><td>Acceptable; more tortuous path; sometimes flow issues</td><td>11–14 Fr dual-lumen, 20+ cm length</td></tr>
+        <tr><td><strong>Subclavian</strong></td><td>Lowest infection rate of central sites; pneumothorax risk; AVOID in chronic dialysis candidates (causes stenosis)</td><td>11–14 Fr dual-lumen</td></tr>
+      </tbody>
+    </table>
+    <ul class="check-list">
+      <li><strong>Ultrasound-guided placement</strong> standard of care.</li>
+      <li><strong>Sterile barrier precautions</strong> at insertion (full body drape, mask, hat, sterile gloves, gown, chlorhexidine prep with appropriate dry time).</li>
+      <li><strong>Chest X-ray post-insertion</strong> for IJ/subclavian to confirm position and rule out pneumothorax.</li>
+      <li><strong>Daily exit-site inspection</strong> for erythema, drainage, tenderness.</li>
+      <li><strong>Strict sterile technique at every connection</strong> — sterile gloves, mask, chlorhexidine wipe of hub.</li>
+      <li><strong>Dedicated CRRT lumens.</strong> No medication infusions or blood draws through CRRT lumens.</li>
+      <li><strong>Remove ASAP</strong> when CRRT no longer needed.</li>
+      <li><strong>CLABSI surveillance per CDC NHSN.</strong></li>
+    </ul>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Catheter Removal Advocacy — Daily Decision</span>Every CRRT catheter is a potential CLABSI source. The CRRT RN should <strong>actively advocate for catheter removal</strong> at every shift handoff when the catheter is no longer needed — for example, after renal recovery off CRRT, when the patient is transitioning to outpatient HD, or at end-of-life when CRRT is being withdrawn. SBAR to the intensivist or nephrologist: <em>"This CRRT catheter has been in for X days. Plan for removal — what is needed before we can remove?"</em> Final decision per physician discretion, but the nursing advocacy is part of CLABSI prevention.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="anticoag">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Anticoagulation Strategy</div></div></div>
+  <div class="prose">
+    <p>KDIGO 2012 recommends regional citrate anticoagulation (RCA) as preferred (Grade 2B), supported by the RICH trial showing longer filter life and fewer bleeding events vs heparin.</p>
+    <table class="compare-table">
+      <thead><tr><th>Strategy</th><th>How it works</th><th>Monitoring</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Regional Citrate (RCA)</strong></td><td>Citrate infused pre-filter chelates iCa, anticoagulating circuit. Calcium replaced post-filter to restore patient iCa.</td><td>Systemic iCa Q4–6 hr (target 1.1–1.3 mmol/L); post-filter iCa Q6–8 hr (target 0.25–0.40 mmol/L); total/iCa ratio Q6–12 hr in high-risk patients (target &lt; 2.5).</td></tr>
+        <tr><td><strong>Systemic Heparin</strong></td><td>Continuous heparin IV infusion.</td><td>aPTT or ACT per institutional protocol; daily platelet count for HIT surveillance.</td></tr>
+        <tr><td><strong>None (saline flushes)</strong></td><td>Periodic saline flushes through circuit; high BFR to reduce stasis.</td><td>Increased frequency of filter changes expected; document changes and downtime.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Citrate Accumulation</span>In hepatic failure or severe shock with poor citrate clearance, citrate can accumulate. Hallmark: rising total/ionized calcium ratio &gt; 2.5, worsening metabolic acidosis, often with low ionized calcium needing escalating calcium replacement. Response: reduce or stop citrate; switch to heparin or saline-only; aggressive calcium replacement; consider underlying treatment for liver failure.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="setup">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Circuit Setup &amp; Prime</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Power on machine; select modality (CVVHDF default).</strong> Verify the Prismaflex or Prismax interface shows correct procedure.</li>
+      <li><strong>Install the filter set.</strong> Match to patient size — HF20 (&lt; 10 kg), M60 (10–25 kg), M100 (standard adult), M150 (large adult / high-dose). ST series if heparin-based circuit.</li>
+      <li><strong>Hang solutions.</strong> Replacement fluid (Prismasol, Hemosol-with-Phos, Phoxilium per institutional protocol); dialysate; anticoagulant (Prismocitrate 18/0 or 10/2); calcium gluconate or CaCl₂ replacement drip.</li>
+      <li><strong>Program prescription parameters.</strong> Modality, BFR, pre/post replacement ratio, dialysate flow, net UF rate, citrate target (typically 3 mmol/L blood), calcium replacement starting rate.</li>
+      <li><strong>Run automated prime.</strong> Saline prime; verify circuit integrity; address any pressure or alarm issues.</li>
+      <li><strong>Verify alarm parameters.</strong> Pressure limits, air detector, blood leak detector.</li>
+      <li><strong>Stage replacement fluids and consumables</strong> for the planned session duration; verify supply chain for next 24–48 hours.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="initiation">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Initiation</div></div></div>
+  <div class="prose">
+    <ol class="step-list">
+      <li><strong>Final pre-connection checks.</strong></li>
+      <li><strong>Sterile catheter access.</strong> Don sterile gloves and mask; chlorhexidine wipe to catheter hubs; aspirate heparin lock; verify blood return on each lumen.</li>
+      <li><strong>Connect inlet and return lines</strong> per catheter lumen assignment.</li>
+      <li><strong>Slow-start protocol.</strong> Begin BFR at 100–125 mL/min for first 30 minutes; net UF zero. Observe hemodynamic response.</li>
+      <li><strong>Citrate / calcium initiation</strong> per RCA protocol. Begin citrate; begin calcium drip.</li>
+      <li><strong>Document initial baseline.</strong> Time of start, vital signs, machine parameters, alarm settings.</li>
+      <li><strong>Advance to target BFR</strong> 150–200 mL/min if hemodynamically tolerated.</li>
+      <li><strong>Initiate net UF</strong> per order — typically start at 50% of target and titrate up if MAP stable.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="monitoring">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">24/7 Monitoring</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Parameter</th><th>Frequency</th><th>Action if abnormal</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Vital signs (BP, HR, RR, SpO2, temp)</strong></td><td>Q1 hr (more if unstable)</td><td>Hypotension → reduce/stop UF, IV bolus, escalate vasopressor</td></tr>
+        <tr><td><strong>Hourly fluid balance verification</strong></td><td>Hourly — manually recalculate against machine display</td><td>Discrepancy &gt; 100 mL: investigate, notify physician</td></tr>
+        <tr><td><strong>Ionized calcium (systemic + post-filter)</strong></td><td>Q4–6 hr systemic, Q6–8 hr post-filter</td><td>Titrate calcium drip; if persistent low post-filter → adjust citrate</td></tr>
+        <tr><td><strong>Total / iCa ratio</strong></td><td>Q6–12 hr in high-risk (hepatic failure, shock)</td><td>&gt; 2.5: reduce citrate, escalate Ca, consider non-citrate strategy</td></tr>
+        <tr><td><strong>Phosphorus, magnesium</strong></td><td>Q12 hr</td><td>Replace via replacement fluid composition or IV bolus</td></tr>
+        <tr><td><strong>Acid-base (ABG)</strong></td><td>Q8–12 hr</td><td>Adjust dialysate bicarbonate; investigate metabolic disturbance</td></tr>
+        <tr><td><strong>Filter pressures (TMP, access pressure, return pressure)</strong></td><td>Continuous machine display</td><td>Rising TMP → assess for clotting; rising access pressure → access dysfunction</td></tr>
+        <tr><td><strong>FFR</strong></td><td>Calculate at each rate change</td><td>&gt; 25%: increase BFR, shift to pre-filter dilution, reduce dose</td></tr>
+        <tr><td><strong>Pharmacy / drug levels</strong></td><td>Per pharmacy consult</td><td>Adjust dosing per CRRT clearance</td></tr>
+        <tr><td><strong>Mental status, sedation depth</strong></td><td>Standard ICU frequency</td><td>Per ICU protocol; consider drug accumulation</td></tr>
+        <tr><td><strong>Access site, catheter exit</strong></td><td>Q shift</td><td>Standard catheter care</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="handoff">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Shift Handoff — A Defined Safety Event</div></div></div>
+  <div class="prose">
+    <p>CRRT runs 24/7; nursing handoff occurs at least 2–3 times per day. Each handoff is a potential point of error and must be structured.</p>
+    <ol class="step-list">
+      <li><strong>Bedside SBAR with both outgoing and incoming RN.</strong></li>
+      <li><strong>Verify machine parameters together.</strong> Modality, BFR, doses, anticoagulation, replacement fluid composition, net UF.</li>
+      <li><strong>Manual fluid balance recalculation</strong> with two-RN verification.</li>
+      <li><strong>Review current iCa, total/iCa ratio, electrolytes, drug levels.</strong></li>
+      <li><strong>Review filter pressures and trend; estimated filter life.</strong></li>
+      <li><strong>Review pharmacy / antibiotic dosing changes.</strong></li>
+      <li><strong>Review pending labs and orders.</strong></li>
+      <li><strong>Document handoff completion in the procedure record.</strong></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="filter">
+  <div class="sec-header"><div class="sec-num">10</div><div><div class="sec-title">Filter Change &amp; Termination</div></div></div>
+  <div class="prose">
+    <p>Filter life typically 24–72 hours depending on anticoagulation and clinical factors. Plan filter changes proactively when TMP rises, pressures climb, or pre-emptively at 48–72 hours to avoid emergent change.</p>
+    <ol class="step-list">
+      <li><strong>Recognize the need for change.</strong> Rising TMP &gt; 250–300 mmHg; access or return pressure trending; visible darkening or thickening of filter; rising blood-side pressure trend.</li>
+      <li><strong>Stage replacement filter set, solutions, and consumables.</strong></li>
+      <li><strong>Discontinue current circuit per machine prompt.</strong> Return circuit blood if possible (rinseback per protocol) or discard if filter is clotted.</li>
+      <li><strong>Sterile catheter management during disconnect.</strong> Mask, sterile gloves; flush each lumen with saline + heparin lock or per protocol.</li>
+      <li><strong>Setup new circuit per Section 06.</strong></li>
+      <li><strong>Resume CRRT.</strong> Update fluid balance counter; reset accumulators; document downtime.</li>
+      <li><strong>For termination of therapy (renal recovery / transition).</strong> Coordinate with physician — UF goal final, replacement final, discontinue per machine, disconnect, observe; transition to IHD or off renal support per nephrology recommendation.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="adverse">
+  <div class="sec-header"><div class="sec-num">11</div><div><div class="sec-title">Adverse Event Response</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Event</th><th>Recognition</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Severe Citrate Accumulation</strong></td><td>Total/iCa &gt; 3.0, severe metabolic acidosis, hypotension, low iCa</td><td>1. STOP citrate; 2. Aggressive iCa replacement; 3. Switch to heparin or saline-only; 4. Treat underlying liver dysfunction.</td></tr>
+        <tr><td><strong>Severe Hypotension</strong></td><td>SBP drop, MAP &lt; 60, refractory</td><td>1. STOP/reduce UF; 2. IV crystalloid bolus through non-CRRT line; 3. Escalate vasopressor; 4. Investigate (citrate, sepsis, cardiac, hemorrhage).</td></tr>
+        <tr><td><strong>Air Embolism</strong></td><td>Sudden hemodynamic / respiratory deterioration with detector alarm</td><td>1. STOP all flow, clamp venous line; 2. Left lateral decubitus, Trendelenburg; 3. 100% O2; 4. Code response; 5. Possible hyperbaric oxygen.</td></tr>
+        <tr><td><strong>Massive Blood Loss (Disconnection)</strong></td><td>Visible bleeding, machine alarm, hemodynamic decline</td><td>1. Clamp catheter; 2. Direct pressure; 3. IV resuscitation; 4. Type/cross; 5. Component support; 6. Equipment / connection root-cause analysis.</td></tr>
+        <tr><td><strong>HIT (Heparin Strategy)</strong></td><td>Platelet drop &gt; 50%, new thrombosis</td><td>1. STOP all heparin; 2. 4Ts score, anti-PF4 antibody; 3. Switch to argatroban or bivalirudin if therapeutic anticoagulation needed; 4. Switch CRRT anticoagulation to citrate.</td></tr>
+        <tr><td><strong>CLABSI Suspected</strong></td><td>Fever, chills, hypotension in CRRT patient</td><td>1. Blood cultures (peripheral + catheter); 2. Empiric IV antibiotics per protocol; 3. Catheter removal if persistent positive; 4. CDC NHSN report.</td></tr>
+        <tr><td><strong>Filter Rupture (Rare)</strong></td><td>Blood leak detector alarm, visible blood in dialysate or effluent line</td><td>1. STOP procedure; 2. Discard circuit; 3. CBC, type/screen; 4. Replace circuit; 5. Equipment review.</td></tr>
+        <tr><td><strong>Severe Hypothermia</strong></td><td>Body temperature drop below patient target</td><td>1. Active warming (warmer blanket, room warming); 2. Check fluid warmer function; 3. Adjust dialysate/replacement temperature if available.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="clabsi">
+  <div class="sec-header"><div class="sec-num">12</div><div><div class="sec-title">CLABSI Management — CRRT-Specific Considerations</div><div class="sec-subtitle">Recognition, antibiotic salvage, line holiday in the ICU setting</div></div></div>
+  <div class="prose">
+    <p>CRRT catheter CLABSI is particularly consequential because the patient is already critically ill, the catheter is dwelling in central circulation for an extended period (often 5–14 days during a CRRT course), and source control may require interrupting therapy. Aggressive prevention is paramount; when infection occurs, decision-making follows the IDSA framework.</p>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Recognition in the ICU Patient</h4>
+    <ul class="check-list">
+      <li><strong>New fever or rising temperature</strong> with no other identifiable source — always consider the CRRT catheter.</li>
+      <li><strong>Unexplained hemodynamic instability:</strong> new vasopressor requirement, dropping MAP, rising lactate.</li>
+      <li><strong>New leukocytosis or worsening sepsis picture.</strong></li>
+      <li><strong>Local catheter exit-site findings:</strong> erythema, purulent drainage, tenderness, swelling.</li>
+      <li><strong>Catheter dysfunction:</strong> declining flows, increasing pressures may signal fibrin sheath with secondary infection.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Diagnostic Workup</h4>
+    <ol class="step-list">
+      <li><strong>Blood cultures from each catheter lumen plus a peripheral set.</strong> Time-to-positivity comparison (catheter ≥ 2 hours faster than peripheral) supports catheter as source.</li>
+      <li><strong>If catheter removed: catheter tip culture</strong> (semiquantitative roll-plate or quantitative). &gt; 15 CFU/mL on roll-plate is significant.</li>
+      <li><strong>Inspect exit site;</strong> swab if purulence present.</li>
+      <li><strong>Other infectious workup as appropriate</strong> — urinalysis, chest imaging, abdominal exam — to ensure CRRT catheter is the source, not a comorbid focus.</li>
+    </ol>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Empiric Antibiotic Therapy</h4>
+    <ul class="check-list">
+      <li><strong>Vancomycin loading dose</strong> per pharmacy (CRRT-adjusted dosing) — typically 25 mg/kg IV.</li>
+      <li><strong>Gram-negative coverage</strong> per institutional antibiogram and patient risk profile — cefepime, piperacillin-tazobactam, or carbapenem.</li>
+      <li><strong>Consider antifungal</strong> if patient is immunocompromised, has prolonged antibiotic exposure, TPN, or other Candida risk factors.</li>
+      <li><strong>Dose adjustments by CRRT pharmacist</strong> — many antibiotics require extended-interval or continuous infusion strategies on CRRT.</li>
+      <li><strong>Stewardship narrowing</strong> based on culture and sensitivity results within 48–72 hours.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Catheter Removal vs Salvage Decision in CRRT</h4>
+    <table class="compare-table">
+      <thead><tr><th>Scenario</th><th>Decision</th></tr></thead>
+      <tbody>
+        <tr><td>Septic shock, hemodynamic compromise attributable to catheter source</td><td><strong>Remove immediately;</strong> place new access at different site.</td></tr>
+        <tr><td>S. aureus, Pseudomonas, fungal organism</td><td><strong>Remove;</strong> salvage rarely successful.</td></tr>
+        <tr><td>Tunnel infection or septic phlebitis</td><td><strong>Remove.</strong></td></tr>
+        <tr><td>Persistent positive cultures &gt; 48–72 hr despite appropriate antibiotics</td><td><strong>Remove.</strong></td></tr>
+        <tr><td>Coag-negative Staph, organism amenable to lock therapy, no metastatic infection</td><td>Salvage attempt reasonable if CRRT must continue and no other clear indication for removal.</td></tr>
+        <tr><td>Patient no longer needs CRRT (renal recovery, transition to IHD)</td><td><strong>Remove regardless</strong> of culture results; benefit-risk favors removal.</td></tr>
+      </tbody>
+    </table>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Line Holiday in the ICU Setting</h4>
+    <p>"Line holiday" — the deliberate period of no central catheter between removal of an infected line and placement of a new tunneled or replacement catheter — is a recognized CLABSI prevention strategy. In the ICU CRRT patient, this requires careful planning because therapy may need to continue.</p>
+    <ul class="check-list">
+      <li><strong>Remove the infected catheter.</strong> Send tip for culture.</li>
+      <li><strong>Establish temporary access</strong> for ongoing CRRT — typically a temporary non-tunneled femoral catheter, or a peripheral non-tunneled IJ catheter. The temporary access permits CRRT continuation while the original site heals.</li>
+      <li><strong>Treat with systemic IV antibiotics</strong> for 48–72 hours through the temporary access (or peripheral if possible). Continue CRRT through temporary access.</li>
+      <li><strong>Repeat blood cultures at 48–72 hours.</strong> Both peripheral and through the new temporary access.</li>
+      <li><strong>Only when blood cultures are negative</strong> proceed to permanent or longer-term access placement — at a different anatomic site if possible.</li>
+      <li><strong>Avoid guidewire exchange in the same site</strong> for an infected catheter — full removal and new site placement has lower recurrence rate.</li>
+      <li><strong>Coordinate with vascular access service</strong> or surgical team for the timing of permanent access.</li>
+    </ul>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Documentation &amp; Reporting</h4>
+    <ul class="check-list">
+      <li><strong>NHSN CLABSI event report</strong> per CDC surveillance protocol.</li>
+      <li><strong>Root-cause analysis</strong> for any CLABSI: catheter insertion technique, dressing changes, hub-care practice, dwell time, hand hygiene compliance.</li>
+      <li><strong>Cluster surveillance:</strong> if multiple CLABSIs in close temporal proximity, escalate to infection prevention for unit-level investigation.</li>
+      <li><strong>Closing the loop:</strong> outcome of antibiotic course, repeat cultures, catheter outcome, patient outcome.</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Antibiotic Lock Therapy in CRRT</span>Antibiotic lock therapy (high-concentration antibiotic dwelling in the catheter lumen) is less commonly used in CRRT than in chronic outpatient HD because the catheter is in active use 24/7 — there is no dwell time. For salvage attempts in CRRT, systemic antibiotics are the primary tool. Some institutions briefly pause CRRT to instill a lock during a transient period (e.g., during a planned filter change), but this is institution-specific and not standard.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="documentation">
+  <div class="sec-header"><div class="sec-num">13</div><div><div class="sec-title">Documentation &amp; Quality Indicators</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Prescription detail.</strong> Modality, dose, BFR, replacement composition, anticoagulation, net UF goal.</li>
+      <li><strong>Hourly fluid balance.</strong> Manual recalculation with timestamp.</li>
+      <li><strong>Hourly vital signs and machine parameters.</strong></li>
+      <li><strong>Anticoagulation monitoring.</strong> iCa systemic, iCa post-filter, total/iCa ratio (if RCA); aPTT or ACT (if heparin).</li>
+      <li><strong>Electrolyte trends.</strong> Q-hourly to Q-12-hourly per parameter.</li>
+      <li><strong>Filter pressure trends.</strong></li>
+      <li><strong>Drug dose adjustments and pharmacy interventions.</strong></li>
+      <li><strong>Shift handoff documentation.</strong> SBAR completion per shift.</li>
+      <li><strong>Filter change events.</strong> Time, reason, downtime, achieved dose.</li>
+      <li><strong>Adverse events.</strong> Type, time, intervention, response.</li>
+      <li><strong>Termination summary.</strong> Total CRRT duration, achieved effluent dose, fluid balance summary, transition plan.</li>
+    </ul>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Prescribed dose delivery</div><div class="kpi-value">≥ 80%</div><div class="kpi-detail">Delivered effluent dose vs prescribed</div></div>
+      <div class="kpi-card"><div class="kpi-label">Filter life</div><div class="kpi-value">≥ 24 hr</div><div class="kpi-detail">Median filter life with RCA</div></div>
+      <div class="kpi-card"><div class="kpi-label">CLABSI rate</div><div class="kpi-value">&lt; 1 / 1000 line-days</div><div class="kpi-detail">CDC NHSN target</div></div>
+      <div class="kpi-card"><div class="kpi-label">Citrate accumulation rate</div><div class="kpi-value">Tracked</div><div class="kpi-detail">Total/iCa ratio surveillance in high-risk patients</div></div>
+      <div class="kpi-card"><div class="kpi-label">Fluid balance accuracy</div><div class="kpi-value">±100 mL/hr</div><div class="kpi-detail">Discrepancy between manual and machine</div></div>
+      <div class="kpi-card"><div class="kpi-label">Renal recovery rate</div><div class="kpi-value">Tracked</div><div class="kpi-detail">% transitioning off RRT at discharge</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a CRRT prescription?</div>
+    <div class="cta-sub">Open the CRRT Calculator to apply this SOP — effluent dose, mode math, FFR check, citrate / calcium estimates.</div>
+  </div>
+  <a class="cta-btn" href="crrt.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>KDIGO Clinical Practice Guideline for Acute Kidney Injury. <strong>Kidney Int Suppl 2012.</strong></li>
+    <li>Zarbock A, et al. <strong>RICH trial — Regional citrate vs systemic heparin in CRRT.</strong> JAMA 2020.</li>
+    <li>RENAL Replacement Therapy Study Investigators. <strong>Intensity of CRRT.</strong> NEJM 2009.</li>
+    <li>VA/NIH ATN Study Group. <strong>Intensity of renal support.</strong> NEJM 2008.</li>
+    <li>STARRT-AKI Investigators. <strong>Timing of initiation of RRT in AKI.</strong> NEJM 2020.</li>
+    <li>AKIKI Study Group. <strong>Initiation strategies for RRT in the ICU.</strong> NEJM 2016.</li>
+    <li>Joannidis M, Oudemans-van Straaten HM. <strong>Clinical review: patency of the CRRT circuit.</strong> Crit Care.</li>
+    <li>Schetz M. <strong>Drug dosing in continuous renal replacement therapy.</strong></li>
+    <li>AACN. <strong>Standards for Establishing and Sustaining Healthy Work Environments &amp; Acute and Critical Care Nursing Practice Standards</strong> (current edition).</li>
+    <li>CDC NHSN. <strong>Central Line-Associated Bloodstream Infection (CLABSI) Event Surveillance.</strong></li>
+    <li>Baxter. <strong>Prismaflex and Prismax Operator's Manuals</strong> (current revisions).</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · CRRT Standards of Practice</span>
+  <span>Educational reference · Verify against institutional policy and current device IFU · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

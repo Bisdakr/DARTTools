@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why HPC-A? — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(97,168,255,.10),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.08),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(126,240,210,.22),rgba(97,168,255,.14));border-color:rgba(126,240,210,.4);color:#cdfaea}
+.chip-calc:hover{border-color:rgba(126,240,210,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 50 C 180 0,380 -8,600 30 C 820 70,1020 60,1340 18');offset-rotate:auto;opacity:0;animation:cometRun 3.6s cubic-bezier(0.42,0.04,0.58,0.98) 0.4s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.22);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.06));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#7ef0d2,#61a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#cdfaea;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-research{background:rgba(179,137,255,.08);border-color:var(--purple)}.callout-research .callout-label{color:#b389ff}
+.callout-mind{background:rgba(255,143,182,.08);border-color:var(--pink)}.callout-mind .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cfe2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(97,168,255,.15),rgba(126,240,210,.10));border:1px solid rgba(97,168,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#cfe2ff}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(59,130,246,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:#9bc4ff;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.ref-list a{color:#9bc4ff;text-decoration:underline}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">D</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Educational Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="stem-cell-collection.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle" style="--x:11%;--y:25%;--delay:0.80s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:1.05s"></div>
+      <div class="twinkle" style="--x:28%;--y:8%;--delay:1.30s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.70s"></div>
+      <div class="twinkle" style="--x:51%;--y:30%;--delay:1.95s"></div>
+      <div class="twinkle small" style="--x:65%;--y:50%;--delay:2.35s"></div>
+      <div class="twinkle" style="--x:74%;--y:52%;--delay:2.60s"></div>
+      <div class="twinkle small" style="--x:82%;--y:40%;--delay:2.85s"></div>
+      <div class="twinkle tiny" style="--x:89%;--y:25%;--delay:3.05s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Education · HPC-A / CMNC on Spectra Optia</div>
+      <div class="head-title"><span class="accent">Why HPC-A?</span></div>
+      <div class="head-sub">From standard autologous SCT to gene-therapy collection for sickle cell: how CD34 mobilization, CMNC apheresis, and the new manufacturing era come together at the bedside.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#mechanism">01 · How It Works</a>
+  <a class="sec-pill" href="#mobilization">02 · Mobilization</a>
+  <a class="sec-pill" href="#cmnc">03 · CMNC Protocol</a>
+  <a class="sec-pill" href="#indications">04 · Indications</a>
+  <a class="sec-pill" href="#math">05 · The Math</a>
+  <a class="sec-pill" href="#gene">06 · Gene Therapy</a>
+  <a class="sec-pill" href="#carT">07 · CAR-T</a>
+  <a class="sec-pill" href="#complications">08 · Complications</a>
+  <a class="sec-pill" href="#new">09 · 2024–2025</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The 60-second version</div>
+  <div class="hero-tldr-text">
+    Hematopoietic progenitor cell apheresis (HPC-A) collects <strong>CD34+ stem cells</strong> from peripheral blood for autologous or allogeneic transplant — and increasingly, for <strong>gene therapy</strong> and <strong>CAR-T cell manufacturing</strong>. The patient or donor is first <em>mobilized</em> (chemo + G-CSF, plerixafor, or both) to drive CD34+ cells out of the bone marrow into circulation. The Optia's <strong>Continuous Mononuclear Cell (CMNC)</strong> protocol then runs for 4–6 hours, processing 2–3 blood volumes through a centrifuge that selectively skims the mononuclear cell layer. Targets vary by indication: 2–5 × 10⁶ CD34/kg for autologous SCT, 8–10 for tandem, ≥ 15 for sickle-cell gene therapy.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">~50%</div><div class="stat-label">Collection Efficiency 2 (CE2) typical</div></div>
+    <div class="stat"><div class="stat-num">2–5</div><div class="stat-label">×10⁶ CD34/kg autologous target</div></div>
+    <div class="stat"><div class="stat-num">≥ 15</div><div class="stat-label">×10⁶ CD34/kg for SCD gene therapy</div></div>
+    <div class="stat"><div class="stat-num">2.0×</div><div class="stat-label">TBV processed (standard)</div></div>
+  </div>
+</div>
+
+<section class="sec" id="mechanism">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">How CMNC Works</div><div class="sec-subtitle">Skimming the buffy coat at scale</div></div></div>
+  <div class="prose">
+    <p>Normal peripheral blood contains <strong>almost no CD34+ stem cells</strong> — they live in bone marrow niches, anchored to stromal cells via CXCR4-SDF1 binding. The whole apheresis project depends on first <em>mobilizing</em> them out of the marrow and into the bloodstream where the Optia can collect them.</p>
+    <p>The Optia's <strong>Continuous Mononuclear Cell (CMNC)</strong> program is software-optimized for this collection. Blood enters the centrifuge at 50–90 mL/min with ACD-A anticoagulant at 12:1 ratio. The centrifuge spins down the layers: RBCs (densest) to the outside, then a thin buffy coat (mononuclear cells + platelets) at the interface, plasma at the inside. The CMNC software <strong>actively tracks the buffy coat position</strong> via optical sensor and skims it into the collection bag, returning everything else to the patient.</p>
+    <p>The collected product is dilute and yellow-tinged — mostly plasma with concentrated mononuclear cells. Per session you collect roughly 200–400 mL of product containing the target CD34+ cells, plus a lot of passenger T-cells, monocytes, and platelets that the cell processing lab will manage downstream.</p>
+    <div class="callout callout-tip"><span class="callout-icon">💡</span><div class="callout-body"><span class="callout-label">CE2 — what it measures</span><strong>Collection Efficiency 2</strong> = CD34 collected ÷ CD34 available in the volume processed. Typical CE2 ranges 40–60% for healthy donors and post-G-CSF-mobilized autologous patients. CE2 depends on technique, settings, and biology — not all CD34+ cells in the circulating pool get captured. The DART calculator shows the predicted CD34 yield as a range using 40% and 60% CE so the operator sees the realistic span.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="mobilization">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Mobilization Strategies</div><div class="sec-subtitle">Getting CD34+ out of the marrow</div></div></div>
+  <div class="prose">
+    <p>Mobilization is the strategy of forcing CD34+ cells out of the bone marrow stroma into peripheral blood. Four common approaches, each with mechanism and indication:</p>
+    <table class="compare-table">
+      <thead><tr><th>Method</th><th>Mechanism</th><th>Typical use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>G-CSF alone</strong></td><td>Cytokine — drives myeloid expansion, CXCR4 downregulation</td><td>Healthy allo donors, low-risk autologous</td></tr>
+        <tr><td><strong>G-CSF + Plerixafor</strong></td><td>CXCR4 antagonist disrupts CD34-stroma binding</td><td>Poor mobilizers, MM, NHL, tandem-target patients</td></tr>
+        <tr><td><strong>Chemo + G-CSF</strong></td><td>Cyclophosphamide rebound mobilization</td><td>Lymphoma patients where chemo is also clinically indicated</td></tr>
+        <tr><td><strong>Plerixafor monotherapy</strong></td><td>CXCR4 antagonist alone</td><td>SCD gene therapy (G-CSF contraindicated)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">🚫</span><div class="callout-body"><span class="callout-label">G-CSF in sickle cell disease — dangerous</span>Granulocyte colony-stimulating factor (G-CSF, Neupogen / filgrastim) <strong>triggers vaso-occlusive crisis</strong> in patients with SCD — well-documented in case reports and a major reason gene therapy collections require a different mobilization approach. For SCD gene therapy collections, mobilization is plerixafor monotherapy (0.24 mg/kg SQ ~6 hours before each apheresis day) with HbS &lt; 30% pre-collection achieved via RBCx.</div></div>
+    <p>The pre-apheresis CD34 count (cells/µL) drawn the morning of collection is the most predictive single number. <strong>≥ 20/µL</strong> predicts a productive day; <strong>10–19/µL</strong> is marginal — consider plerixafor add-on; <strong>&lt; 10/µL</strong> is a poor mobilizer that may need remobilization with a different strategy.</p>
+  </div>
+</section>
+
+<section class="sec" id="cmnc">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">The CMNC Protocol on Optia</div><div class="sec-subtitle">Defaults, why they exist, and when you change them</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Parameter</th><th>Standard</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Inlet:AC ratio</td><td><strong>12:1</strong></td><td>Adequate anticoagulation for citrate-tolerant adult</td></tr>
+        <tr><td>TBV processed</td><td><strong>2.0× (range 1.5–3×)</strong></td><td>Diminishing CD34 yield past 2× under most conditions</td></tr>
+        <tr><td>Inlet flow</td><td><strong>50–90 mL/min</strong></td><td>Higher = faster but more citrate dose</td></tr>
+        <tr><td>Collection preference</td><td><strong>Light</strong> (standard HPC-A)</td><td>Cleaner product, lower contamination</td></tr>
+        <tr><td>AIR</td><td><strong>0.8–1.2 mL/min/L TBV</strong></td><td>Hard machine cap at 1.2; symptoms cluster above 1.0</td></tr>
+      </tbody>
+    </table>
+    <p>The CMNC software handles the active interface tracking. The operator's job is steady inlet flow, patient monitoring (especially calcium symptoms), watching the collection product accumulate, and being ready to adjust collection preference when the message bar reads "Collecting MNC."</p>
+    <p>For <strong>Bluebird Bio / Genetix SCD gene-therapy collections</strong>, the protocol shifts: AC ratio drops to 8:1 (sometimes 6:1 if clumping), collection preference goes to <em>DARK</em> (the Optia color tool), and the AIR ceiling effectively forces lower inlet flow — meaning total whole blood processed in the same time period drops.</p>
+  </div>
+</section>
+
+<section class="sec" id="indications">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Indications</div><div class="sec-subtitle">Autologous, allogeneic, and the new "manufacturing" category</div></div></div>
+  <div class="prose">
+    <p><strong>Autologous</strong> collections store the patient's own cells for rescue after high-dose chemotherapy. Classic indications: multiple myeloma (single or tandem ASCT), relapsed lymphoma (NHL, Hodgkin), germ cell tumors, autoimmune disorders.</p>
+    <p><strong>Allogeneic</strong> collections come from related (sibling) or unrelated (matched URD) donors. Used for AML, ALL, MDS, severe aplastic anemia, certain inherited bone marrow failure syndromes, hemoglobinopathies when transplant is appropriate.</p>
+    <p><strong>Manufacturing collections</strong> are the new and rapidly growing category — collected cells are sent to a manufacturer for gene editing (Casgevy/Lyfgenia for SCD/TDT) or CAR-T construction (Yescarta, Kymriah, Abecma, Breyanzi, Tecartus). These collections often have unique requirements: specific bag specs, identifier chains, plasma volume in the product, manufacturer-specific TBV processing protocols. The DART CMNC calculator surfaces these in the company-dropdown info card.</p>
+  </div>
+</section>
+
+<section class="sec" id="math">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">CD34 Yield Math</div><div class="sec-subtitle">Why the calculator looks the way it does</div></div></div>
+  <div class="prose">
+    <div class="callout callout-key"><span class="callout-icon">📐</span><div class="callout-body"><span class="callout-label">The yield formula</span><strong>Total CD34 collected (×10⁶) = (Pre-CD34 [/µL] × Whole blood processed [mL] × CE) ÷ 1000</strong><br><br>Where:<br>• <strong>Pre-CD34</strong> = morning-of CD34 cell count (the predictive number)<br>• <strong>Whole blood processed</strong> = Total Inlet − AC volume = inlet × time × (acd − 1)/acd<br>• <strong>CE</strong> = Collection Efficiency, typically 0.40–0.60 (DART shows the range)</div></div>
+    <p>The arithmetic is simple but the inputs are dynamic. Pre-CD34 is measured the morning of each session. Whole blood processed is determined by inlet flow, total time (max 8 hours typically), and AC ratio (tighter AC ratios mean more AC per unit inlet, less whole blood). CE varies by patient, technique, and slightly with collection-preference setting.</p>
+    <p>To estimate the <strong>per-kg dose</strong>, divide total by patient (or recipient) weight: 4.5 × 10⁶ ÷ 80 kg = 0.056 × 10⁶ CD34/kg. Most autologous targets sit between 2 and 5 × 10⁶ CD34/kg per transplant. Tandem ASCT planning multiplies that.</p>
+    <p>The DART calculator computes both the predicted CD34 yield AND the estimated collection bag volume (using interface establishment time + collect rate × duration). The cells-per-mL density is reported at the midpoint CE — useful for the cell processing lab.</p>
+  </div>
+</section>
+
+<section class="sec" id="gene">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">The Gene Therapy Era</div><div class="sec-subtitle">Why your apheresis center now talks to Genetix Biotherapeutics</div></div></div>
+  <div class="prose">
+    <p>FDA approvals of <strong>Casgevy (exa-cel)</strong> and <strong>Lyfgenia (lovo-cel)</strong> for sickle cell and TDT in December 2023 created a new kind of HPC-A collection — one where the product gets <em>shipped</em> to a manufacturer who edits the cells ex vivo and ships them back for infusion. This changes everything operationally.</p>
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">SCD-specific protocol differences</span><strong>HbS must be &lt; 30%</strong> at collection (achieved via RBCx in the weeks prior). <strong>No G-CSF</strong> — plerixafor monotherapy at 0.24 mg/kg SQ ~6 hours pre-collection. <strong>Tight AC ratio</strong> (start 8:1, drop to 6:1 if clumping). <strong>DARK collection-preference</strong> — Genetix specifically recommends collecting on the darker end of the Optia color tool. Targets: <strong>≥ 15 × 10⁶ CD34/kg for SCD</strong>, <strong>≥ 25 × 10⁶ CD34/kg for TDT</strong>, plus an additional 1.5 × 10⁶/kg for back-up. The DART calculator integrates these as a Bluebird company selection with tooltips and warnings.</div></div>
+    <p>The labeling and chain-of-custody requirements are also strict. Each product bag has a patient-specific Apheresis ID that must be verified across the Optia screen, the bag label, the manufacturer's traceability portal, and the cell-processing lab manifest before the bag leaves your unit. A wrong sticker can disqualify the entire collection.</p>
+    <div class="callout callout-mind"><span class="callout-icon">💭</span><div class="callout-body"><span class="callout-label">A cell therapy supply chain</span>The patient's own cells become a manufactured drug product. Apheresis is the <em>raw material harvest</em>; the manufacturer does the editing; the patient gets the edited cells back as an infusion. Your unit is now part of a multi-week, multi-stakeholder, manufacturer-driven supply chain. Document everything.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="carT">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">CAR-T Collections</div><div class="sec-subtitle">T-cells, not CD34</div></div></div>
+  <div class="prose">
+    <p>CAR-T therapy starts with collecting the patient's <strong>T-cells</strong> (not CD34+ stem cells) for ex vivo transduction with a chimeric antigen receptor that targets a tumor-specific antigen. The Optia protocol is similar but the target is different: instead of pre-CD34, you're driven by pre-CD3 (T-cell count) and the manufacturer's specific volume processing target.</p>
+    <table class="compare-table">
+      <thead><tr><th>Product</th><th>Manufacturer</th><th>Volume processed</th><th>Notable</th></tr></thead>
+      <tbody>
+        <tr><td>Yescarta / Tecartus</td><td>Kite / Gilead</td><td>12–15 L</td><td>Long bag seal</td></tr>
+        <tr><td>Kymriah</td><td>Novartis</td><td>2–5× TBV</td><td>Pediatric ALL-focused workflow</td></tr>
+        <tr><td>Abecma</td><td>BMS</td><td>2–3× TBV</td><td>Multiple myeloma</td></tr>
+        <tr><td>Breyanzi</td><td>BMS</td><td>17 L</td><td>5-inch seal, 150 mL plasma to collect bag, ≤ 540 mL final</td></tr>
+      </tbody>
+    </table>
+    <p>Manufacturer-specific differences are real and consequential. The DART calculator surfaces these in the company-dropdown info card so the bedside team knows what to expect: bag seal type, plasma additions, volume caps, login portal requirements, and product-specific endpoints.</p>
+  </div>
+</section>
+
+<section class="sec" id="complications">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Complications</div><div class="sec-subtitle">The usual suspects with some product-specific quirks</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Complication</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Citrate symptoms</strong></td><td>Prophylactic Ca-gluconate (institutional: 1.5–2 g per 4000 mL processed); slow inlet if needed</td></tr>
+        <tr><td><strong>Platelet drop</strong></td><td>Each session removes ~10–15% of circulating platelets; threshold pre-procedure plt ≥ 50 × 10⁹/L</td></tr>
+        <tr><td><strong>Access issues</strong></td><td>Central catheter standard for adults; verify patency before start; consider scheduled access on Day −1</td></tr>
+        <tr><td><strong>Hypotension</strong></td><td>Adequate hydration, slow start, watch for dilutional anemia</td></tr>
+        <tr><td><strong>Bone pain (G-CSF)</strong></td><td>Acetaminophen, antihistamine; usually resolves within hours of last dose</td></tr>
+        <tr><td><strong>Splenic rupture (rare)</strong></td><td>Avoid contact sports during mobilization; consider for new abdominal pain</td></tr>
+        <tr><td><strong>Apheresis-related coagulopathy</strong></td><td>Long sessions can affect fibrinogen; trend with morning labs in tandem collections</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="new">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">2024–2025 Developments</div><div class="sec-subtitle">Where HPC-A is going</div></div></div>
+  <div class="prose">
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">Multi-product CAR-T pipelines</span>2024 brought continued expansion of CAR-T products (autologous + allogeneic) across more cancers — MM relapsed/refractory, follicular and mantle cell lymphoma, ALL. Each new product means new collection-protocol nuances. The institutional apheresis team needs ongoing certification per product to maintain manufacturer registration.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🩸</span><div class="callout-body"><span class="callout-label">Gene therapy for β-thalassemia</span><strong>Casgevy/Lyfgenia for TDT</strong> approved in many jurisdictions. Targets are higher than SCD (≥ 25 × 10⁶ CD34/kg) because manufacturing yield is lower in TDT cells; collection often requires multiple cycles spanning weeks. Patient counseling about expected procedure burden is now a key pre-collection conversation.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">⚡</span><div class="callout-body"><span class="callout-label">Motixafortide — longer-acting CXCR4 inhibitor</span>FDA-approved 2023; reduces day-of-collection plerixafor logistics and improves CD34 yields vs G-CSF + plerixafor in MM. Adoption growing, particularly at high-volume MM centers where collection day efficiency matters.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🤝</span><div class="callout-body"><span class="callout-label">Allogeneic "off-the-shelf" CAR-T</span>Several allogeneic CAR-T candidates (donor-derived, gene-edited to be hypoallergenic) are in late-phase trials. If approved, these would shift the apheresis workflow from patient-specific to donor-bank collections, dramatically reducing time-to-infusion for individual patients.</div></div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a CMNC?</div>
+    <div class="cta-sub">Open the Stem Cell Collection Calculator for Whole Blood Processed (hero tile), AC volume, Estimated CD34 Yield range, and Estimated Collection Bag Volume.</div>
+  </div>
+  <a class="cta-btn" href="stem-cell-collection.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Curated, evidence-based sources</div></div></div>
+  <ol class="ref-list">
+    <li>Connelly-Smith L, et al. <strong>ASFA 2023 Guidelines.</strong> J Clin Apher 38:77–278.</li>
+    <li>Terumo BCT. <strong>Spectra Optia CMNC Protocol training</strong>. Current revision.</li>
+    <li>Frangoul H, et al. <strong>exa-cel for SCD/TDT.</strong> NEJM 2023.</li>
+    <li>Genetix Biotherapeutics. <strong>Optimizing HPC-A Collections from SCD/TDT.</strong> Institutional training reference.</li>
+    <li>Devine SM, et al. <strong>Motixafortide for HPC mobilization in MM.</strong> Blood 2023.</li>
+    <li>Maus MV, et al. <strong>Modern CAR-T cell therapy across hematologic malignancies.</strong> Cell 2024.</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Why HPC-A?</span>
+  <span>Educational reference — verify all clinical decisions against current guidelines and your institutional protocol.</span>
+</div>
+</div></body></html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Disaster &amp; Contingency Planning — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--warn-bright:#ffd896;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,205,112,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--warn),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,205,112,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--warn-bright);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffeec9 0%,#ffcd70 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,205,112,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,205,112,.4);color:var(--text);background:rgba(255,205,112,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,205,112,.24);background:linear-gradient(135deg,rgba(255,205,112,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,205,112,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--warn-bright);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,205,112,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(255,205,112,.08);border-color:var(--warn-bright)}.callout-key .callout-label{color:var(--warn-bright)}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,205,112,.10);color:#ffe8b6;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.step-list{list-style:none;padding:0;margin:18px 0;counter-reset:stepnum}
+.step-list li{counter-increment:stepnum;position:relative;padding:14px 14px 14px 56px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;line-height:1.6;color:#d6e0ee}
+.step-list li::before{content:counter(stepnum);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(255,205,112,.30),rgba(126,240,210,.10));color:#ffe8b6;display:grid;place-items:center;font-weight:900;font-size:13px;border:1px solid rgba(255,205,112,.40)}
+.step-list li strong{color:#fff;display:inline}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,205,112,.15);color:#ffe8b6;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">⚡</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Universal Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Universal Reference · Disaster &amp; Contingency Planning</div>
+      <div class="head-title"><span class="accent">Disaster &amp; Contingency</span></div>
+      <div class="head-sub">Power outage, water failure, equipment malfunction, mass casualty surge, evacuation. Applies to every DART modality. Compiled from CMS Emergency Preparedness rule (42 CFR 482.15 / 494.62), ESRD Network disaster guidance, AAMI standards, and Joint Commission emergency management requirements.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#framework">01 · Framework</a>
+  <a class="sec-pill" href="#power">02 · Power Outage</a>
+  <a class="sec-pill" href="#water">03 · Water Failure (HD)</a>
+  <a class="sec-pill" href="#device">04 · Device Failure</a>
+  <a class="sec-pill" href="#disconnect">05 · Manual Disconnection</a>
+  <a class="sec-pill" href="#surge">06 · Mass Casualty / Surge</a>
+  <a class="sec-pill" href="#evacuation">07 · Evacuation</a>
+  <a class="sec-pill" href="#communication">08 · Communication Chain</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — Plan Now, Respond Calmly</div>
+  <div class="hero-tldr-text">
+    Every extracorporeal therapy depends on power, water, and intact equipment. When any of these fails — even briefly — patients connected to circuits are at immediate risk. CMS Emergency Preparedness requirements mandate written, drilled, and revised disaster plans for every dialysis facility and hospital. This reference summarizes the universal contingency principles: <strong>safe patient disconnection before the situation becomes critical</strong>, transparent communication, and rehearsed muscle memory. Plans are not effective unless drilled — schedule disaster drills at least annually and document.
+  </div>
+</div>
+
+<section class="sec" id="framework">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Emergency Preparedness Framework</div><div class="sec-subtitle">CMS, Joint Commission, ESRD Network requirements</div></div></div>
+  <div class="prose">
+    <p>Federal requirements provide the framework:</p>
+    <ul class="check-list">
+      <li><strong>CMS Emergency Preparedness Rule (42 CFR Part 482.15 hospitals; 494.62 ESRD facilities)</strong> — Each facility must have a written all-hazards emergency preparedness plan, communication plan, training and testing program, and policies and procedures.</li>
+      <li><strong>Joint Commission Emergency Management Standards</strong> — Hazard Vulnerability Assessment (HVA) annually; emergency operations plan covering 6 functional areas; drills twice annually (one community-wide).</li>
+      <li><strong>ESRD Network Disaster Coordination</strong> — Regional network coordinates patient relocation, dialysis access, and resource sharing during natural disasters. Patients should have a Disaster Card with prescription, allergies, and emergency contact.</li>
+      <li><strong>Manufacturer device-failure protocols</strong> — Each device manufacturer provides emergency-stop and manual-disconnect procedures.</li>
+    </ul>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The Three-Question Test</span>Whenever something goes wrong, ask in order: (1) Is the patient safe right now? (2) Can the patient be safely disconnected? (3) Can therapy continue or be transferred? If the answer to #1 is no, disconnect immediately — do not attempt to save the procedure first.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="power">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Power Outage Protocol</div><div class="sec-subtitle">Backup power, battery life, manual return</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Device / Setting</th><th>Backup Power</th><th>Battery Window</th><th>Recommended Action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hemodialysis (Fresenius 2008T/2008K, in-center)</strong></td><td>Facility emergency generator powers RO + dialysis stations</td><td>None on device; UPS for documentation systems</td><td>Verify generator activated within 10 seconds; if no power within 1 minute, manually rinseback all patients per protocol.</td></tr>
+        <tr><td><strong>Peritoneal Dialysis (HomeChoice Pro at home)</strong></td><td>Internal battery</td><td>~2 hours typical</td><td>Patient continues cycle if power returns &lt; 2 hours; if extended outage, drain cavity and disconnect; contact PD nurse.</td></tr>
+        <tr><td><strong>CRRT (Prismaflex / Prismax in ICU)</strong></td><td>Generator + UPS</td><td>~30 minutes machine battery</td><td>Verify generator power; if no power restoration, manually disconnect; resume on new circuit when power restored.</td></tr>
+        <tr><td><strong>Apheresis (Spectra Optia)</strong></td><td>Generator-powered outlet</td><td>~15 minutes internal</td><td>Verify generator power; if no restoration in 15 minutes, manually rinseback if possible per protocol; abort and document if not.</td></tr>
+        <tr><td><strong>LDL Apheresis (Liposorber LA-15)</strong></td><td>Generator-powered outlet</td><td>Limited / device-specific</td><td>Disconnect patient per protocol; document; reschedule.</td></tr>
+        <tr><td><strong>ECP (Therakos CELLEX)</strong></td><td>Generator-powered outlet</td><td>9V backup powers low-battery alarm only</td><td>If photoactivation interrupted, the UVA dose is not delivered; document and discuss alternative course with physician.</td></tr>
+      </tbody>
+    </table>
+    <div class="emergency-box">
+      <div class="emergency-box-title">⚠ Power Outage Response — In Order</div>
+      <ol class="emergency-steps">
+        <li><strong>Stay calm.</strong> Verify what failed — single device, single station, whole unit, whole facility?</li>
+        <li><strong>Check generator status.</strong> Most institutional generators activate within 10 seconds. Verify red outlets receiving power.</li>
+        <li><strong>If generator power: continue therapy.</strong> Document the event time; monitor closely.</li>
+        <li><strong>If no generator power within 1 minute: assess each patient.</strong> Hemodynamic stability, current procedure phase.</li>
+        <li><strong>Manual disconnection per device protocol.</strong> See Section 5 of this reference for general principles; specific procedure varies by device.</li>
+        <li><strong>Document outage start, response, and outcome.</strong> Incident report; review at next QI meeting.</li>
+      </ol>
+    </div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Generator Testing</span>Generator and UPS testing per facility schedule (typically monthly). Document test outcomes. Any test failure is an immediate maintenance issue; verify red outlets and life-safety circuits hold patient-critical equipment.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="water">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Water Failure / Treatment System Failure (HD)</div></div></div>
+  <div class="prose">
+    <p>Hemodialysis depends entirely on AAMI-grade water. Water system failure — RO failure, chlorine breakthrough, distribution loop contamination — must trigger immediate cessation.</p>
+    <div class="emergency-box">
+      <div class="emergency-box-title">⚠ Water Failure Response</div>
+      <ol class="emergency-steps">
+        <li><strong>Stop initiating new treatments.</strong> Hold all incoming patients.</li>
+        <li><strong>Assess in-progress treatments.</strong> Can they be safely completed if the issue is short-term (e.g., brief chlorine breakthrough resolved by switching tanks)?</li>
+        <li><strong>If chlorine/chloramine breakthrough confirmed:</strong> Stop all treatments immediately. Patient blood exposure to dialysate with chloramine causes acute hemolysis.</li>
+        <li><strong>Rinseback per protocol;</strong> disconnect patients.</li>
+        <li><strong>Stat labs on exposed patients:</strong> CBC, K, free hemoglobin, LDH, ABG. Monitor for hemolysis.</li>
+        <li><strong>Notify medical director and water treatment technician.</strong></li>
+        <li><strong>Document and report</strong> as a sentinel event per institutional policy.</li>
+        <li><strong>Resume treatment only after</strong> water quality verified acceptable per AAMI standards.</li>
+      </ol>
+    </div>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Chlorine Breakthrough = Stop Now</span>Chloramine and chlorine cause immediate hemolysis. Even brief exposure can cause hyperkalemia, AKI, and death. The carbon tank test is the canary; act on it without delay.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="device">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Device Malfunction</div></div></div>
+  <div class="prose">
+    <p>Device failure modes are varied: pump failure, alarm system malfunction, sensor failure, circuit rupture, leak. The response framework is consistent:</p>
+    <ol class="step-list">
+      <li><strong>Recognize.</strong> Listen for alarm; observe what's different; check vital signs.</li>
+      <li><strong>Stabilize the patient.</strong> If hemodynamic concern, treat first; document concurrent device issue.</li>
+      <li><strong>Pause the device</strong> per manufacturer instructions. Do not attempt repair while running.</li>
+      <li><strong>Disconnect if safe to do so</strong> — see Section 5.</li>
+      <li><strong>Notify biomed / equipment technician</strong> for device assessment; tag out of service; substitute another machine if available.</li>
+      <li><strong>Document the failure mode</strong> — exact alarm, time, patient state, machine serial; report to manufacturer per MedWatch / equipment-failure surveillance.</li>
+      <li><strong>Reschedule if needed</strong>; coordinate with team.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="disconnect">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Manual Disconnection — Universal Principles</div><div class="sec-subtitle">Safe patient separation from a non-functioning circuit</div></div></div>
+  <div class="prose">
+    <p>Manual disconnection is sometimes necessary when normal rinseback or termination procedures cannot be performed. The principles are universal across modalities.</p>
+    <ol class="step-list">
+      <li><strong>Clamp the patient access lines</strong> first — venous return line and arterial / inlet line both clamped to prevent further blood exchange.</li>
+      <li><strong>Clamp the circuit lines</strong> at the patient access — preventing back-flow of circuit fluid into the patient line.</li>
+      <li><strong>Disconnect at the catheter or access hub</strong> using aseptic technique (mask, sterile gloves where possible).</li>
+      <li><strong>Cap the catheter hub</strong> with sterile cap or apply sterile flush per access protocol.</li>
+      <li><strong>Apply pressure</strong> to peripheral access sites; secure central catheter dressing.</li>
+      <li><strong>Document patient stability</strong> — vital signs, symptoms, blood loss estimate.</li>
+      <li><strong>Discard the circuit per institutional waste protocol.</strong></li>
+      <li><strong>Plan re-initiation</strong> when conditions allow.</li>
+    </ol>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Estimated Blood Loss</span>Circuit blood loss varies by device: TPE/RBCx circuit ~185 mL + warmer 50 mL; HD circuit ~120–190 mL; CRRT circuit ~150–250 mL; CELLEX ~240 mL. Document this estimate after manual disconnection — particularly important for pediatric patients and anemic adults.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="surge">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Mass Casualty / Surge Planning</div></div></div>
+  <div class="prose">
+    <p>Mass casualty events (natural disasters, mass shootings, infectious surge) can create sudden demand for renal replacement therapy that exceeds capacity. Pre-planning is essential.</p>
+    <ul class="check-list">
+      <li><strong>Pre-identify surge capacity</strong> — Maximum patients per shift; staffing required; equipment available; consumable inventory.</li>
+      <li><strong>Triage protocol</strong> — Categorize patients by need (life-threatening hyperkalemia first; chronic missed sessions second; routine maintenance last).</li>
+      <li><strong>Modify schedule</strong> — Run extended hours; reduce session time from 4 hr to 2.5–3 hr; increase frequency where possible.</li>
+      <li><strong>Coordinate with ESRD Network</strong> — Regional patient relocation; sharing resources across facilities.</li>
+      <li><strong>Plan for chronic patients from other facilities</strong> — Many displaced patients during natural disasters; receive their prescription, verify access, treat.</li>
+      <li><strong>Document and report</strong> — Both NHSN and ESRD Network track surge events.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="evacuation">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Patient Evacuation</div></div></div>
+  <div class="prose">
+    <p>Evacuation may be required for fire, severe weather, infrastructure failure, or security event. Patients connected to extracorporeal circuits add complexity.</p>
+    <ol class="step-list">
+      <li><strong>Activate facility evacuation protocol.</strong></li>
+      <li><strong>Triage patients</strong> — Connected (highest priority for safe disconnect), ambulatory (assist as needed), critical (medical evacuation).</li>
+      <li><strong>Disconnect patients per Section 5</strong> as quickly as is safe.</li>
+      <li><strong>Move patients per the institutional plan</strong> — Stretcher, wheelchair, walking; designated routes; designated meeting area.</li>
+      <li><strong>Bring critical supplies</strong> — Patient identifiers, chart access (paper backup), portable oxygen, emergency medications.</li>
+      <li><strong>Account for all patients</strong> at the assembly point; report to incident command.</li>
+      <li><strong>Coordinate continuation of care</strong> — Transfer to alternate facility; plan resumption.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="communication">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Communication Chain</div></div></div>
+  <div class="prose">
+    <p>Effective response requires clear, rehearsed communication.</p>
+    <ul class="check-list">
+      <li><strong>First responder</strong> at the bedside notifies charge nurse immediately.</li>
+      <li><strong>Charge nurse</strong> activates appropriate response: rapid response, code, security, infection prevention, biomed.</li>
+      <li><strong>Charge nurse notifies medical director</strong> for procedural or facility-level decisions.</li>
+      <li><strong>Hospital incident command activated</strong> for facility-wide events per institutional policy.</li>
+      <li><strong>External notification</strong> — Police, fire, FBI, public health, ESRD Network as appropriate.</li>
+      <li><strong>Family notification</strong> per chaplaincy / social work / institutional protocol for major events.</li>
+      <li><strong>Media communication</strong> via public affairs only; staff do not speak to media directly.</li>
+      <li><strong>Documentation</strong> by all involved as soon as practical; incident report; sentinel event review if applicable.</li>
+    </ul>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Drill, Drill, Drill</span>Disaster plans only work if they're rehearsed. CMS requires twice-annual drills (one community-wide); Joint Commission requires HVA review and drill cycles. Schedule, conduct, debrief, and revise — and document every drill.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>CMS. <strong>Emergency Preparedness Requirements for Medicare and Medicaid Participating Providers and Suppliers — Final Rule</strong> (42 CFR Part 482.15 / 494.62).</li>
+    <li>Joint Commission. <strong>Emergency Management Standards</strong> (current edition).</li>
+    <li>CDC. <strong>Emergency Preparedness for Dialysis Facilities</strong> (current edition).</li>
+    <li>ESRD Networks. <strong>Disaster Preparedness Resources.</strong></li>
+    <li>AAMI / ISO 23500. <strong>Water Quality Standards for Hemodialysis.</strong></li>
+    <li>Kidney Community Emergency Response (KCER) Program — patient and facility emergency resources.</li>
+    <li>Manufacturer device-failure / emergency-stop procedures (each device IFU current revision).</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Disaster &amp; Contingency Planning</span>
+  <span>Educational reference · Verify against institutional emergency operations plan · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Peritoneal Dialysis Safety Considerations — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,143,182,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,143,182,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(255,143,182,.22),rgba(126,240,210,.10));border-color:rgba(255,143,182,.4);color:#ffd1e2}
+.chip-calc:hover{border-color:rgba(255,143,182,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffe1ec 0%,#ff8fb6 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,143,182,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,143,182,.4);color:var(--text);background:rgba(255,143,182,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,143,182,.24);background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,143,182,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--pink);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:28px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#ff8fb6,#7ef0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,143,182,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#ffd1e2;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-watch{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-watch .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,143,182,.10);color:#ffd1e2;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,143,182,.15),rgba(126,240,210,.10));border:1px solid rgba(255,143,182,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#ffd1e2}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--primary));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(255,143,182,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,143,182,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,143,182,.15);color:#ffb2cc;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🛡️</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Safety Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="peritonealdialysis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Safety Reference · Peritoneal Dialysis</div>
+      <div class="head-title"><span class="accent">PD Safety Considerations</span></div>
+      <div class="head-sub">Peritonitis prevention as the dominant safety issue, mechanical complications, glycemic / metabolic concerns, and the safety of a chronic home modality. Compiled from ISPD 2022 guidelines, current peritonitis literature, and best-practice home dialysis training.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#overview">01 · Risk Overview</a>
+  <a class="sec-pill" href="#peritonitis">02 · Peritonitis</a>
+  <a class="sec-pill" href="#aseptic">03 · Aseptic Technique</a>
+  <a class="sec-pill" href="#exitsite">04 · Exit Site / Catheter</a>
+  <a class="sec-pill" href="#mechanical">05 · Mechanical</a>
+  <a class="sec-pill" href="#glycemic">06 · Glycemic / Metabolic</a>
+  <a class="sec-pill" href="#fill">07 · Fill Safety</a>
+  <a class="sec-pill" href="#peds">08 · Pediatric</a>
+  <a class="sec-pill" href="#emergency">09 · Emergency Response</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The safety story in one paragraph</div>
+  <div class="hero-tldr-text">
+    PD safety is dominated by one issue: <strong>peritonitis</strong>. The peritoneum has no native bacterial flora, so any introduced organism has free run of the cavity. Peritonitis is the leading cause of PD dropout and a major mortality contributor. Every other PD safety issue — exit-site infection, catheter complications, mechanical issues (hernia, leak, hydrothorax), glycemic load from dextrose-based solutions, intra-abdominal hypertension from over-fill — is meaningfully less common but still requires structured monitoring. The institutional goal is <strong>peritonitis rate &lt; 0.4 episodes per patient-year</strong>. Aggressive aseptic technique training and exit-site care are the most cost-effective interventions.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">&lt; 0.4</div><div class="stat-label">ISPD peritonitis rate target (per patient-year)</div></div>
+    <div class="stat"><div class="stat-num">30–40</div><div class="stat-label">mL/kg adult fill ceiling</div></div>
+    <div class="stat"><div class="stat-num">800–1100</div><div class="stat-label">mL/m² peds BSA target</div></div>
+    <div class="stat"><div class="stat-num">≥ 1.7</div><div class="stat-label">Weekly Kt/V adequacy target</div></div>
+  </div>
+</div>
+
+<section class="sec" id="overview">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">The Major Risk Profile</div><div class="sec-subtitle">Peritonitis dominates; mechanical issues secondary</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Adverse event</th><th>Approximate rate</th><th>Severity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Peritonitis</strong></td><td>Target &lt; 0.4 / patient-year; real-world variable</td><td>Severe; dropout / mortality driver</td></tr>
+        <tr><td><strong>Exit-site infection</strong></td><td>Variable with care</td><td>Mild–severe (can progress to tunnel/peritonitis)</td></tr>
+        <tr><td><strong>Catheter malfunction</strong></td><td>5–15% lifetime</td><td>Mechanical; correctable</td></tr>
+        <tr><td><strong>Hernia</strong> (umbilical, inguinal)</td><td>10–25% lifetime</td><td>Variable; surgical</td></tr>
+        <tr><td><strong>Dialysate leak</strong></td><td>Variable</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Hydrothorax</strong></td><td>1–10% (right-sided more common)</td><td>Severe respiratory</td></tr>
+        <tr><td><strong>Hyperglycemia</strong></td><td>Common with dextrose; variable</td><td>Long-term metabolic</td></tr>
+        <tr><td><strong>Weight gain / insulin resistance</strong></td><td>Cumulative</td><td>Long-term</td></tr>
+        <tr><td><strong>Intra-abdominal hypertension</strong> (over-fill)</td><td>If fill exceeds ceiling</td><td>Severe; respiratory + hemodynamic compromise</td></tr>
+        <tr><td><strong>Encapsulating peritoneal sclerosis (EPS)</strong></td><td>Rare; long-term &gt; 5 yr</td><td>Catastrophic; high mortality</td></tr>
+        <tr><td><strong>Membrane failure / inadequate UF</strong></td><td>Progressive over years</td><td>Modality change</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="peritonitis">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Peritonitis — The Defining Complication</div><div class="sec-subtitle">Recognition, treatment, prevention</div></div></div>
+  <div class="prose">
+    <p>Peritonitis presents with the triad: <strong>cloudy effluent, abdominal pain, fever</strong>. Cloudy effluent alone — even without pain — should prompt immediate evaluation. ISPD defines peritonitis as ≥ 2 of: typical clinical features, effluent WBC &gt; 100/µL with &gt; 50% neutrophils, or positive effluent culture.</p>
+    <table class="compare-table">
+      <thead><tr><th>Organism category</th><th>Typical source</th><th>Empiric coverage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Gram-positive</strong> (S. aureus, coag-neg Staph, Strep)</td><td>Skin/touch contamination</td><td>Vancomycin or cefazolin IP (intraperitoneal)</td></tr>
+        <tr><td><strong>Gram-negative</strong> (E. coli, Klebsiella, Pseudomonas)</td><td>Bowel translocation; constipation</td><td>Ceftazidime or aminoglycoside IP</td></tr>
+        <tr><td><strong>Fungal</strong> (Candida)</td><td>Prior antibiotic courses; immunosuppressed</td><td>Catheter removal mandatory; IV antifungal</td></tr>
+        <tr><td><strong>Polymicrobial</strong></td><td>Bowel perforation</td><td>Surgical consult; broad-spectrum IV + IP</td></tr>
+        <tr><td><strong>Mycobacterial</strong> (rare)</td><td>Atypical presentation</td><td>Catheter removal; ID consult</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Catheter removal indications</span>Remove the catheter for: refractory bacterial peritonitis (no improvement by day 5), relapsing peritonitis, fungal peritonitis, mycobacterial peritonitis, bowel perforation, recurrent peritonitis with the same organism, severe exit-site/tunnel infection.</div></div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The 0.4 / patient-year target</span>ISPD recommends &lt; <strong>0.4 episodes per patient-year</strong>. Units exceeding 0.5 should audit their training, exchange technique, and exit-site protocols. Repeat peritonitis predicts technique failure and modality change.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="aseptic">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Aseptic Technique — The Non-Negotiable</div><div class="sec-subtitle">Every connection matters</div></div></div>
+  <div class="prose">
+    <p>The peritoneum has no native bacterial flora. <strong>Every introduced organism has free run of the cavity.</strong> Aseptic technique at every connection is the most cost-effective prevention.</p>
+    <ul class="check-list">
+      <li><strong>Dedicated, clean room</strong> for exchanges. No pets, no open windows during exchange (pet exposure linked to <em>Pasteurella</em> peritonitis outbreaks)</li>
+      <li><strong>Hand hygiene:</strong> surgical scrub ≥ 1 minute with antimicrobial soap, dry with single-use paper towel, then alcohol-based hand rub</li>
+      <li><strong>Surgical mask</strong> on patient AND caregiver during connection — droplets from speech documented source of <em>S. salivarius</em> peritonitis</li>
+      <li><strong>Sterile field:</strong> disinfect work surface; assemble all supplies before opening the catheter</li>
+      <li><strong>Flush-before-fill:</strong> drain the bag's first ~100 mL through the drain line before infusing — clears any contaminant introduced at connection</li>
+      <li><strong>Daily exit-site care:</strong> cleansing with chlorhexidine or povidone-iodine; mupirocin or gentamicin cream prophylactically</li>
+      <li><strong>Catheter handling:</strong> never reuse a transfer set; replace per institutional schedule; always cap when disconnected</li>
+      <li><strong>No sharps near catheter</strong> (e.g., scissors); no fingers in the bag opening; avoid touch contamination of the spike</li>
+    </ul>
+    <div class="callout callout-danger"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">The cardinal rule of PD nursing</span><strong>When in doubt, don't connect.</strong> If sterility is compromised, a new bag and transfer set cost less than a peritonitis admission. Document and replace.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="exitsite">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Exit Site &amp; Catheter Care</div><div class="sec-subtitle">Daily inspection, prophylactic antibiotics</div></div></div>
+  <div class="prose">
+    <p>Exit-site infection (ESI) is a precursor to tunnel infection and peritonitis. Daily inspection and prompt treatment of ESI are central to peritonitis prevention.</p>
+    <table class="compare-table">
+      <thead><tr><th>Finding</th><th>Severity</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td>Clean, dry, no redness</td><td>Normal</td><td>Continue daily care</td></tr>
+        <tr><td>Mild crusting, no erythema</td><td>Minor / equivocal</td><td>Increase cleansing frequency; monitor</td></tr>
+        <tr><td>Erythema, pain, drainage</td><td>Exit-site infection</td><td>Culture; empiric antibiotics per ISPD; weekly follow-up</td></tr>
+        <tr><td>Tunnel tenderness, induration</td><td>Tunnel infection</td><td>Aggressive antibiotic course; possibly catheter removal</td></tr>
+        <tr><td>Erythema + peritonitis</td><td>Severe</td><td>Catheter removal usually required</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Mupirocin / gentamicin prophylaxis</span>Daily exit-site application of <strong>mupirocin or gentamicin cream</strong> reduces ESI and peritonitis rates. Most ISPD-aligned centers use one of these routinely.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="mechanical">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Mechanical Complications</div><div class="sec-subtitle">Hernia, leak, hydrothorax, drain pain</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Complication</th><th>Presentation</th><th>Management</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hernia</strong> (umbilical, inguinal, incisional)</td><td>Bulging at site; especially with full fill</td><td>Surgical repair; consider lower fills or APD-only post-op</td></tr>
+        <tr><td><strong>Dialysate leak</strong></td><td>Subcutaneous swelling, scrotal/labial edema</td><td>Reduce fill volume, supine fills, surgical consult</td></tr>
+        <tr><td><strong>Hydrothorax</strong> (right &gt; left)</td><td>Dyspnea, pleural effusion (high glucose in fluid)</td><td>Drain peritoneum, thoracentesis; surgical pleurodesis if recurrent</td></tr>
+        <tr><td><strong>Catheter malposition / kinking</strong></td><td>Drain pain, slow drainage, incomplete drains</td><td>Catheter manipulation, laxatives (constipation often contributes), surgical revision</td></tr>
+        <tr><td><strong>Intra-abdominal hypertension</strong> (over-fill)</td><td>Respiratory distress, hypotension, abdominal pain</td><td>Drain immediately; reduce future fill volumes</td></tr>
+        <tr><td><strong>Drain pain</strong></td><td>End-of-drain abdominal pain</td><td>Switch to Tidal mode (leaves residual in cavity)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="glycemic">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Glycemic &amp; Metabolic Concerns</div><div class="sec-subtitle">The dextrose load over time</div></div></div>
+  <div class="prose">
+    <p>Dextrose-based PD solutions deliver glucose continuously. A patient on 4.25% bags daily absorbs <strong>100–200 g of glucose per day</strong>, contributing to insulin resistance, weight gain, dyslipidemia, and accelerated peritoneal membrane fibrosis.</p>
+    <ul class="check-list">
+      <li><strong>Minimize 4.25% (red bag) use</strong> — reserve for true UF emergencies; use 2.5% (green) as workhorse</li>
+      <li><strong>Icodextrin for long dwell</strong> — colloid osmotic, minimal glucose absorption; once-daily limit</li>
+      <li><strong>HbA1c monitoring</strong> in diabetics; insulin needs increase over PD course</li>
+      <li><strong>Weight surveillance</strong>; nutritional counseling</li>
+      <li><strong>Lipid panel</strong> every 6 months</li>
+      <li><strong>Long-term:</strong> consider biocompatible (low-GDP) solutions to preserve peritoneal membrane</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Finger-stick glucose interference</span>Icodextrin (Extraneal · purple bag) can <strong>falsely elevate finger-stick glucose readings</strong> with certain meters (those using GDH-PQQ enzyme). Use glucose-specific meters (GDH-FAD, GDH-NAD, glucose oxidase) for icodextrin patients to avoid spurious hyperglycemia and inappropriate insulin dosing.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="fill">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Fill Safety — Weight-Based Ceilings</div><div class="sec-subtitle">Adult 30–40 mL/kg; pediatric 800–1100 mL/m²</div></div></div>
+  <div class="prose">
+    <p>Over-filling produces intra-abdominal hypertension with respiratory compromise, hypotension, hernia / leak risk, and patient discomfort. The calculator's fill safety check uses weight (adults) or BSA (pediatrics).</p>
+    <table class="compare-table">
+      <thead><tr><th>Population</th><th>Target</th><th>Ceiling</th></tr></thead>
+      <tbody>
+        <tr><td>Adult typical</td><td>30–40 mL/kg</td><td>40–45 mL/kg max</td></tr>
+        <tr><td>Adult break-in</td><td>25 mL/kg</td><td>Scale up gradually</td></tr>
+        <tr><td>Pediatric (BSA-based)</td><td>800–1100 mL/m²</td><td>1100–1400 mL/m²</td></tr>
+        <tr><td>Pediatric break-in</td><td>600–800 mL/m²</td><td>Scale up</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Patient-tolerance test</span>Even within numeric guidelines, individuals vary. Listen to the patient: any reproducible abdominal pain, respiratory tightness, or back pain at full fill should prompt a fill-volume reduction trial.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Pediatric PD</div><div class="sec-subtitle">BSA-based fills, low-fill cyclers, family education</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>BSA-based fill targets</strong> (800–1100 mL/m²) for &gt; 10 kg children; weight-based for smaller</li>
+      <li><strong>Low-fill cycler mode</strong> for fills under ~500 mL</li>
+      <li><strong>Start with shorter dwells</strong> (45–60 min) and scale up</li>
+      <li><strong>Family training</strong> is the most important intervention — peritonitis rates correlate with caregiver technique</li>
+      <li><strong>Avoid icodextrin</strong> in infants (insufficient data; acid-base concerns)</li>
+      <li><strong>Fluoroscopy-guided catheter placement</strong> to verify position</li>
+      <li><strong>Daily fill tolerance check:</strong> watch for respiratory distress, abdominal distention, vomiting</li>
+      <li><strong>School integration</strong> — schedule overnight cycler around school hours</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="emergency">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Emergency Response</div><div class="sec-subtitle">When something goes wrong</div></div></div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Suspected Peritonitis (Cloudy Effluent / Pain / Fever)</div>
+    <ol class="emergency-steps">
+      <li><strong>Drain a full bag</strong> for diagnostic sampling.</li>
+      <li><strong>Send effluent</strong> for cell count, differential, Gram stain, and culture.</li>
+      <li><strong>Start empiric IP antibiotics</strong> immediately (don't wait for culture) — vancomycin + ceftazidime per ISPD protocol.</li>
+      <li><strong>Investigate source:</strong> recent connection technique, exit-site exam, recent constipation / diarrhea.</li>
+      <li><strong>Daily clinical reassessment;</strong> repeat cell count in 48–72 hr.</li>
+      <li><strong>If no improvement by day 5:</strong> consider catheter removal.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Acute Respiratory Distress (Over-Fill or Hydrothorax)</div>
+    <ol class="emergency-steps">
+      <li><strong>Drain peritoneum immediately</strong> — empties the cavity.</li>
+      <li><strong>O₂ via non-rebreather;</strong> consider BiPAP if severe.</li>
+      <li><strong>If over-fill:</strong> reduce future fill volumes; consider lower-fill mode.</li>
+      <li><strong>If hydrothorax suspected:</strong> chest film, thoracentesis (high-glucose effluent confirms), surgical consult for pleurodesis.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Bowel Perforation</div>
+    <ol class="emergency-steps">
+      <li><strong>Recognize:</strong> sudden severe abdominal pain, feculent effluent, polymicrobial growth, hemodynamic instability.</li>
+      <li><strong>STOP all dialysate;</strong> drain peritoneum.</li>
+      <li><strong>Surgical consult emergent;</strong> CT abdomen.</li>
+      <li><strong>Broad-spectrum IV antibiotics</strong> (covering anaerobes); fluid resuscitation.</li>
+      <li><strong>Catheter removal usually required.</strong></li>
+    </ol>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a PD prescription?</div>
+    <div class="cta-sub">Open the PD Calculator for fill safety, mode math, last-fill reconciliation, and bag plan — with the safety thresholds covered here baked into the result interpretation.</div>
+  </div>
+  <a class="cta-btn" href="peritonealdialysis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div></div></div>
+  <ol class="ref-list">
+    <li>Li PK, et al. <strong>ISPD Peritonitis Guidelines: 2022 Update.</strong> Perit Dial Int.</li>
+    <li>Brown EA, et al. <strong>ISPD CV / Metabolic Guidelines for Adult PD.</strong> Perit Dial Int 2024.</li>
+    <li>Warady BA, Schaefer F, et al. <strong>ISPD Pediatric PD Adequacy Guidelines.</strong> Perit Dial Int.</li>
+    <li>Crabtree JH, et al. <strong>ISPD Catheter-related Infections Recommendations.</strong></li>
+    <li>2020 ISPD/EuroPD <strong>Prescription of PD: Goal-Directed Therapy.</strong></li>
+    <li>Mehrotra R, et al. <strong>The current state of peritoneal dialysis.</strong> JASN.</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · PD Safety Considerations</span>
+  <span>Educational reference · Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+</div>
+</div></body></html>

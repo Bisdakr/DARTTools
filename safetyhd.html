@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hemodialysis Safety Considerations — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(255,143,182,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(255,143,182,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(255,143,182,.22),rgba(126,240,210,.10));border-color:rgba(255,143,182,.4);color:#ffd1e2}
+.chip-calc:hover{border-color:rgba(255,143,182,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#ffe1ec 0%,#ff8fb6 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(255,143,182,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(255,143,182,.4);color:var(--text);background:rgba(255,143,182,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(255,143,182,.24);background:linear-gradient(135deg,rgba(255,143,182,.08),rgba(126,240,210,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,143,182,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--pink);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:28px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#ff8fb6,#7ef0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(255,143,182,.6),rgba(126,240,210,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#ffd1e2;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.callout-watch{background:rgba(255,143,182,.07);border-color:var(--pink)}.callout-watch .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(255,143,182,.10);color:#ffd1e2;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,143,182,.15),rgba(126,240,210,.10));border:1px solid rgba(255,143,182,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#ffd1e2}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--primary));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(255,143,182,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,143,182,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(255,143,182,.15);color:#ffb2cc;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🛡️</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Safety Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="hemodialysis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Safety Reference · Hemodialysis</div>
+      <div class="head-title"><span class="accent">HD Safety Considerations</span></div>
+      <div class="head-sub">Intradialytic hypotension, disequilibrium syndrome, UFR ceilings, vascular access, dialyzer reactions, and the safety of the most common chronic dialysis modality. Compiled from KDOQI, KDIGO, AAMI standards, and current nephrology safety literature.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#overview">01 · Risk Overview</a>
+  <a class="sec-pill" href="#hypotension">02 · Intradialytic Hypotension</a>
+  <a class="sec-pill" href="#ufr">03 · UFR Safety</a>
+  <a class="sec-pill" href="#disequilibrium">04 · Disequilibrium</a>
+  <a class="sec-pill" href="#access">05 · Access Complications</a>
+  <a class="sec-pill" href="#dialyzer">06 · Membrane Reactions</a>
+  <a class="sec-pill" href="#electrolyte">07 · Electrolyte / K Bath</a>
+  <a class="sec-pill" href="#peds">08 · Pediatric</a>
+  <a class="sec-pill" href="#emergency">09 · Emergency Response</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The safety story in one paragraph</div>
+  <div class="hero-tldr-text">
+    Chronic hemodialysis carries the highest cumulative safety burden of any apheresis-related modality because it's performed three times weekly for years. The dominant intra-procedure issue is <strong>intradialytic hypotension</strong> (IDH, ~10–30% of sessions), driven by aggressive ultrafiltration. KDOQI's <strong>UFR &lt; 13 mL/kg/hr</strong> ceiling is the single most important safety threshold — above this, mortality and end-organ stunning (myocardial, cerebral, mesenteric) climb sharply. Acute disequilibrium syndrome from rapid solute shifts is now rare with appropriate first-session pacing. Long-term, <strong>vascular access</strong> (CLABSI, fistula thrombosis, AV graft infection) is the biggest cumulative complication, followed by the cardiovascular consequences of repeated hemodynamic stress.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">13 mL/kg/hr</div><div class="stat-label">KDOQI UFR safety ceiling</div></div>
+    <div class="stat"><div class="stat-num">10–30%</div><div class="stat-label">IDH rate per session</div></div>
+    <div class="stat"><div class="stat-num">~1/1000</div><div class="stat-label">Access-related CLABSI / line-day target</div></div>
+    <div class="stat"><div class="stat-num">≥ 1.4</div><div class="stat-label">Target spKt/V per session</div></div>
+  </div>
+</div>
+
+<section class="sec" id="overview">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">The Major Risk Profile</div><div class="sec-subtitle">Intra-session, inter-dialytic, and long-term</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Adverse event</th><th>Approximate rate</th><th>Severity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Intradialytic hypotension (IDH)</strong></td><td>10–30% of sessions</td><td>Mild–severe (myocardial / cerebral stunning)</td></tr>
+        <tr><td><strong>Muscle cramps</strong></td><td>20–30%</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Nausea / vomiting</strong></td><td>5–15%</td><td>Mild–moderate</td></tr>
+        <tr><td><strong>Headache</strong></td><td>5–10%</td><td>Mild</td></tr>
+        <tr><td><strong>Arrhythmia</strong> (related to K, Ca shifts)</td><td>Frequent ectopy; sustained rare</td><td>Variable</td></tr>
+        <tr><td><strong>Disequilibrium syndrome</strong></td><td>Rare with modern pacing</td><td>Severe (cerebral edema)</td></tr>
+        <tr><td><strong>Vascular access infection</strong></td><td>Variable; CLABSI target &lt; 1/1000 line-days</td><td>Severe</td></tr>
+        <tr><td><strong>Air embolism</strong></td><td>Vanishingly rare with modern detectors</td><td>Catastrophic</td></tr>
+        <tr><td><strong>Anaphylactoid (first-use, ETO sterilant)</strong></td><td>&lt; 1% modern dialyzers</td><td>Severe</td></tr>
+        <tr><td><strong>Bicarbonate dialysate contamination</strong></td><td>Rare</td><td>Severe</td></tr>
+        <tr><td><strong>Hyperkalemia / hypokalemia</strong></td><td>K-bath dependent</td><td>Severe arrhythmia risk</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="hypotension">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Intradialytic Hypotension</div><div class="sec-subtitle">The most common adverse event in chronic HD</div></div></div>
+  <div class="prose">
+    <p>IDH is defined as SBP drop &gt; 20 mmHg or MAP drop &gt; 10 mmHg from pre-dialysis baseline, with symptoms. Multiple etiologies: excessive UFR, autonomic dysfunction (especially diabetic patients), cardiac dysfunction, sepsis, anti-hypertensives, food intake.</p>
+    <ul class="check-list">
+      <li><strong>Pre-dialysis assessment:</strong> weight, BP, dry-weight evaluation, target UF goal</li>
+      <li><strong>Slow start:</strong> first 30 min at lower BFR (250 mL/min) if hypotension-prone</li>
+      <li><strong>BP monitoring:</strong> every 30 min standard, every 15 min if hypotension-prone</li>
+      <li><strong>Cool dialysate (35.5°C):</strong> reduces IDH frequency significantly</li>
+      <li><strong>Sodium modeling:</strong> higher Na at start, lower at end — but increases interdialytic thirst</li>
+      <li><strong>Avoid food intake during dialysis</strong> in hypotension-prone patients (post-prandial vasodilation)</li>
+      <li><strong>Hold anti-hypertensives</strong> morning of dialysis</li>
+      <li><strong>If IDH occurs:</strong> stop or slow UF, Trendelenburg, IV bolus 100–250 mL NS, reassess dry weight</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Recurrent IDH = end-organ stunning</span>Repeated IDH causes <strong>myocardial stunning, white-matter ischemic injury, mesenteric ischemia</strong>, and accelerates cardiovascular mortality. Don't normalize recurrent IDH — investigate dry weight, anti-hypertensive timing, cardiac function, autonomic neuropathy.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="ufr">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">UFR Safety — The 13 mL/kg/hr Rule</div><div class="sec-subtitle">KDOQI's single most important threshold</div></div></div>
+  <div class="prose">
+    <p>Observational data from Flythe et al. and others show that UFR &gt; 13 mL/kg/hr is independently associated with increased mortality, myocardial stunning, and cardiovascular events. UFR &gt; 10 is a yellow-zone caution band.</p>
+    <table class="compare-table">
+      <thead><tr><th>UFR</th><th>Risk band</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>&lt; 10 mL/kg/hr</td><td>Safe</td><td>Standard monitoring</td></tr>
+        <tr><td>10–13 mL/kg/hr</td><td>KDIGO caution</td><td>Closer BP monitoring; reassess dry weight</td></tr>
+        <tr><td>&gt; 13 mL/kg/hr</td><td>KDOQI ceiling exceeded</td><td>Extend session time OR reduce UF goal OR add session — do not exceed</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">The arithmetic</span>For a 70 kg patient: UFR = total UF (mL) / time (hr) / weight (kg). 2,500 mL UF over 4 hr = 625 mL/hr ÷ 70 kg = 8.9 mL/kg/hr (safe). 4,000 mL over 4 hr = 14.3 mL/kg/hr (exceeds ceiling — extend to 5 hr → 11.4 mL/kg/hr).</div></div>
+    <p>Patient education about interdialytic weight gain (target &lt; 2.5 kg between sessions) is part of UFR safety. Counsel on sodium and fluid intake.</p>
+  </div>
+</section>
+
+<section class="sec" id="disequilibrium">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Disequilibrium Syndrome</div><div class="sec-subtitle">Rare now — but devastating when it occurs</div></div></div>
+  <div class="prose">
+    <p>Dialysis disequilibrium syndrome (DDS) results from rapid solute clearance during the first dialysis sessions of a severely uremic patient. Urea drops faster in plasma than in brain, creating an osmotic gradient that draws water into brain tissue → cerebral edema → headache, nausea, seizure, coma.</p>
+    <ul class="check-list">
+      <li><strong>Highest risk:</strong> first 1–3 sessions of severely uremic patient (BUN &gt; 150)</li>
+      <li><strong>Modern prevention strategies (largely effective):</strong>
+        <ul style="margin:6px 0 0 22px;list-style:disc">
+          <li>Short first session (1–2 hr)</li>
+          <li>Low BFR (150–200 mL/min)</li>
+          <li>Small dialyzer (low surface area)</li>
+          <li>Gradual UF</li>
+          <li>Cool dialysate</li>
+          <li>Hypertonic mannitol during session if very high BUN</li>
+        </ul>
+      </li>
+      <li><strong>Symptoms during/after session:</strong> headache, nausea, restlessness, AMS, seizure</li>
+      <li><strong>Response:</strong> stop dialysis, mannitol, supportive care, neurology consult if severe</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="access">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Vascular Access Complications</div><div class="sec-subtitle">The dominant long-term morbidity</div></div></div>
+  <div class="prose">
+    <p>HD access is the single largest source of HD morbidity and a major mortality driver. Sequential priority: <strong>AV fistula &gt; AV graft &gt; tunneled catheter</strong>.</p>
+    <table class="compare-table">
+      <thead><tr><th>Access</th><th>Major complications</th><th>Surveillance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AV fistula</strong></td><td>Thrombosis, stenosis, aneurysm, steal syndrome</td><td>Thrill / bruit assessment each session; flow studies; vein mapping for maturation</td></tr>
+        <tr><td><strong>AV graft</strong></td><td>Higher thrombosis rate, infection, pseudoaneurysm</td><td>Same as fistula; lower CLABSI than catheter</td></tr>
+        <tr><td><strong>Tunneled catheter</strong></td><td>CLABSI (10× higher than fistula), thrombosis, mechanical failure</td><td>Daily exit site assessment; strict sterile technique; transition to fistula ASAP</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">CLABSI prevention</span>Catheter-related bloodstream infection is the leading cause of HD-associated hospitalization and mortality. Strict sterile technique at every access connection, chlorhexidine dressings, antibiotic lock per protocol, and aggressive transition to fistula are non-negotiable.</div></div>
+    <p>Hand hygiene, sterile barriers, chlorhexidine prep with adequate dry time, and dedicated nursing staff are evidence-based bundle elements.</p>
+  </div>
+</section>
+
+<section class="sec" id="dialyzer">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Membrane / Dialyzer Reactions</div><div class="sec-subtitle">First-use, complement activation, anaphylaxis</div></div></div>
+  <div class="prose">
+    <p>Modern dialyzers are highly biocompatible. First-use anaphylactoid reactions (Type A, EtO-sterilant-related) and complement-mediated reactions (Type B) are now rare with modern e-beam or gamma-sterilized synthetic polysulfone / polyethersulfone membranes.</p>
+    <ul class="check-list">
+      <li><strong>Type A (anaphylactoid):</strong> immediate (first 30 min) — flushing, dyspnea, hypotension, GI symptoms. STOP, supportive care, switch dialyzer brand</li>
+      <li><strong>Type B (complement-mediated):</strong> 30–60 min in — chest/back pain, dyspnea, mild hypotension. Usually resolves; can switch dialyzer if recurrent</li>
+      <li><strong>Pruritus / urticaria:</strong> usually idiopathic uremic pruritus, not dialyzer reaction</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="electrolyte">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Electrolyte Management — The K Bath</div><div class="sec-subtitle">Arrhythmia risk from steep gradients</div></div></div>
+  <div class="prose">
+    <p>K bath selection is the single most common cause of inpatient HD-related arrhythmia. Aggressive K removal (K=1 bath against high serum K) creates steep early gradients and can precipitate ectopy or unstable rhythms.</p>
+    <table class="compare-table">
+      <thead><tr><th>K bath</th><th>Use case</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td>K = 1</td><td>Severe hyperkalemia (&gt; 6.5) refractory to medical therapy</td><td>Arrhythmia from rapid K shift</td></tr>
+        <tr><td>K = 2</td><td>Standard chronic; serum K 5.0–6.0</td><td>Moderate</td></tr>
+        <tr><td>K = 3</td><td>Lower starting K; stable patient</td><td>Lower</td></tr>
+        <tr><td>K = 4</td><td>Hypokalemia-prone patient</td><td>Risk of inadequate clearance</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-watch"><span class="callout-icon">👁</span><div class="callout-body"><span class="callout-label">Bicarbonate, calcium, sodium</span>Routine baths: HCO3 32–35, Ca 2.25–3.0 mEq/L, Na 137–140. Higher Na = better hemodynamics but more interdialytic thirst. Lower temp (35.5°C) reduces IDH.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Pediatric Hemodialysis</div><div class="sec-subtitle">ECV margin, sedation, slow first sessions</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>ECV ceiling 10% TBV</strong> — blood prime for circuits exceeding this</li>
+      <li><strong>Smaller dialyzers</strong> (Optiflux F160NR / Revaclear 300, neonatal husky tubing)</li>
+      <li><strong>Lower BFR</strong> (3–5 mL/kg/min)</li>
+      <li><strong>Shorter sessions</strong> (often 3 hr) and tighter UFR ceilings</li>
+      <li><strong>Slow first sessions</strong> in pediatric uremic patients — DDS risk is real</li>
+      <li><strong>Sedation</strong> often needed for younger children; coordinate with anesthesia / PICU</li>
+      <li><strong>Catheter management</strong> requires meticulous CLABSI prevention</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="emergency">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">Emergency Response</div><div class="sec-subtitle">When something goes wrong</div></div></div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Severe Intradialytic Hypotension</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP UF</strong> (set to zero); continue dialysis at low flow.</li>
+      <li><strong>Trendelenburg position;</strong> 100% O₂.</li>
+      <li><strong>IV crystalloid bolus</strong> 100–250 mL NS through circuit.</li>
+      <li><strong>If unresponsive:</strong> reassess dry weight, investigate cardiac event, sepsis, bleeding.</li>
+      <li><strong>Sustained hypotension:</strong> stop dialysis, admit if outpatient, cardiac workup.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Anaphylactoid Reaction (First-Use)</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP dialysis immediately;</strong> do not return circuit blood.</li>
+      <li><strong>IM epinephrine</strong> 0.3–0.5 mg lateral thigh.</li>
+      <li><strong>Standard anaphylaxis protocol:</strong> antihistamines, corticosteroids, IV fluids, oxygen.</li>
+      <li><strong>Document dialyzer brand/lot;</strong> switch to different membrane for next session.</li>
+    </ol>
+  </div>
+
+  <div class="emergency-box">
+    <div class="emergency-box-title">⚠ Air Embolism (Rare but Catastrophic)</div>
+    <ol class="emergency-steps">
+      <li><strong>STOP all flow immediately;</strong> clamp venous line.</li>
+      <li><strong>Position patient left lateral decubitus, Trendelenburg</strong> (traps air in right atrium).</li>
+      <li><strong>100% O₂ via non-rebreather.</strong></li>
+      <li><strong>Call code response;</strong> consider hyperbaric oxygen if cerebral symptoms.</li>
+      <li><strong>Root-cause analysis;</strong> equipment check.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan a hemodialysis session?</div>
+    <div class="cta-sub">Open the HD Calculator for circuit volume, ECV % of TBV, pediatric prime threshold, UFR safety check, and dialyzer reference — with the safety thresholds covered here baked into the result interpretation.</div>
+  </div>
+  <a class="cta-btn" href="hemodialysis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div></div></div>
+  <ol class="ref-list">
+    <li>KDOQI 2015 Clinical Practice Guideline for Hemodialysis Adequacy.</li>
+    <li>Flythe JE, et al. <strong>Rapid fluid removal during dialysis and CV mortality.</strong> Kidney Int.</li>
+    <li>Eknoyan G, et al. <strong>HEMO trial.</strong> NEJM 2002.</li>
+    <li>Blankestijn PJ, et al. <strong>CONVINCE trial — HDF.</strong> NEJM 2023.</li>
+    <li>Burton JO, et al. <strong>Hemodialysis-induced cardiac injury.</strong> Clin J Am Soc Nephrol.</li>
+    <li>AAMI / ISO Standards for hemodialysis water quality.</li>
+    <li>NHSN / CDC. <strong>CLABSI surveillance and prevention.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Hemodialysis Safety Considerations</span>
+  <span>Educational reference · Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+</div>
+</div></body></html>

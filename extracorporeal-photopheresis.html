@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DART Tools — Extracorporeal Photopheresis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b11; --card:#111a27; --card2:#0f1722;
+  --border:rgba(149,173,205,.14); --border-strong:rgba(122,162,255,.28);
+  --text:#e9f0fa; --muted:#96a7bf;
+  --primary:#61a8ff; --primary2:#3b82f6; --accent:#7ef0d2;
+  --gold:#cfa95f; --warn:#ffcd70; --danger:#ff6f6f;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --nav-bg:rgba(7,11,17,.82); --grid:rgba(255,255,255,.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top, rgba(97,168,255,.10), transparent 30%),radial-gradient(circle at 80% 20%, rgba(126,240,210,.08), transparent 24%),linear-gradient(180deg, var(--bg), #05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom, rgba(0,0,0,.35), transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1280px, calc(100% - 28px));margin:0 auto}
+
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-why{background:linear-gradient(135deg,rgba(207,169,95,.18),rgba(126,240,210,.10));border-color:rgba(207,169,95,.35);color:#f0dba8}
+.chip-why:hover{border-color:rgba(207,169,95,.6);color:#fff;transform:translateY(-1px)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(126,240,210,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.5}}
+
+.head-bar{padding:22px 0 14px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:18px}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:800;margin-bottom:6px}
+.head-title{font-size:clamp(22px,3.4vw,32px);line-height:1.05;letter-spacing:-.03em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-meta{font-size:13px;color:var(--muted);max-width:520px;line-height:1.65;text-align:right}
+
+.grid-wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;padding-bottom:44px}
+.panel{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--border);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.panel-title{font-size:16px;font-weight:900;margin-bottom:4px}
+.panel-sub{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1 / -1}
+.label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.11em;color:var(--muted)}
+
+input,select,button{font:inherit}
+input,select{width:100%;min-height:42px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);padding:0 12px;outline:none;transition:border-color .2s ease, box-shadow .2s ease}
+input:focus,select:focus{border-color:rgba(97,168,255,.45);box-shadow:0 0 0 3px rgba(97,168,255,.12)}
+input::placeholder{color:#70829a}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%),linear-gradient(135deg, var(--muted) 50%, transparent 50%);background-position:calc(100% - 16px) 50%, calc(100% - 11px) 50%;background-size:5px 5px, 5px 5px;background-repeat:no-repeat;padding-right:30px}
+
+.inline-toggle{display:flex;gap:6px;flex-wrap:wrap}
+.toggle-btn{flex:1;min-width:60px;min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s ease}
+.toggle-btn:hover{border-color:rgba(97,168,255,.34)}
+.toggle-btn.active{background:linear-gradient(135deg,rgba(97,168,255,.22),rgba(126,240,210,.14));border-color:rgba(97,168,255,.45);color:#eaf3ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.sub-grid,.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.note{border:1px solid rgba(126,240,210,.18);background:rgba(126,240,210,.06);color:#d5fff2;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.65}
+.note.warning{border-color:rgba(255,205,112,.20);background:rgba(255,205,112,.08);color:#ffe8b6}
+.note.info{border-color:rgba(97,168,255,.2);background:rgba(97,168,255,.05);color:#cfe2ff}
+.note.danger{border-color:rgba(255,111,111,.30);background:rgba(255,111,111,.08);color:#ffd2d2}
+
+.calc-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:12px;border:1px solid transparent;font-weight:800;font-size:14px;cursor:pointer;transition:all .22s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 10px 26px rgba(59,130,246,.26)}
+.btn-primary:hover{box-shadow:0 14px 32px rgba(59,130,246,.38)}
+.btn-secondary{color:var(--text);background:rgba(255,255,255,.03);border-color:var(--border)}
+.btn-secondary:hover{border-color:rgba(97,168,255,.34)}
+
+.result-stack{display:grid;gap:12px}
+.result-card{border:1px solid var(--border);border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));padding:14px 16px}
+.result-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800;margin-bottom:6px}
+.result-value{font-size:clamp(20px,3vw,30px);letter-spacing:-.04em;line-height:1;font-weight:900;color:#f4f8ff;margin-bottom:6px}
+.result-meta{color:var(--muted);font-size:12px;line-height:1.6}
+.math-box{border:1px solid rgba(97,168,255,.18);background:rgba(97,168,255,.05);color:#d8e9ff;border-radius:14px;padding:12px 14px;font-size:12.5px;line-height:1.7}
+.math-box strong{color:#fff}
+.calc-line{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.calc-line:last-child{border-bottom:none}
+.hidden{display:none!important}
+
+.banner{border-radius:14px;padding:12px 14px;font-size:13px;font-weight:700;line-height:1.5;display:flex;gap:10px;align-items:flex-start}
+.banner.warning{border:1px solid rgba(255,205,112,.32);background:rgba(255,205,112,.08);color:#ffe8b6}
+.banner.danger{border:1px solid rgba(255,111,111,.32);background:rgba(255,111,111,.10);color:#ffd2d2}
+.banner.proceed{border:1px solid rgba(126,240,210,.32);background:rgba(126,240,210,.08);color:#cdfaea}
+.banner-icon{font-size:18px;line-height:1}
+
+details{margin-top:2px}
+details summary{cursor:pointer;list-style:none;padding:10px 12px;border-radius:11px;border:1px dashed var(--border);background:rgba(255,255,255,.02);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:space-between;transition:all .2s ease}
+details summary:hover{color:var(--text);border-color:rgba(97,168,255,.3)}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font-size:16px;color:var(--accent);font-weight:900}
+details[open] summary::after{content:"−"}
+details[open] summary{margin-bottom:10px;border-style:solid}
+
+.foot{padding:18px 0 32px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:8px}
+
+@media (max-width:980px){.grid-wrap{grid-template-columns:1fr}.head-meta{text-align:left}}
+@media (max-width:540px){.form-grid,.sub-grid,.mini-grid{grid-template-columns:1fr}}
+/* ── comet + twinkles on title (plays once on load) ── */
+.head-bar{position:relative;overflow:hidden}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 40 C 180 -8, 380 -12, 600 18 C 820 50, 1020 42, 1340 8');offset-rotate:auto;opacity:0;animation:cometRun 3.4s cubic-bezier(0.42,0.04,0.58,0.98) 0.3s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95) 0%,rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent 100%);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+
+/* ── Treatment Menu (Why / SOP / Safety) ───────────── */
+.treatment-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 22px}
+.menu-card{display:flex;flex-direction:column;padding:18px 18px 16px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));text-decoration:none;color:inherit;transition:all .22s ease;position:relative;overflow:hidden;min-height:128px}
+.menu-card::before{content:"";position:absolute;top:-40%;right:-20%;width:160px;height:160px;border-radius:50%;opacity:.10;pointer-events:none;transition:opacity .22s ease}
+.menu-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.30)}
+.menu-card:hover::before{opacity:.20}
+.menu-card.menu-why{border-color:rgba(97,168,255,.32);background:linear-gradient(135deg,rgba(97,168,255,.10),rgba(126,240,210,.04))}
+.menu-card.menu-why::before{background:radial-gradient(circle,rgba(97,168,255,.6),transparent 70%)}
+.menu-card.menu-why:hover{border-color:rgba(97,168,255,.6)}
+.menu-card.menu-sop{border-color:rgba(207,169,95,.30);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(255,255,255,.015));opacity:.78}
+.menu-card.menu-sop::before{background:radial-gradient(circle,rgba(207,169,95,.6),transparent 70%)}
+.menu-card.menu-sop:hover{border-color:rgba(207,169,95,.55);opacity:1}
+.menu-card.menu-safety{border-color:rgba(255,143,182,.30);background:linear-gradient(135deg,rgba(255,143,182,.10),rgba(126,240,210,.04))}
+.menu-card.menu-safety::before{background:radial-gradient(circle,rgba(255,143,182,.6),transparent 70%)}
+.menu-card.menu-safety:hover{border-color:rgba(255,143,182,.6)}
+.menu-icon{font-size:22px;line-height:1;margin-bottom:8px;position:relative;z-index:1}
+.menu-title{font-size:14.5px;font-weight:900;color:#fff;letter-spacing:-.01em;margin-bottom:5px;position:relative;z-index:1}
+.menu-desc{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;position:relative;z-index:1}
+.menu-foot{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;position:relative;z-index:1}
+.menu-foot .badge{padding:2px 8px;border-radius:999px;font-size:9.5px}
+.menu-foot.ready{color:#9be8d0}
+.menu-foot.ready .badge{background:rgba(126,240,210,.14);color:#cdfaea;border:1px solid rgba(126,240,210,.35)}
+.menu-foot.progress{color:#e6c682}
+.menu-foot.progress .badge{background:rgba(207,169,95,.14);color:#f0dba8;border:1px solid rgba(207,169,95,.35)}
+.menu-arrow{font-size:13px;font-weight:900}
+@media (max-width:780px){.treatment-menu{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">D</div>
+      <div>
+        <div class="brand-title">DART Tools</div>
+        <div class="brand-sub">Clinical calculator suite</div>
+      </div>
+    </a>
+    <div class="nav-right">
+      <span class="chip"><span class="dot"></span>Extracorporeal Photopheresis</span>
+      <a class="chip chip-home" href="index.html">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle"       style="--x:11%;--y:25%;--delay:0.70s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:0.95s"></div>
+      <div class="twinkle"       style="--x:28%;--y:8%; --delay:1.20s"></div>
+      <div class="twinkle tiny"  style="--x:34%;--y:12%;--delay:1.40s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.60s"></div>
+      <div class="twinkle"       style="--x:51%;--y:28%;--delay:1.85s"></div>
+      <div class="twinkle tiny"  style="--x:58%;--y:38%;--delay:2.05s"></div>
+      <div class="twinkle small" style="--x:65%;--y:45%;--delay:2.25s"></div>
+      <div class="twinkle"       style="--x:74%;--y:48%;--delay:2.50s"></div>
+      <div class="twinkle small" style="--x:82%;--y:38%;--delay:2.70s"></div>
+      <div class="twinkle tiny"  style="--x:89%;--y:25%;--delay:2.90s"></div>
+      <div class="twinkle small" style="--x:95%;--y:15%;--delay:3.10s"></div>
+    </div>
+    <div>
+      <div class="head-kicker">Extracorporeal Photopheresis</div>
+      <div class="head-title"><span class="accent">ECP Calculator</span></div>
+    </div>
+    <div class="head-meta">Estimates ECV from a published Hct × access-mode × RBTV reference table (RBTV 100 mL default), TBV (Nadler / build factor / fallback), blood-prime threshold, methoxsalen formula reference, instrument-setup tips.</div>
+  </div>
+
+  <nav class="treatment-menu" aria-label="ECP references">
+    <a class="menu-card menu-why" href="whyextracorporealphotopheresis.html">
+      <div class="menu-icon">📖</div>
+      <div class="menu-title">Why Photopheresis?</div>
+      <div class="menu-desc">Mechanism, history, GVHD focus, CTCL, transplant rejection, advances.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-sop" href="sopecp.html">
+      <div class="menu-icon">📋</div>
+      <div class="menu-title">ECP Standards of Practice</div>
+      <div class="menu-desc">Institutional protocols, technique standards, and procedural workflow.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-safety" href="safetyecp.html">
+      <div class="menu-icon">🛡️</div>
+      <div class="menu-title">ECP Safety Considerations</div>
+      <div class="menu-desc">UV precautions, DVT/PE risk in GVHD, blood prime, monitoring.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+  </nav>
+
+  <div class="grid-wrap">
+
+    <section class="panel">
+      <div class="form-grid">
+
+        <div class="field">
+          <label class="label" for="hct">Hematocrit (%) — ≤ 48 h old</label>
+          <input id="hct" type="number" step="0.1" min="0" max="60" placeholder="e.g. 35" autofocus />
+        </div>
+
+        <div class="field">
+          <label class="label">Weight Unit</label>
+          <div class="inline-toggle">
+            <button class="toggle-btn active" type="button" id="weightMetricBtn">kg</button>
+            <button class="toggle-btn" type="button" id="weightEnglishBtn">lb</button>
+          </div>
+        </div>
+
+        <div class="field full" id="weightKgWrap">
+          <label class="label" for="weightKg">Weight (kg)</label>
+          <input id="weightKg" type="number" step="0.1" min="0" placeholder="e.g. 70" />
+        </div>
+        <div class="field full hidden" id="weightLbWrap">
+          <label class="label" for="weightLb">Weight (lb)</label>
+          <input id="weightLb" type="number" step="0.1" min="0" placeholder="e.g. 154" />
+        </div>
+
+        <div class="field full">
+          <label class="label">Access Mode</label>
+          <div class="inline-toggle" id="needleToggle">
+            <button class="toggle-btn active" type="button" data-needle="double">Double Needle</button>
+            <button class="toggle-btn" type="button" data-needle="single">Single Needle (RBTV 100)</button>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label class="label">Total Blood to Process (mL)</label>
+          <div class="inline-toggle" id="processToggle">
+            <button class="toggle-btn" type="button" data-proc="1000">1000</button>
+            <button class="toggle-btn" type="button" data-proc="1250">1250</button>
+            <button class="toggle-btn active" type="button" data-proc="1500">1500 (max)</button>
+            <button class="toggle-btn" type="button" data-proc="custom">Custom</button>
+          </div>
+        </div>
+
+        <div class="field full hidden" id="customProcWrap">
+          <label class="label" for="customProc">Custom blood-processed volume (mL) — instrument max typically 1500</label>
+          <input id="customProc" type="number" step="50" min="0" placeholder="e.g. 1200" />
+        </div>
+
+        <div class="field full">
+          <details>
+            <summary>Advanced — Sex + Height for Nadler TBV · RBTV override · Indication</summary>
+            <div class="form-grid" style="margin-top:8px">
+              <div class="field">
+                <label class="label" for="sex">Sex (for Nadler / Build Factor)</label>
+                <select id="sex">
+                  <option value="">— skip (uses 70 mL/kg estimate)</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label" for="bodyBuild">Body Build (alternate TBV method)</label>
+                <select id="bodyBuild">
+                  <option value="">— skip (use Nadler if height given)</option>
+                  <option value="adult_muscular">Adult Muscular (M 80 / F 75 mL/kg)</option>
+                  <option value="adult_normal">Adult Normal (M 75 / F 70 mL/kg)</option>
+                  <option value="adult_thin">Adult Thin (M 70 / F 65 mL/kg)</option>
+                  <option value="adult_obese">Adult Obese (M 65 / F 60 mL/kg)</option>
+                  <option value="adolescent">Adolescent (≈ 72 mL/kg)</option>
+                  <option value="neonate">Neonate (≈ 90 mL/kg)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label">Height Unit</label>
+                <div class="inline-toggle">
+                  <button class="toggle-btn active" type="button" id="heightMetricBtn">cm</button>
+                  <button class="toggle-btn" type="button" id="heightEnglishBtn">ft + in</button>
+                </div>
+              </div>
+              <div class="field" id="heightCmWrap">
+                <label class="label" for="heightCm">Height (cm)</label>
+                <input id="heightCm" type="number" step="0.1" min="0" placeholder="e.g. 170" />
+              </div>
+              <div class="field hidden" id="heightEnglishWrap">
+                <label class="label">Height (ft + in)</label>
+                <div class="sub-grid">
+                  <input id="heightFt" type="number" step="1" min="0" placeholder="ft" />
+                  <input id="heightIn" type="number" step="0.1" min="0" placeholder="in" />
+                </div>
+              </div>
+              <div class="field full">
+                <label class="label" for="rbtv">RBTV (Single Needle only) — institutional default 100 mL</label>
+                <select id="rbtv">
+                  <option value="100" selected>100 mL (institutional standard — DO NOT exceed)</option>
+                  <option value="150">150 mL (reference only)</option>
+                  <option value="200">200 mL (reference only)</option>
+                  <option value="250">250 mL (reference only)</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="label" for="diagnosis">Indication / treatment schedule</label>
+                <select id="diagnosis">
+                  <option value="">Select indication (optional)</option>
+                  <option value="ctcl">CTCL — FDA-approved (palliative skin)</option>
+                  <option value="agvhd-skin">Acute GVHD — skin (steroid-refractory)</option>
+                  <option value="agvhd-gi">Acute GVHD — GI / liver (steroid-refractory)</option>
+                  <option value="cgvhd-skin">Chronic GVHD — skin / sclerotic</option>
+                  <option value="cgvhd-multi">Chronic GVHD — multi-organ</option>
+                  <option value="lung-tx-blas">Lung transplant — CLAD / BOS</option>
+                  <option value="cardiac-tx-rej">Cardiac transplant — recurrent rejection</option>
+                  <option value="crohn-other">Other / off-label</option>
+                </select>
+                <div id="diagnosisInfoCard" class="math-box hidden" style="margin-top:10px"></div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="field full">
+          <div class="note info"><strong>Estimates only — not an order.</strong> Independent educational tool, no manufacturer affiliation. ECV looked up from a publicly available Hct × access-mode × RBTV reference table commonly cited in apheresis literature and operator manuals. Verify Hct is ≤ 48 h old per device labeling. Patient weight &lt; 30 kg → 10% TBV ceiling (not 15%).</div>
+        </div>
+
+      </div>
+
+      <div class="calc-row">
+        <button class="btn btn-primary" id="calculateBtn" type="button">Calculate</button>
+        <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-title">Results</div>
+      <div class="panel-sub">ECV/TBV ratio, Uvadex (methoxsalen 200 mcg/mL) volume = ECV × 0.017, heparin guidance, schedule.</div>
+      <div class="result-stack" id="results">
+        <div class="result-card">
+          <div class="result-kicker">Awaiting inputs</div>
+          <div class="result-value">—</div>
+          <div class="result-meta">Fill the form and press Calculate.</div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Tip Sheet Section -->
+  <section class="panel" style="margin-bottom:18px">
+    <div class="panel-title" style="margin-bottom:6px">Extracorporeal Photopheresis — Reference Tips</div>
+    <div class="panel-sub">Reference content compiled from publicly available operator documentation and institutional standards. <strong>Independent educational material — not affiliated with, sponsored by, or endorsed by any device manufacturer.</strong> Any product or company names below appear only for clinical context and remain the trademarks of their respective owners. Always follow the laminated machine guide and current operator's manual.</div>
+
+    <div class="mini-grid">
+      <details open>
+        <summary>Standard Medications</summary>
+        <div class="math-box">
+          <div class="calc-line"><strong>NS 0.9%</strong> 500 mL × 1 — <strong>WHITE spike</strong></div>
+          <div class="calc-line"><strong>Heparin</strong> 10,000 U in 500 mL NS = 20 U/mL — <strong>ORANGE spike</strong></div>
+          <div class="calc-line"><strong>Methoxsalen (Uvadex)</strong> 200 mcg / 10 mL · single-use vial · discard remainder</div>
+          <div class="calc-line">Methoxsalen dose = <strong>ECV × 0.017 mL</strong></div>
+        </div>
+      </details>
+      <details open>
+        <summary>Pre-Procedure Checklist</summary>
+        <div class="math-box">
+          <div class="calc-line"><strong>CBC with Hct ≤ 48 hours old</strong> (Therakos label requirement)</div>
+          <div class="calc-line">Patient education: <strong>UV precautions × 24 h post</strong> — sunglasses, long sleeves, indoors</div>
+          <div class="calc-line">ECV %TBV: &lt; 10% = standard · 10–15% = caution · &gt; 15% adult / &gt; 10% peds &lt; 30 kg = blood prime</div>
+          <div class="calc-line"><strong>Lamp life &gt; 10 hours remaining</strong> (18-lamp assembly, 150 hr total life)</div>
+          <div class="calc-line">Peripheral IV: hot packs / tourniquet to optimize flow; central line if peripheral inadequate</div>
+        </div>
+      </details>
+    </div>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Body Build Factor (Alternate TBV Method — Reference)</summary>
+      <div class="math-box" style="overflow:auto">
+        <div class="calc-line"><strong>Method:</strong> TBV (mL) = Patient weight (kg) × Body Build Factor (mL/kg). Use when height is unavailable or Nadler equation isn't preferred.</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;margin-top:8px">
+          <thead><tr style="background:rgba(97,168,255,.12);color:#cfe2ff">
+            <th style="padding:6px 10px;text-align:left">Body Build</th>
+            <th style="padding:6px 10px">Male (mL/kg)</th>
+            <th style="padding:6px 10px">Female (mL/kg)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="padding:5px 10px;font-weight:700;color:#fff">Adult Muscular</td><td style="padding:5px 10px;text-align:center">80</td><td style="padding:5px 10px;text-align:center">75</td></tr>
+            <tr><td style="padding:5px 10px;font-weight:700;color:#fff">Adult Normal</td><td style="padding:5px 10px;text-align:center">75</td><td style="padding:5px 10px;text-align:center">70</td></tr>
+            <tr><td style="padding:5px 10px;font-weight:700;color:#fff">Adult Thin</td><td style="padding:5px 10px;text-align:center">70</td><td style="padding:5px 10px;text-align:center">65</td></tr>
+            <tr><td style="padding:5px 10px;font-weight:700;color:#fff">Adult Obese</td><td style="padding:5px 10px;text-align:center">65</td><td style="padding:5px 10px;text-align:center">60</td></tr>
+            <tr><td style="padding:5px 10px;font-weight:700;color:#fff">Adolescent</td><td style="padding:5px 10px;text-align:center" colspan="2">75 – 70 mL/kg (range; calculator uses 72)</td></tr>
+            <tr><td style="padding:5px 10px;font-weight:700;color:#fff">Neonate</td><td style="padding:5px 10px;text-align:center" colspan="2">100 – 80 mL/kg (range; calculator uses 90)</td></tr>
+          </tbody>
+        </table>
+        <div class="calc-line" style="margin-top:8px;color:var(--muted)">Source: publicly available device-operator reference (2020-03). The integrated Nadler method (height + weight + sex) remains the most precise. Body Build Factor is a documented alternate when height is unknown.</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>ECV by Hematocrit — Published Reference Table</summary>
+      <div class="math-box" style="overflow:auto">
+        <table style="width:100%;font-size:11.5px;border-collapse:collapse">
+          <thead><tr style="background:rgba(97,168,255,.12);color:#cfe2ff">
+            <th style="padding:6px 8px;text-align:left">% Hct</th>
+            <th style="padding:6px 8px">Double Needle</th>
+            <th style="padding:6px 8px;background:rgba(126,240,210,.15);color:#cdfaea">Single RBTV 100</th>
+            <th style="padding:6px 8px">RBTV 150</th>
+            <th style="padding:6px 8px">RBTV 200</th>
+            <th style="padding:6px 8px">RBTV 250</th>
+          </tr></thead>
+          <tbody id="ecvTableBody"></tbody>
+        </table>
+        <div class="calc-line" style="margin-top:8px"><strong>Our standard:</strong> RBTV = 100 mL. The other columns are reference only.</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Machine Setup (follow laminated guide)</summary>
+      <div class="math-box">
+        <div class="calc-line">1. <strong>Establish Ready State</strong> — check operator interface for "13 zeros"</div>
+        <div class="calc-line">2. <strong>Insert photoactivation module</strong>, remove kit, hang bags, insert pump tubing organizer</div>
+        <div class="calc-line">3. <strong>Install drive tube / centrifuge bowl</strong> — turn clockwise to secure</div>
+        <div class="calc-line">4. <strong>Load pump tubing segments</strong> — install <em>from the bottom up</em></div>
+        <div class="calc-line">5. <strong>Smart Card</strong> → reads kit lot/expiration</div>
+        <div class="calc-line">6. <strong>Spike fluids</strong>: NS (WHITE) + Heparin (ORANGE)</div>
+        <div class="calc-line">7. <strong>Cassette install order: C-R-Y</strong> — Clear, Red, Yellow — then bowl</div>
+        <div class="calc-line">8. <strong>Air detectors, Hct cuvette, pressure domes</strong> — verify each click into place</div>
+        <div class="calc-line"><strong>9. Pressure pods LAST</strong> — spread tabs firmly, verify membrane intact (no green caps remaining)</div>
+        <div class="calc-line">10. Hang patient lines on the IV pole; close Collect Line (RED), clean injection port</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Machine Programming — verify "13 zeros"</summary>
+      <div class="math-box">
+        <div class="calc-line"><strong>Return Bag Threshold (RBTV) = 100 mL</strong> (institutional default — do not exceed)</div>
+        <div class="calc-line">Max speed collect = <strong>50 mL/min</strong></div>
+        <div class="calc-line">Max speed return = <strong>50 mL/min</strong></div>
+        <div class="calc-line">Collect Pressure Limit = <strong>200 mmHg</strong></div>
+        <div class="calc-line">Return Pressure Limit = <strong>200 mmHg</strong></div>
+        <div class="calc-line">Total blood processed = <strong>1500 mL max</strong></div>
+        <div class="calc-line"><strong>Bowl Optic Threshold default = 140 mL</strong> (raise/lower by 10 if interface alarms — see Alarm #45)</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Priming &amp; Testing (auto ≈ 7 minutes)</summary>
+      <div class="math-box">
+        <div class="calc-line">1. Press <strong>"Prime Access"</strong></div>
+        <div class="calc-line">2. Select <strong>Single</strong> or <strong>Double</strong> needle to match access setup</div>
+        <div class="calc-line">3. Connect <strong>Blue → Red</strong> when prompted</div>
+        <div class="calc-line">4. System auto-primes and runs Prime Test (~7 min). Resolve any prime test failures before proceeding.</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Starting Treatment &amp; Phase Sequence</summary>
+      <div class="math-box">
+        <div class="calc-line"><strong>Start slow:</strong> Collect 25 mL/min, Return 10 mL/min</div>
+        <div class="calc-line"><strong>COLLECT Phase 1:</strong> Purging air</div>
+        <div class="calc-line"><strong>COLLECT Phase 2:</strong> Drawing / Recirculating</div>
+        <div class="calc-line">When you hear <strong>BEEP</strong>, OR NET balance ≤ −100, OR blood processed &gt; 300 mL → <strong>increase</strong>: Collect 30–40, Return 35–45</div>
+        <div class="calc-line"><strong>BUFFY COAT phase:</strong> Open Graph → watch S-wave (Hct rises) → look for "<strong>END BUFFY</strong>" prompt</div>
+        <div class="calc-line">Full sequence: <strong>COLLECT → BUFFY → UVA → PAUSE → ELUTRIATE → EMPTY BOWL → RINSE</strong></div>
+        <div class="calc-line"><strong>Inject Uvadex</strong> into photoactivation bag per CELLEX prompt (before UVA cycle starts)</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Interrupting Treatment — PAUSE vs STOP</summary>
+      <div class="math-box">
+        <div class="calc-line"><strong>PAUSE</strong> (up to 10 min): flush access · give saline bolus · go to SETUP · go to BUFFY COAT — all preserve treatment</div>
+        <div class="calc-line"><strong>STOP</strong>: END TREATMENT, ABORT TREATMENT, or go to SETUP — these <em>terminate</em> the treatment</div>
+        <div class="calc-line" style="color:#ffd2d2"><strong>⚠ Centrifuge bowl re-prime:</strong> resuming collection after centrifuge stops requires re-prime → displaces leukocytes already collected → ECV runs higher than anticipated</div>
+        <div class="calc-line" style="color:#ffd2d2"><strong>⚠ PHOTOACTIVATE must run to 00:00</strong> — interrupting before completion means calculated UVA dose is NOT delivered</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Alarms — MUTE → Resolve → RESET → START</summary>
+      <div class="math-box">
+        <div class="calc-line"><strong>Process:</strong> Press <strong>MUTE</strong> (silences ≤ 60 sec) → Resolve per Section 6 → Press <strong>RESET</strong> → Press <strong>START</strong></div>
+        <div class="calc-line"><strong>Alarm types:</strong> LOW (operator-correctable) · MEDIUM (technical, needs investigation) · No HIGH-priority alarms exist on CELLEX</div>
+        <div class="calc-line"><strong>Common alarms:</strong> #41 Air Detector · #45 Red Blood Cell Pump (interface high/low) · #66 Anticoagulant bag empty · #11 Photoactivation Chamber Door</div>
+        <div class="calc-line"><strong>Alarm #45 — RBC Pump (interface position):</strong></div>
+        <div class="calc-line">&nbsp;&nbsp;• Interface <strong>too LOW</strong>: SETUP → LOWER Bowl Optic Threshold by 10 → SAVE → START</div>
+        <div class="calc-line">&nbsp;&nbsp;• Interface <strong>too HIGH</strong>: RESET → STOP → START (purges bowl and re-establishes interface)</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Bowl Optic Sensor &amp; Specific Gravity</summary>
+      <div class="math-box">
+        <div class="calc-line">Default Bowl Optic Threshold = <strong>140 mL</strong> (adjustable in SETUP)</div>
+        <div class="calc-line">May raise threshold (e.g. 150 mL) if patient's Hct is unusually low and plasma/RBC interface is too low</div>
+        <div class="calc-line"><strong>Specific gravity order (top → bottom of bowl):</strong> Platelets (1.040) · Lymphocytes (1.055–1.065) · B cells / Promyelocytes · Myelocytes / Basophils · Reticulocytes · Band + Segmented Neutrophils · Erythrocytes (1.078–1.114) · Aged erythrocytes</div>
+        <div class="calc-line">Total centrifugal force = function of bowl rotation; do not stare directly into the laser sensor beam</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Maintenance Schedule</summary>
+      <div class="math-box">
+        <div class="calc-line"><strong>After each use:</strong> System exterior · Photoactivation chamber door · Air detectors · Pressure sensors · Hematocrit sensor · Leak Detector (Centrifuge Well + Vinegar) — clean with 1:10 bleach or approved disinfectant wipe</div>
+        <div class="calc-line"><strong>Daily:</strong> Centrifuge chamber (1:10 bleach), Bowl Optic Lens (dry the lens with a dry, lint-free cloth — clean and streak-free)</div>
+        <div class="calc-line"><strong>As needed:</strong> Operator interface (mild soap + warm water), Mallinckrodt service for fluid leaks</div>
+        <div class="calc-line"><strong>Annually:</strong> Replace <strong>9V battery</strong> (powers low-battery alarm during power loss)</div>
+        <div class="calc-line"><strong>Lamp assembly:</strong> 18 lamps, 150 hr total life — replace when ≤ <strong>10 hr remaining</strong>. Keep old lamp set as backup if new fails.</div>
+      </div>
+    </details>
+
+    <div style="height:10px"></div>
+
+    <details>
+      <summary>Patient Safety &amp; Special Considerations</summary>
+      <div class="math-box">
+        <div class="calc-line"><strong>UV precautions × 24 hr post-treatment:</strong> Wear UV-blocking sunglasses, long sleeves, hats; stay indoors when possible — methoxsalen photosensitivity persists</div>
+        <div class="calc-line"><strong>GVHD patients — DVT/PE risk:</strong> Increased thromboembolism reported with UVADEX in GVHD population per Therakos labeling. Consider extra anticoagulation per physician.</div>
+        <div class="calc-line"><strong>Pediatric / &lt; 30 kg:</strong> Use 10% TBV ceiling (not 15%). Blood prime if patient's Hct or weight can't bring ECV under threshold (see Operator's Manual page 1-3).</div>
+        <div class="calc-line"><strong>Raising Hct may avoid blood prime</strong> — transfusion to Hct ≥ 30% can pull ECV into safe range per Table 1</div>
+        <div class="calc-line"><strong>Hct &lt; 27%:</strong> Off-chart — patient cannot undergo standard procedure. Optimize Hct or use blood prime protocol.</div>
+        <div class="calc-line"><strong>Citrate / heparin tolerance:</strong> Monitor ionized calcium, BP, mental status during run. Calcium replacement protocol per apheresis standing orders.</div>
+      </div>
+    </details>
+  </section>
+
+  <div class="foot">
+    <span>DART Tools · Extracorporeal Photopheresis</span>
+    <span>Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   THERAKOS REFERENCE RING — Table 1
+   Predicting Actual Procedural Kit Extracorporeal Volume (ECV)
+   by Hematocrit, Access Mode, and Return Bag Threshold Value (RBTV).
+   Single Needle mode varies by RBTV; Double Needle is single-column.
+   Rows are integer Hct from 27% (off-chart below) to 44% (chart max).
+   ════════════════════════════════════════════════════════════════════ */
+const therakosECV = {
+  // hct%: [double, singleR100, singleR150, singleR200, singleR250]
+  27: [396, 441, 491, 541, 591],
+  28: [384, 429, 479, 529, 579],
+  29: [372, 417, 467, 517, 567],
+  30: [362, 407, 457, 507, 557],
+  31: [352, 397, 447, 497, 547],
+  32: [343, 388, 438, 488, 538],
+  33: [334, 379, 429, 479, 529],
+  34: [326, 371, 421, 471, 521],
+  35: [319, 364, 414, 464, 514],
+  36: [311, 356, 406, 456, 506],
+  37: [304, 349, 399, 449, 499],
+  38: [298, 343, 393, 443, 493],
+  39: [292, 337, 387, 437, 487],
+  40: [286, 331, 381, 431, 481],
+  41: [280, 325, 375, 425, 475],
+  42: [275, 320, 370, 420, 470],
+  43: [270, 315, 365, 415, 465],
+  44: [265, 310, 360, 410, 460]
+};
+
+/* Linear interpolation between integer Hct rows.
+   Returns ECV (mL) and a flag if Hct is off-chart.
+   needleMode: 'double' or 'single'
+   rbtv: 100 | 150 | 200 | 250 (only used if single needle) */
+function lookupECV(hctPct, needleMode, rbtv){
+  const colIndex = needleMode === 'double' ? 0
+    : (rbtv === 100 ? 1 : rbtv === 150 ? 2 : rbtv === 200 ? 3 : 4);
+
+  if(hctPct < 27){
+    return {ecv: therakosECV[27][colIndex], offChart:'below', usedHct:27};
+  }
+  if(hctPct >= 44){
+    return {ecv: therakosECV[44][colIndex], offChart: hctPct > 44 ? 'above' : null, usedHct:44};
+  }
+  const lo = Math.floor(hctPct), hi = lo + 1;
+  const loV = therakosECV[lo][colIndex];
+  const hiV = therakosECV[hi][colIndex];
+  const frac = hctPct - lo;
+  const ecv = loV + (hiV - loV) * frac;
+  return {ecv, offChart:null, usedHct:hctPct};
+}
+
+/* Populate the in-page reference table */
+function buildECVTable(){
+  const tb = document.getElementById('ecvTableBody');
+  if(!tb) return;
+  Object.keys(therakosECV).map(Number).sort((a,b)=>a-b).forEach(h=>{
+    const [d, s100, s150, s200, s250] = therakosECV[h];
+    tb.innerHTML += `<tr>
+      <td style="padding:5px 8px;color:#fff;font-weight:800">${h}%</td>
+      <td style="padding:5px 8px;text-align:center">${d}</td>
+      <td style="padding:5px 8px;text-align:center;background:rgba(126,240,210,.06);color:#cdfaea;font-weight:700">${s100}</td>
+      <td style="padding:5px 8px;text-align:center;color:var(--muted)">${s150}</td>
+      <td style="padding:5px 8px;text-align:center;color:var(--muted)">${s200}</td>
+      <td style="padding:5px 8px;text-align:center;color:var(--muted)">${s250}</td>
+    </tr>`;
+  });
+}
+
+const diagnosisLibrary = {
+  "ctcl": {
+    label:"Cutaneous T-Cell Lymphoma (CTCL)",
+    fda:"FDA-approved indication for CELLEX (palliative skin manifestations).",
+    schedule:"Typical induction: 2 consecutive days every 2–4 weeks for 6 months, then taper based on response.",
+    rationale:"ECP induces apoptosis of pathogenic T-cells; cross-presentation of apoptotic cells modulates anti-tumor immunity.",
+    nurse:"Trend skin score (mSWAT), photo documentation, monitor for transient erythroderma/fever 6–8 h post."
+  },
+  "agvhd-skin": {
+    label:"Acute GVHD — skin (steroid-refractory)",
+    fda:"Standard-of-care second-line option in steroid-refractory aGVHD.",
+    schedule:"2 consecutive days per week × 4–8 weeks; then taper based on response.",
+    rationale:"Tregs expanded by ECP suppress alloreactive T-cell response without broad immunosuppression.",
+    nurse:"Watch hemodynamics — citrate/heparin tolerance, fluid balance, line care, infection precautions."
+  },
+  "agvhd-gi": {
+    label:"Acute GVHD — GI / liver (steroid-refractory)",
+    fda:"Used in steroid-refractory disease; visceral aGVHD often less responsive than skin.",
+    schedule:"2 consecutive days per week, may extend duration; combine with other lines.",
+    rationale:"Same immunomodulation; visceral disease may need adjunct therapy (ruxolitinib).",
+    nurse:"Critical fluid/electrolyte monitoring, stool output, LFT trends, opportunistic-infection vigilance."
+  },
+  "cgvhd-skin": {
+    label:"Chronic GVHD — skin / sclerotic",
+    fda:"Established second-line/adjunct for steroid-dependent or refractory cGVHD.",
+    schedule:"2 consecutive days q2 weeks for 3 months → q2–4 weeks → monthly, often for ≥ 1 year.",
+    rationale:"Improves skin scores and allows steroid taper; well-tolerated long-term.",
+    nurse:"Skin score, ROM/photographs, immunosuppression taper coordination, infection screen."
+  },
+  "cgvhd-multi": {
+    label:"Chronic GVHD — multi-organ",
+    fda:"Adjunct second/third-line; combine with ruxolitinib or other systemic agents.",
+    schedule:"Initially 2/week × 2 mo → q2 wk × 2 mo → monthly × ≥ 1 year (NIH consensus pattern).",
+    rationale:"Broad immunomodulation; sparing effect on overall immunity.",
+    nurse:"Multi-system assessment each visit, organ-specific scores, immunosuppression compliance."
+  },
+  "lung-tx-blas": {
+    label:"Lung transplant — CLAD / BOS",
+    fda:"Off-label; established practice for chronic lung-allograft dysfunction.",
+    schedule:"2/week induction × 6–12 weeks → q2 weeks → monthly, individualized.",
+    rationale:"Slows FEV1 decline and stabilizes CLAD in many patients.",
+    nurse:"PFT trending, infection precautions, line care, immunosuppression dose check."
+  },
+  "cardiac-tx-rej": {
+    label:"Cardiac transplant — recurrent rejection",
+    fda:"Off-label for recurrent / steroid-resistant cellular rejection.",
+    schedule:"2 consecutive days every 1–2 weeks initially.",
+    rationale:"Reduces T-cell-mediated allograft rejection.",
+    nurse:"Endomyocardial biopsy schedule, hemodynamic monitoring, fluid balance."
+  },
+  "crohn-other": {
+    label:"Other / off-label",
+    fda:"Verify center protocol and payer coverage.",
+    schedule:"Confirm cadence with physician.",
+    rationale:"Indication not mapped here.",
+    nurse:"Document indication, target endpoints, schedule."
+  }
+};
+
+const state = {heightMode:'cm', weightMode:'kg', needle:'double', proc:1500, isCustomProc:false};
+const $ = (id) => document.getElementById(id);
+const el = {
+  sex:$('sex'), hct:$('hct'), bodyBuild:$('bodyBuild'),
+  heightCm:$('heightCm'), heightFt:$('heightFt'), heightIn:$('heightIn'),
+  weightKg:$('weightKg'), weightLb:$('weightLb'),
+  rbtv:$('rbtv'),
+  customProc:$('customProc'), customProcWrap:$('customProcWrap'),
+  diagnosis:$('diagnosis'), diagnosisInfoCard:$('diagnosisInfoCard'),
+  results:$('results'),
+  calculateBtn:$('calculateBtn'), resetBtn:$('resetBtn'),
+  heightMetricBtn:$('heightMetricBtn'), heightEnglishBtn:$('heightEnglishBtn'),
+  weightMetricBtn:$('weightMetricBtn'), weightEnglishBtn:$('weightEnglishBtn'),
+  heightCmWrap:$('heightCmWrap'), heightEnglishWrap:$('heightEnglishWrap'),
+  weightKgWrap:$('weightKgWrap'), weightLbWrap:$('weightLbWrap'),
+  needleToggle:$('needleToggle'), processToggle:$('processToggle')
+};
+
+function setActive(buttons, activeButton){ buttons.forEach(b=>b.classList.remove('active')); activeButton.classList.add('active'); }
+function fmt(num, digits=1){ if(!Number.isFinite(num)) return '—'; return Number(num).toLocaleString(undefined,{minimumFractionDigits:digits, maximumFractionDigits:digits}); }
+function fmtInt(num){ if(!Number.isFinite(num)) return '—'; return Math.round(Number(num)).toLocaleString(); }
+function heightToCm(){ if(state.heightMode==='cm') return parseFloat(el.heightCm.value); const ft=parseFloat(el.heightFt.value||0); const inches=parseFloat(el.heightIn.value||0); return ((ft*12)+inches)*2.54; }
+function weightToKg(){ if(state.weightMode==='kg') return parseFloat(el.weightKg.value); return parseFloat(el.weightLb.value)*0.45359237; }
+function nadlerTBVml(sex, heightCm, weightKg){ const h=heightCm/100; return sex==='male' ? 604 + (367*Math.pow(h,3)) + (32.2*weightKg) : 183 + (356*Math.pow(h,3)) + (33.1*weightKg); }
+const ADULT_FALLBACK_ML_PER_KG = 70;
+
+/* Therakos Reference Ring page 6 — Body Build Factor table (alternate TBV method).
+   TBV (mL) = weight (kg) × build factor (mL/kg). Adult builds require sex; adolescent
+   and neonate are not sex-differentiated in the Therakos table (ranges 75-70 and 100-80
+   collapsed to midpoint here). */
+const bodyBuildFactors = {
+  adult_muscular: {male:80, female:75, label:'Adult Muscular'},
+  adult_normal:   {male:75, female:70, label:'Adult Normal'},
+  adult_thin:     {male:70, female:65, label:'Adult Thin'},
+  adult_obese:    {male:65, female:60, label:'Adult Obese'},
+  adolescent:     {male:72, female:72, label:'Adolescent'},
+  neonate:        {male:90, female:90, label:'Neonate'}
+};
+function validatePositive(v, n){ if(!Number.isFinite(v) || v<=0) throw new Error(`Please enter a valid ${n}.`); }
+
+function renderDiagnosisInfo(){
+  const key = el.diagnosis.value;
+  if(!key){ el.diagnosisInfoCard.classList.add('hidden'); el.diagnosisInfoCard.innerHTML=''; return; }
+  const d = diagnosisLibrary[key];
+  el.diagnosisInfoCard.classList.remove('hidden');
+  el.diagnosisInfoCard.innerHTML = `
+    <div class="calc-line"><strong>Indication:</strong> ${d.label}</div>
+    <div class="calc-line"><strong>FDA / status:</strong> ${d.fda}</div>
+    <div class="calc-line"><strong>Schedule:</strong> ${d.schedule}</div>
+    <div class="calc-line"><strong>Rationale:</strong> ${d.rationale}</div>
+    <div class="calc-line"><strong>Nurse focus:</strong> ${d.nurse}</div>
+  `;
+}
+
+function createResultHTML(d){
+  // Adult vs pediatric ECV ceiling (Therakos: < 30 kg → 10%; adults → 15%)
+  const isPed = d.weightKg < 30;
+  const ceilingPct = isPed ? 10 : 15;
+  const cautionLow = isPed ? 7 : 10;
+  const ecvPct = (d.ecvUsedMl / d.tbvMl) * 100;
+
+  let ecvBanner = '';
+  if(ecvPct > ceilingPct){
+    ecvBanner = `<div class="banner danger"><span class="banner-icon">⚠</span><div><strong>ECV ${fmt(ecvPct,1)}% of TBV exceeds the ${ceilingPct}% ${isPed ? 'pediatric (&lt; 30 kg)' : 'adult'} ceiling.</strong> Patient cannot undergo standard CELLEX procedure — <strong>blood prime required</strong> (crossmatched, compatible packed RBC). Coordinate with blood bank. Raising Hct (transfusion) may also bring ECV under threshold per Table 1.</div></div>`;
+  } else if(ecvPct > cautionLow){
+    ecvBanner = `<div class="banner warning"><span class="banner-icon">▲</span><div><strong>ECV ${fmt(ecvPct,1)}% of TBV</strong> (${isPed ? 'pediatric' : 'adult'}; caution band ${cautionLow}–${ceilingPct}%). Proceed with extra monitoring — hot packs, pre-warm, slow start, frequent BP.</div></div>`;
+  } else {
+    ecvBanner = `<div class="banner proceed"><span class="banner-icon">●</span><div><strong>ECV ${fmt(ecvPct,1)}% of TBV</strong> within ${isPed ? 'pediatric' : 'adult'} safety margin (&lt; ${ceilingPct}%). Standard procedure acceptable.</div></div>`;
+  }
+
+  // Off-chart Hct warning
+  let hctBanner = '';
+  if(d.offChart === 'below'){
+    hctBanner = `<div class="banner danger"><span class="banner-icon">⚠</span><div><strong>Hct ${fmt(d.hctEntered,1)}% is below Table 1 (chart starts at 27%).</strong> Standard procedure cannot be calculated reliably — used Hct=27 worst-case for display. Optimize Hct (transfusion) or use blood prime protocol before proceeding.</div></div>`;
+  } else if(d.offChart === 'above'){
+    hctBanner = `<div class="banner warning"><span class="banner-icon">▲</span><div>Hct ${fmt(d.hctEntered,1)}% is above Table 1 ceiling (44%). Used Hct=44 (lowest ECV) for display.</div></div>`;
+  }
+
+  // RBTV override warning (single needle only, > 100)
+  let rbtvBanner = '';
+  if(d.needle === 'single' && d.rbtv > 100){
+    rbtvBanner = `<div class="banner warning"><span class="banner-icon">▲</span><div><strong>RBTV ${d.rbtv} mL exceeds institutional cap of 100 mL.</strong> Reference values only — verify the order matches local protocol.</div></div>`;
+  }
+
+  // TBV fallback note
+  let tbvNote = '';
+  if(d.tbvFallback){
+    tbvNote = `<div class="note info" style="margin-bottom:0">TBV estimated at <strong>${ADULT_FALLBACK_ML_PER_KG} mL/kg × ${fmt(d.weightKg,1)} kg = ${fmtInt(d.tbvMl)} mL</strong>. For precision pick one in Advanced: <strong>Nadler</strong> (sex + height) or <strong>Body Build Factor</strong> (sex + build category — Therakos alternate method, no height required).</div>`;
+  }
+
+  return `
+    ${hctBanner}
+    ${rbtvBanner}
+    ${ecvBanner}
+    ${tbvNote}
+
+    ${d.diagnosis ? `
+    <div class="result-card">
+      <div class="result-kicker">Indication Context</div>
+      <div class="result-value" style="font-size:18px">${d.diagnosis.label}</div>
+      <div class="result-meta">${d.diagnosis.fda}</div>
+    </div>` : ''}
+
+    <!-- HERO: ECV from Therakos chart -->
+    <div class="result-card" style="border:2px solid rgba(126,240,210,.55);background:linear-gradient(135deg, rgba(126,240,210,.12), rgba(97,168,255,.08));padding:18px 22px">
+      <div class="result-kicker" style="color:#9be8d0">Estimated ECV (Published Reference Table)</div>
+      <div class="result-value" style="font-size:clamp(36px, 6vw, 52px);color:#ecfff8">${fmtInt(d.ecvUsedMl)} <span style="font-size:.32em;font-weight:800;color:#9be8d0">mL</span></div>
+      <div class="result-meta" style="color:#cdd6e2;font-size:13px">${d.needle === 'single' ? `Single Needle · RBTV ${d.rbtv} mL` : 'Double Needle'} · Hct ${fmt(d.hctEntered,1)}%${d.usedHct !== d.hctEntered ? ` (used ${d.usedHct}%)` : ''} · ${fmt(ecvPct,1)}% of TBV</div>
+    </div>
+
+    <!-- Both modes side-by-side reference -->
+    <div class="result-card">
+      <div class="result-kicker">Both modes at this Hct</div>
+      <div class="mini-grid" style="margin-top:6px">
+        <div style="padding:10px 12px;border-radius:10px;background:${d.needle==='double'?'rgba(126,240,210,.10)':'rgba(255,255,255,.025)'};border:1px solid ${d.needle==='double'?'rgba(126,240,210,.4)':'var(--border)'}">
+          <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:800">Double Needle</div>
+          <div style="font-size:24px;font-weight:900;color:#fff">${fmtInt(d.bothECV.double)} mL</div>
+        </div>
+        <div style="padding:10px 12px;border-radius:10px;background:${d.needle==='single'?'rgba(126,240,210,.10)':'rgba(255,255,255,.025)'};border:1px solid ${d.needle==='single'?'rgba(126,240,210,.4)':'var(--border)'}">
+          <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:800">Single Needle · RBTV 100</div>
+          <div style="font-size:24px;font-weight:900;color:#fff">${fmtInt(d.bothECV.single100)} mL</div>
+        </div>
+      </div>
+      <div class="result-meta" style="margin-top:8px;font-size:11.5px">Looked up from a publicly available ECV-by-Hematocrit reference table commonly cited in apheresis literature and operator manuals. Single needle uses the institutional default RBTV = 100 mL.</div>
+    </div>
+
+    <div class="mini-grid">
+      <div class="result-card">
+        <div class="result-kicker">Total Blood Volume</div>
+        <div class="result-value">${fmtInt(d.tbvMl)} <span style="font-size:.48em;font-weight:800;color:var(--muted)">mL</span></div>
+        <div class="result-meta">${d.tbvMethod}</div>
+      </div>
+      <div class="result-card">
+        <div class="result-kicker">ECV / TBV</div>
+        <div class="result-value">${fmt(ecvPct,1)} <span style="font-size:.48em;font-weight:800;color:var(--muted)">%</span></div>
+        <div class="result-meta">Ceiling: ${ceilingPct}% (${isPed ? 'ped &lt; 30 kg' : 'adult'})</div>
+      </div>
+    </div>
+
+    <div class="mini-grid">
+      <div class="result-card" style="border-color:${isPed ? 'rgba(255,205,112,.32)' : 'var(--border)'};background:${isPed ? 'linear-gradient(180deg, rgba(255,205,112,.06), rgba(255,255,255,.01))' : ''}">
+        <div class="result-kicker" style="${isPed ? 'color:#ffe8b6' : ''}">10% of TBV ${isPed ? '· pediatric ceiling' : '· caution above'}</div>
+        <div class="result-value">${fmtInt(d.tbvMl * 0.10)} <span style="font-size:.48em;font-weight:800;color:var(--muted)">mL</span></div>
+        <div class="result-meta">ECV above this triggers extra monitoring${isPed ? ' — pediatric &lt; 30 kg must stay below this' : ''}</div>
+      </div>
+      <div class="result-card" style="border-color:${!isPed ? 'rgba(255,205,112,.32)' : 'var(--border)'};background:${!isPed ? 'linear-gradient(180deg, rgba(255,205,112,.06), rgba(255,255,255,.01))' : ''}">
+        <div class="result-kicker" style="${!isPed ? 'color:#ffe8b6' : ''}">15% of TBV ${!isPed ? '· adult ceiling' : '· (not used for ped &lt; 30 kg)'}</div>
+        <div class="result-value">${fmtInt(d.tbvMl * 0.15)} <span style="font-size:.48em;font-weight:800;color:var(--muted)">mL</span></div>
+        <div class="result-meta">${!isPed ? 'ECV above this requires blood prime' : 'Pediatric ceiling is 10% — this is reference only'}</div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-kicker">Methoxsalen (Uvadex) Formula — final dose calculated at end of BUFFY</div>
+      <div class="math-box">
+        <div class="calc-line"><strong>Uvadex (mL) = Treatment Volume (mL) × 0.017</strong></div>
+        <div class="calc-line">Treatment Volume = actual volume in the photoactivation bag at end of BUFFY COAT collection (varies with patient Hct and buffy yield — <em>not</em> predictable from pre-procedure inputs).</div>
+        <div class="calc-line">Uvadex concentration: <strong>200 mcg/mL</strong> · single-use 10 mL vial · discard remainder.</div>
+        <div class="calc-line">The CELLEX displays the Treatment Volume on screen at the UVA prompt — multiply by 0.017, draw, inject into the photoactivation bag, confirm before UVA cycle starts.</div>
+      </div>
+    </div>
+
+    <div class="mini-grid">
+      <div class="result-card">
+        <div class="result-kicker">Total Blood Processed</div>
+        <div class="result-value" style="font-size:22px">${fmtInt(d.procMl)} mL</div>
+        <div class="result-meta">CELLEX max 1500 mL</div>
+      </div>
+      <div class="result-card">
+        <div class="result-kicker">Access Mode</div>
+        <div class="result-value" style="font-size:22px">${d.needle === 'single' ? 'Single' : 'Double'}</div>
+        <div class="result-meta">${d.needle === 'single' ? `RBTV ${d.rbtv} mL · slower cycle` : 'Faster cycle · two access sites'}</div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-kicker">Heparin (per tip sheet)</div>
+      <div class="math-box">
+        <div class="calc-line"><strong>Mix:</strong> Heparin 10,000 U in 500 mL NS = <strong>20 U/mL</strong></div>
+        <div class="calc-line">Typical institutional protocols: bolus 5,000 U then run via heparin pump per CELLEX prompt; verify your center's heparin protocol.</div>
+        <div class="calc-line">Consider extra anticoagulation in GVHD patients (per Therakos labeling — DVT/PE reported with UVADEX in GVHD).</div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-kicker">Read-Back / Order Summary</div>
+      <div class="math-box">
+        <div class="calc-line"><strong>Patient:</strong> ${fmt(d.weightKg,1)} kg${d.heightCm ? `, ${fmt(d.heightCm,0)} cm` : ''}${d.sex ? `, ${d.sex}` : ''} · Hct ${fmt(d.hctEntered,1)}%</div>
+        <div class="calc-line"><strong>Access:</strong> ${d.needle === 'single' ? `Single Needle · RBTV ${d.rbtv} mL` : 'Double Needle'}</div>
+        <div class="calc-line"><strong>ECV:</strong> ${fmtInt(d.ecvUsedMl)} mL (Table 1 lookup)</div>
+        <div class="calc-line"><strong>TBV:</strong> ${fmtInt(d.tbvMl)} mL (${d.tbvMethod})</div>
+        <div class="calc-line"><strong>ECV/TBV:</strong> ${fmt(ecvPct,1)}% (ceiling ${ceilingPct}%)</div>
+        <div class="calc-line"><strong>Methoxsalen:</strong> dosed at end of BUFFY — Treatment Volume × 0.017 (Uvadex 200 mcg/mL)</div>
+        <div class="calc-line"><strong>Blood to process:</strong> ${fmtInt(d.procMl)} mL</div>
+      </div>
+    </div>
+
+    ${d.diagnosis ? `
+    <div class="math-box">
+      <div class="calc-line"><strong>Why ECP for this indication:</strong> ${d.diagnosis.rationale}</div>
+      <div class="calc-line"><strong>Schedule:</strong> ${d.diagnosis.schedule}</div>
+      <div class="calc-line"><strong>Nurse focus:</strong> ${d.diagnosis.nurse}</div>
+    </div>` : ''}
+  `;
+}
+
+function calculate(){
+  try{
+    const hctRaw = parseFloat(el.hct.value);
+    const weightKg = weightToKg();
+    validatePositive(hctRaw, 'hematocrit');
+    validatePositive(weightKg, 'weight');
+    if(hctRaw >= 100) throw new Error('Hematocrit must be less than 100.');
+
+    // TBV precedence: (1) Body Build Factor if selected, (2) Nadler if sex+height, (3) 70 mL/kg fallback
+    const sex = el.sex.value || null;
+    const heightCmRaw = heightToCm();
+    const heightCm = (Number.isFinite(heightCmRaw) && heightCmRaw > 0) ? heightCmRaw : null;
+    const buildKey = el.bodyBuild.value || null;
+
+    let tbvMl, tbvMethod, tbvFallback = false;
+    if(buildKey){
+      const bf = bodyBuildFactors[buildKey];
+      // Adolescent/Neonate work without sex (M=F); adults need sex.
+      const isPedBuild = (buildKey === 'adolescent' || buildKey === 'neonate');
+      if(!sex && !isPedBuild){
+        throw new Error('Body Build (adult) requires Sex — select Sex in Advanced or change Body Build.');
+      }
+      const factor = isPedBuild ? bf.male : bf[sex];
+      tbvMl = factor * weightKg;
+      tbvMethod = `Body Build Factor — ${bf.label} (${factor} mL/kg × ${fmt(weightKg,1)} kg)`;
+    } else if(sex && heightCm){
+      tbvMl = nadlerTBVml(sex, heightCm, weightKg);
+      tbvMethod = 'Nadler equation';
+    } else {
+      tbvMl = ADULT_FALLBACK_ML_PER_KG * weightKg;
+      tbvMethod = `Estimate (${ADULT_FALLBACK_ML_PER_KG} mL/kg)`;
+      tbvFallback = true;
+    }
+
+    const rbtv = parseInt(el.rbtv.value, 10) || 100;
+
+    // Therakos table lookups
+    const dblLookup = lookupECV(hctRaw, 'double', 100);
+    const sgl100Lookup = lookupECV(hctRaw, 'single', 100);
+    const usedLookup = lookupECV(hctRaw, state.needle, rbtv);
+
+    let procMl;
+    if(state.isCustomProc){
+      const ct = parseFloat(el.customProc.value);
+      if(!Number.isFinite(ct) || ct<=0) throw new Error('Please enter a valid custom blood-processed volume.');
+      if(ct > 1500) throw new Error('CELLEX maximum is 1500 mL processed.');
+      procMl = ct;
+    } else {
+      procMl = state.proc;
+    }
+
+    const data = {
+      tbvMl, tbvMethod, tbvFallback, weightKg, heightCm, sex,
+      ecvUsedMl: usedLookup.ecv,
+      usedHct: usedLookup.usedHct,
+      hctEntered: hctRaw,
+      offChart: usedLookup.offChart,
+      bothECV: { double: dblLookup.ecv, single100: sgl100Lookup.ecv },
+      needle: state.needle, rbtv,
+      procMl,
+      diagnosis: el.diagnosis.value ? diagnosisLibrary[el.diagnosis.value] : null
+    };
+
+    el.results.innerHTML = createResultHTML(data);
+  } catch(err){
+    el.results.innerHTML = `
+      <div class="result-card">
+        <div class="result-kicker">Input Error</div>
+        <div class="result-value" style="font-size:18px;color:#ffb4b4">Unable to calculate</div>
+        <div class="result-meta">${err.message}</div>
+      </div>`;
+  }
+}
+
+function resetForm(){
+  el.sex.value=''; el.hct.value=''; el.bodyBuild.value='';
+  el.heightCm.value=''; el.heightFt.value=''; el.heightIn.value='';
+  el.weightKg.value=''; el.weightLb.value='';
+  el.rbtv.value='100';
+  el.customProc.value=''; el.customProcWrap.classList.add('hidden');
+  el.diagnosis.value='';
+  el.diagnosisInfoCard.classList.add('hidden'); el.diagnosisInfoCard.innerHTML='';
+  state.heightMode='cm'; state.weightMode='kg'; state.needle='double'; state.proc=1500; state.isCustomProc=false;
+  setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightMetricBtn);
+  setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn);
+  el.needleToggle.querySelectorAll('[data-needle]').forEach(b=>b.classList.toggle('active', b.dataset.needle==='double'));
+  el.processToggle.querySelectorAll('[data-proc]').forEach(b=>b.classList.toggle('active', b.dataset.proc==='1500'));
+  el.heightCmWrap.classList.remove('hidden'); el.heightEnglishWrap.classList.add('hidden');
+  el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden');
+  el.results.innerHTML = `<div class="result-card"><div class="result-kicker">Awaiting inputs</div><div class="result-value">—</div><div class="result-meta">Enter Hct, weight, access mode and press Calculate.</div></div>`;
+}
+
+/* Build the embedded Table 1 reference */
+buildECVTable();
+
+el.heightMetricBtn.addEventListener('click', ()=>{ state.heightMode='cm'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightMetricBtn); el.heightCmWrap.classList.remove('hidden'); el.heightEnglishWrap.classList.add('hidden'); });
+el.heightEnglishBtn.addEventListener('click', ()=>{ state.heightMode='ftin'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightEnglishBtn); el.heightCmWrap.classList.add('hidden'); el.heightEnglishWrap.classList.remove('hidden'); });
+el.weightMetricBtn.addEventListener('click', ()=>{ state.weightMode='kg'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn); el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden'); });
+el.weightEnglishBtn.addEventListener('click', ()=>{ state.weightMode='lb'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightEnglishBtn); el.weightKgWrap.classList.add('hidden'); el.weightLbWrap.classList.remove('hidden'); });
+
+el.needleToggle.querySelectorAll('[data-needle]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    el.needleToggle.querySelectorAll('[data-needle]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.needle = btn.dataset.needle;
+  });
+});
+
+el.processToggle.querySelectorAll('[data-proc]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    el.processToggle.querySelectorAll('[data-proc]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    if(btn.dataset.proc==='custom'){
+      state.isCustomProc = true;
+      el.customProcWrap.classList.remove('hidden');
+      el.customProc.focus();
+    } else {
+      state.isCustomProc = false;
+      el.customProcWrap.classList.add('hidden');
+      state.proc = parseFloat(btn.dataset.proc);
+    }
+  });
+});
+
+el.diagnosis.addEventListener('change', renderDiagnosisInfo);
+el.calculateBtn.addEventListener('click', calculate);
+el.resetBtn.addEventListener('click', resetForm);
+
+document.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); calculate(); } });
+</script>
+</body>
+</html>

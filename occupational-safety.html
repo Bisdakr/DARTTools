@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Occupational Safety — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--gold-bright:#e6c682;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(126,240,210,.08),transparent 30%),radial-gradient(circle at 80% 20%,rgba(97,168,255,.06),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--accent),var(--primary));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(126,240,210,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#d8fff5 0%,#7ef0d2 45%,#61a8ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.24);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.04));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:17px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(22px,3.2vw,30px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:16px}
+.prose p strong{color:#fff;font-weight:700}
+.callout{margin:22px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-danger{background:rgba(255,111,111,.08);border-color:var(--danger)}.callout-danger .callout-label{color:#ff8a8a}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(126,240,210,.10);color:#caf6e6;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.step-list{list-style:none;padding:0;margin:18px 0;counter-reset:stepnum}
+.step-list li{counter-increment:stepnum;position:relative;padding:14px 14px 14px 56px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;line-height:1.6;color:#d6e0ee}
+.step-list li::before{content:counter(stepnum);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(126,240,210,.30),rgba(97,168,255,.10));color:#caf6e6;display:grid;place-items:center;font-weight:900;font-size:13px;border:1px solid rgba(126,240,210,.40)}
+.step-list li strong{color:#fff;display:inline}
+.check-list{list-style:none;padding:0;margin:18px 0}
+.check-list li{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.55;color:#d6e0ee}
+.check-list li::before{content:"✓";color:var(--accent);font-weight:900;font-size:16px;flex-shrink:0;margin-top:1px}
+.check-list li strong{color:#fff}
+.warn-list li::before{content:"⚠";color:var(--warn)}
+.danger-list li::before{content:"⊘";color:var(--danger)}
+.emergency-box{margin:24px 0;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,111,111,.10),rgba(255,205,112,.05));border:2px solid rgba(255,111,111,.35)}
+.emergency-box-title{font-size:14px;text-transform:uppercase;letter-spacing:.15em;color:#ff8a8a;font-weight:900;margin-bottom:12px}
+.emergency-steps{list-style:none;padding:0;counter-reset:stepnum}
+.emergency-steps li{counter-increment:stepnum;padding:10px 14px 10px 44px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.025);position:relative;font-size:14px;line-height:1.55;color:#ffd2d2}
+.emergency-steps li::before{content:counter(stepnum);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,111,111,.25);color:#ffd2d2;display:grid;place-items:center;font-weight:900;font-size:12px;border:1px solid rgba(255,111,111,.4)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(126,240,210,.15);color:#7ef0d2;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">🛡</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Universal Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div>
+      <div class="head-kicker">Universal Reference · Patient &amp; Staff Occupational Safety</div>
+      <div class="head-title"><span class="accent">Occupational Safety</span></div>
+      <div class="head-sub">PPE selection, bloodborne pathogen exposure protocols, sharps safety, ergonomics, vaccinations, and chemical exposures. Compiled from OSHA Bloodborne Pathogens Standard 29 CFR 1910.1030, CDC PEP guidance, NIOSH ergonomics, and institutional employee health.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#standard">01 · Standard Precautions</a>
+  <a class="sec-pill" href="#ppe-detail">02 · PPE by Task</a>
+  <a class="sec-pill" href="#sharps">03 · Sharps Safety</a>
+  <a class="sec-pill" href="#exposure">04 · Bloodborne Exposure</a>
+  <a class="sec-pill" href="#pep">05 · PEP Timeline</a>
+  <a class="sec-pill" href="#chemical">06 · Chemical Exposures</a>
+  <a class="sec-pill" href="#ergonomics">07 · Ergonomics</a>
+  <a class="sec-pill" href="#vaccinations">08 · Vaccinations</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — Protect Yourself, Protect Patients</div>
+  <div class="hero-tldr-text">
+    Apheresis and dialysis nursing carry meaningful occupational risks: bloodborne pathogen exposure, sharps injury, chemical exposure (bleach, peracetic acid, glutaraldehyde, citrate), musculoskeletal strain, and infectious disease transmission. The OSHA Bloodborne Pathogens Standard (29 CFR 1910.1030) and CDC PEP guidance establish the framework. The single most important principle: <strong>treat every patient's blood as if it carries an infection</strong> — universal precautions. If an exposure occurs, the response window is short; PEP for HIV must begin within 72 hours and ideally within 2 hours.
+  </div>
+</div>
+
+<section class="sec" id="standard">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">Standard Precautions — The Universal Default</div><div class="sec-subtitle">CDC: treat all blood and body fluids as infectious</div></div></div>
+  <div class="prose">
+    <p>Standard Precautions apply to <strong>all patients regardless of suspected or confirmed infection status</strong>. They include:</p>
+    <ul class="check-list">
+      <li><strong>Hand hygiene</strong> per the WHO 5 Moments (see CLABSI Prevention reference).</li>
+      <li><strong>PPE selection</strong> based on anticipated exposure.</li>
+      <li><strong>Respiratory hygiene / cough etiquette.</strong></li>
+      <li><strong>Safe injection practices</strong> — one needle, one syringe, one time.</li>
+      <li><strong>Safe handling of contaminated equipment / linens.</strong></li>
+      <li><strong>Environmental cleaning</strong> — high-touch surfaces and patient zone after each session.</li>
+      <li><strong>Sharps safety</strong> — engineered safety devices, no recapping.</li>
+    </ul>
+    <p>Transmission-based precautions (Contact, Droplet, Airborne) are added on top of Standard Precautions when specific pathogens are suspected or confirmed.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Why "Universal" Precautions</span>You cannot reliably identify who carries hepatitis B, hepatitis C, HIV, or other bloodborne pathogens by appearance. Many patients are unaware they are infected. The default of treating every patient's blood as infectious protects everyone — patients and staff — from transmission.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="ppe-detail">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">PPE — Detailed Selection by Task</div><div class="sec-subtitle">Match exposure to barrier</div></div></div>
+  <div class="prose">
+    <p>Each PPE element addresses specific exposure routes. Choose based on what's anticipated, but err toward more protection when uncertain.</p>
+    <table class="compare-table">
+      <thead><tr><th>PPE Element</th><th>What It Prevents</th><th>When Required</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Gloves (non-sterile or sterile)</strong></td><td>Hand contamination from blood, body fluids, mucous membranes, non-intact skin, contaminated surfaces</td><td>Any patient contact, any catheter contact, any potentially contaminated surface. Sterile gloves for sterile fields (catheter insertion, dressing change, hub access for apheresis/HD/CRRT).</td></tr>
+        <tr><td><strong>Surgical mask</strong></td><td>Respiratory droplets; protection of sterile field; oral/nasal mucosal splash</td><td>Sterile catheter access; droplet precautions; potential splash to face. Patient masked during catheter connection.</td></tr>
+        <tr><td><strong>N95 respirator</strong></td><td>Airborne particles &lt; 5 μm (TB, measles, varicella, COVID-19 per policy)</td><td>Airborne precautions; aerosol-generating procedures with airborne pathogen. Fit-tested annually; seal-check each donning.</td></tr>
+        <tr><td><strong>Eye protection (goggles or face shield)</strong></td><td>Conjunctival splash from blood / body fluids</td><td>Initial catheter access, disconnection, dressing change with active bleeding, emergency procedures, dialyzer line disconnection.</td></tr>
+        <tr><td><strong>Fluid-resistant gown</strong></td><td>Body and clothing contamination from splash</td><td>Splash risk; contact precautions; sterile dressing change; per institutional policy.</td></tr>
+        <tr><td><strong>Sterile gown</strong></td><td>Sterile field contamination from inserter</td><td>Central line insertion; some institutions require for hub access.</td></tr>
+        <tr><td><strong>Cap (bouffant or surgical)</strong></td><td>Hair contamination of sterile field; fomite transfer</td><td>Sterile procedures; full sterile barrier at central line insertion.</td></tr>
+        <tr><td><strong>Shoe covers</strong></td><td>Floor contamination tracking</td><td>Per institutional policy; rare in dialysis/apheresis units; standard for ORs and certain isolation rooms.</td></tr>
+      </tbody>
+    </table>
+    <h4 style="color:#fff;margin-top:14px;margin-bottom:8px">Critical Apheresis / Dialysis Tasks — PPE Specific</h4>
+    <ul class="check-list">
+      <li><strong>Cannulating AVF / AVG:</strong> Gloves, mask, eye protection. Mask both patient and staff during cannulation in dialysis.</li>
+      <li><strong>HD catheter connection / disconnection:</strong> Mask (patient + staff), sterile gloves, eye protection. Sterile field at hub.</li>
+      <li><strong>Apheresis circuit connection / disconnection:</strong> Same as HD catheter. Plus gown if splash anticipated.</li>
+      <li><strong>PD exchange / cycler connection:</strong> Mask (patient + staff), hand hygiene, gloves. Aseptic technique critical.</li>
+      <li><strong>Dialyzer reprocessing (if performed):</strong> Gloves, gown, eye protection, respirator if peracetic acid; never bypass ventilation.</li>
+      <li><strong>Spectra Optia setup / loading:</strong> Gloves; mask and gown if blood handling.</li>
+      <li><strong>Therakos CELLEX setup / leukocyte handling:</strong> Gloves; mask and eye protection at connection / disconnection / methoxsalen handling.</li>
+      <li><strong>Cleaning blood spill:</strong> Gloves, mask, eye protection, gown; 1:10 bleach (5,000 ppm sodium hypochlorite) per OSHA.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="sharps">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Sharps Safety</div><div class="sec-subtitle">Engineering controls, work practices, post-injury</div></div></div>
+  <div class="prose">
+    <ul class="check-list">
+      <li><strong>Engineered safety devices</strong> — Required by OSHA (Needlestick Safety and Prevention Act 2000). Self-retracting needles, blunt cannulae, sheathed fistula needles. Activate the safety mechanism immediately after use.</li>
+      <li><strong>No recapping</strong> — Single-handed scoop technique only if absolutely required.</li>
+      <li><strong>Sharps containers</strong> — Within arm's reach of point of use; replace at fill line (typically 2/3 full); never overfilled; never reach into.</li>
+      <li><strong>Cannulation technique</strong> — Properly trained, well-lit, supported position, controlled patient.</li>
+      <li><strong>Set-up safety</strong> — Have everything ready before patient contact; don't break sterility to retrieve forgotten supplies.</li>
+      <li><strong>Glove change after suspected breach</strong> — Even a small needle puncture in the glove warrants change.</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Highest-Risk Steps</span>Fistula needle removal, recapping (avoid), cleanup, equipment disassembly, garbage handling. Pause before these steps and verify sharps disposal is at hand.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="exposure">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">Bloodborne Pathogen Exposure Response</div><div class="sec-subtitle">Needlestick, splash, mucocutaneous exposure</div></div></div>
+  <div class="prose">
+    <div class="emergency-box">
+      <div class="emergency-box-title">⚠ Immediate Exposure Response (Within Minutes)</div>
+      <ol class="emergency-steps">
+        <li><strong>Stop the procedure if safe to do so;</strong> stabilize the patient if not.</li>
+        <li><strong>Wash the exposed area immediately</strong> — soap and water for skin; saline or clean water for eye (irrigate &gt; 15 minutes); rinse mouth for oral exposure. Do not scrub aggressively or apply caustic agents.</li>
+        <li><strong>Express bleeding gently</strong> from puncture wound; do not squeeze hard or apply caustics.</li>
+        <li><strong>Notify charge nurse and supervisor.</strong></li>
+        <li><strong>Report to Employee Health Service / Occupational Health</strong> immediately; if after hours, the Emergency Department.</li>
+        <li><strong>Source patient identification</strong> — Notify the patient and obtain consent for source testing (HBsAg, anti-HCV, HIV Ag/Ab). Most states permit testing under specific employee-exposure provisions even without consent.</li>
+        <li><strong>Exposed worker baseline labs:</strong> HBsAg, anti-HBs, anti-HCV, HIV Ag/Ab.</li>
+        <li><strong>Decision-making with Occupational Health / ID:</strong> Need for PEP, vaccination booster, follow-up schedule.</li>
+        <li><strong>Complete incident report</strong> — Required by OSHA; tracked in Sharps Injury Log.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="pep">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Post-Exposure Prophylaxis (PEP) Timeline</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Pathogen</th><th>PEP Window</th><th>Regimen</th><th>Follow-Up</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HIV</strong></td><td>Begin ASAP, ideally within 2 hours, no later than 72 hours</td><td>3-drug regimen (typically tenofovir-emtricitabine + raltegravir or dolutegravir) × 28 days. ID consultation.</td><td>HIV testing at baseline, 6 weeks, 12 weeks, 6 months. New 4th-generation Ag/Ab tests may shorten follow-up.</td></tr>
+        <tr><td><strong>Hepatitis B</strong></td><td>Initiate within 24 hours; effective up to 7 days</td><td>If unvaccinated or unknown response: HBIG + initiate HBV vaccine series. If vaccinated, anti-HBs &gt; 10: no PEP. If vaccinated but non-responder: 2 doses HBIG (1 month apart) or HBIG + revaccination.</td><td>Anti-HBs at 1–2 months post-vaccine series (if completed).</td></tr>
+        <tr><td><strong>Hepatitis C</strong></td><td>No PEP recommended; surveillance only</td><td>No effective post-exposure prophylaxis. Modern direct-acting antivirals treat established infection.</td><td>HCV RNA at 3 weeks if early detection desired; anti-HCV at 4–6 months for seroconversion.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">PEP Time Window Is Short</span>HIV PEP starting within 2 hours is far more effective than starting at 48–72 hours. <strong>Do not wait to "get the source result."</strong> If risk is high, start PEP empirically and stop later if source tests negative. Coordinate with on-call Occupational Health or ID.</div></div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">Risk Stratification (CDC Estimates per Percutaneous Exposure)</span>HIV: ~0.3% from infected source; ~0.09% from mucous membrane. Hep C: ~1.8%. Hep B: 6–30% in unvaccinated. The vaccine is the most powerful prevention available; ensure your series is complete and anti-HBs &gt; 10 mIU/mL.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="chemical">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Chemical Exposures</div><div class="sec-subtitle">Bleach, peracetic acid, glutaraldehyde, citrate, ACD-A</div></div></div>
+  <div class="prose">
+    <p>Dialysis and apheresis use several chemicals that pose occupational risk if mishandled.</p>
+    <table class="compare-table">
+      <thead><tr><th>Chemical</th><th>Use</th><th>Risk</th><th>Protection / Response</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sodium hypochlorite (bleach)</strong></td><td>Surface disinfection (1:10), HD machine disinfection, blood spill cleanup</td><td>Respiratory irritation, eye/skin burns, never mix with ammonia or acids</td><td>Gloves, eye protection, ventilation, mask. Eye splash: flush ≥ 15 min, ED. Skin: wash. Inhalation: fresh air, medical eval.</td></tr>
+        <tr><td><strong>Peracetic acid (e.g., Renalin)</strong></td><td>Dialyzer reprocessing, machine acid disinfection</td><td>Severe respiratory and mucosal irritation; pulmonary edema with high exposure</td><td>Engineered ventilation required; gloves, gown, eye protection, half-mask respirator if vented. Exposure: fresh air, ED.</td></tr>
+        <tr><td><strong>Citrate / ACD-A</strong></td><td>Anticoagulation in apheresis</td><td>Hypocalcemia if accidental rapid IV; skin: low risk</td><td>Avoid direct line connection of citrate to patient (always through pump). Skin/eye splash: rinse.</td></tr>
+        <tr><td><strong>Heparin</strong></td><td>HD / CRRT anticoagulation</td><td>Bleeding if accidental self-injection; HIT in long-term exposure (rare)</td><td>Safety devices; sharps disposal; report exposures.</td></tr>
+        <tr><td><strong>Methoxsalen (8-MOP)</strong></td><td>ECP photoactivator (Therakos CELLEX)</td><td>Phototoxicity; teratogenic risk (avoid in pregnancy)</td><td>Gloves, avoid skin contact; pregnant staff should be reassigned from ECP photoactivator handling per institutional policy.</td></tr>
+        <tr><td><strong>Acid (HD disinfectant)</strong></td><td>HD machine descaling</td><td>Skin and eye burns; respiratory irritation</td><td>Gloves, eye protection, ventilation. Spill: neutralize per SDS.</td></tr>
+        <tr><td><strong>Formaldehyde / glutaraldehyde</strong></td><td>Dialyzer reprocessing (legacy)</td><td>Carcinogen / sensitizer; severe respiratory and skin reaction</td><td>Engineering controls, fit-tested respirator if used. Most centers have phased out.</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Safety Data Sheets (SDS):</strong> OSHA requires SDS for every chemical in the workplace, accessible to all staff. Know where the binder or electronic SDS database is located before you need it.</p>
+  </div>
+</section>
+
+<section class="sec" id="ergonomics">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Ergonomics &amp; Musculoskeletal Health</div></div></div>
+  <div class="prose">
+    <p>Apheresis and dialysis staff have high rates of musculoskeletal injury — back, shoulder, neck, wrist. Standing for long hours, repetitive bending, patient transfers, heavy bag handling, and prolonged cannulation positions contribute.</p>
+    <ul class="check-list">
+      <li><strong>Patient positioning equipment:</strong> Use lift devices, slide sheets, and gait belts for patient transfers; never lift &gt; 35 lbs alone per NIOSH.</li>
+      <li><strong>Adjustable chairs / beds:</strong> Bring patient to comfortable working height; do not bend over for prolonged tasks.</li>
+      <li><strong>Anti-fatigue mats</strong> at standing stations.</li>
+      <li><strong>Rotate tasks</strong> — Avoid prolonged repetitive cannulation in the same shift; rotate with colleagues.</li>
+      <li><strong>Stretching breaks</strong> every 1–2 hours during procedures.</li>
+      <li><strong>Report MSK symptoms early</strong> — Early intervention prevents chronic injury.</li>
+      <li><strong>Two-person assist</strong> for patient transfers, lifting dialysate bags, moving heavy equipment.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="vaccinations">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Vaccinations &amp; Health Surveillance</div></div></div>
+  <div class="prose">
+    <p>Healthcare worker vaccinations are required by CDC and most institutional employee health programs.</p>
+    <table class="compare-table">
+      <thead><tr><th>Vaccine</th><th>Schedule</th><th>Documentation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hepatitis B</strong></td><td>3-dose series (0, 1, 6 months); anti-HBs titer 1–2 months after dose 3; revaccinate non-responders</td><td>Required for all dialysis / apheresis staff per OSHA. Document anti-HBs &gt; 10 mIU/mL.</td></tr>
+        <tr><td><strong>Influenza</strong></td><td>Annual</td><td>Required or strongly recommended by most institutions.</td></tr>
+        <tr><td><strong>MMR</strong></td><td>2 doses if not immune; verify titers</td><td>Required for HCW.</td></tr>
+        <tr><td><strong>Varicella</strong></td><td>2 doses if not immune; verify titers</td><td>Required for HCW.</td></tr>
+        <tr><td><strong>Tdap</strong></td><td>Tdap × 1, Td booster every 10 years</td><td>Recommended for HCW.</td></tr>
+        <tr><td><strong>COVID-19</strong></td><td>Per current CDC recommendation</td><td>Per institutional policy.</td></tr>
+        <tr><td><strong>Tuberculosis screening</strong></td><td>Annual TB screening risk assessment; IGRA or PPD if indicated</td><td>Per institutional policy.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Hep B Non-Responders</span>5–10% of vaccinated individuals do not mount an adequate anti-HBs response. Revaccination (3 additional doses) restores protection in many. Persistent non-responders need HBIG + revaccination after any exposure. Know your status.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Regulatory Sources</div></div></div>
+  <ol class="ref-list">
+    <li>OSHA. <strong>Bloodborne Pathogens Standard (29 CFR 1910.1030).</strong></li>
+    <li>OSHA. <strong>Needlestick Safety and Prevention Act</strong> (2000).</li>
+    <li>CDC. <strong>Updated U.S. Public Health Service Guidelines for the Management of Occupational Exposures to HBV, HCV, and HIV.</strong></li>
+    <li>CDC. <strong>Recommendations for Preventing Transmission of Infections Among Chronic Hemodialysis Patients.</strong></li>
+    <li>CDC. <strong>Immunization of Health-Care Personnel.</strong> MMWR Recomm Rep.</li>
+    <li>NIOSH. <strong>Safe Patient Handling and Mobility.</strong></li>
+    <li>OSHA Hazard Communication Standard — <strong>Safety Data Sheet (SDS)</strong> requirements.</li>
+    <li>ANNA (American Nephrology Nurses Association). <strong>Core Curriculum for Nephrology Nursing.</strong></li>
+    <li>AACN. <strong>Procedure Manual for High Acuity, Progressive, and Critical Care.</strong></li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Occupational Safety Reference</span>
+  <span>Educational reference · Verify against institutional employee health and OSHA-required policies · Not affiliated with any device manufacturer</span>
+</div>
+</div></body></html>

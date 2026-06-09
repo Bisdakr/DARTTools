@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DART Tools — Hemodialysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b11; --card:#111a27; --card2:#0f1722;
+  --border:rgba(149,173,205,.14); --border-strong:rgba(122,162,255,.28);
+  --text:#e9f0fa; --muted:#96a7bf;
+  --primary:#61a8ff; --primary2:#3b82f6; --accent:#7ef0d2;
+  --gold:#cfa95f; --warn:#ffcd70; --danger:#ff6f6f;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --nav-bg:rgba(7,11,17,.82); --grid:rgba(255,255,255,.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top, rgba(97,168,255,.10), transparent 30%),radial-gradient(circle at 80% 20%, rgba(126,240,210,.08), transparent 24%),linear-gradient(180deg, var(--bg), #05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom, rgba(0,0,0,.35), transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1280px, calc(100% - 28px));margin:0 auto}
+
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-why{background:linear-gradient(135deg,rgba(207,169,95,.18),rgba(126,240,210,.10));border-color:rgba(207,169,95,.35);color:#f0dba8}
+.chip-why:hover{border-color:rgba(207,169,95,.6);color:#fff;transform:translateY(-1px)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(126,240,210,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.5}}
+
+.head-bar{padding:22px 0 14px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:18px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:800;margin-bottom:6px}
+.head-title{font-size:clamp(22px,3.4vw,32px);line-height:1.05;letter-spacing:-.03em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-meta{font-size:13px;color:var(--muted);max-width:520px;line-height:1.65;text-align:right}
+
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 40 C 180 -8, 380 -12, 600 18 C 820 50, 1020 42, 1340 8');offset-rotate:auto;opacity:0;animation:cometRun 3.4s cubic-bezier(0.42,0.04,0.58,0.98) 0.3s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+
+.grid-wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;padding-bottom:44px}
+.panel{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--border);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.panel-title{font-size:16px;font-weight:900;margin-bottom:4px}
+.panel-sub{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+
+.section-divider{margin:18px -20px 14px;padding:0 20px;border-top:1px solid var(--border);padding-top:14px}
+.section-divider:first-of-type{margin-top:0;border-top:none;padding-top:0}
+.section-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);margin-bottom:12px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1 / -1}
+.label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.11em;color:var(--muted)}
+
+input,select,button{font:inherit}
+input,select{width:100%;min-height:42px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);padding:0 12px;outline:none;transition:border-color .2s ease, box-shadow .2s ease}
+input:focus,select:focus{border-color:rgba(97,168,255,.45);box-shadow:0 0 0 3px rgba(97,168,255,.12)}
+input::placeholder{color:#70829a}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%),linear-gradient(135deg, var(--muted) 50%, transparent 50%);background-position:calc(100% - 16px) 50%, calc(100% - 11px) 50%;background-size:5px 5px, 5px 5px;background-repeat:no-repeat;padding-right:30px}
+
+.inline-toggle{display:flex;gap:6px;flex-wrap:wrap}
+.toggle-btn{flex:1;min-width:60px;min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s ease}
+.toggle-btn:hover{border-color:rgba(97,168,255,.34)}
+.toggle-btn.active{background:linear-gradient(135deg,rgba(97,168,255,.22),rgba(126,240,210,.14));border-color:rgba(97,168,255,.45);color:#eaf3ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.sub-grid,.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.note{border:1px solid rgba(126,240,210,.18);background:rgba(126,240,210,.06);color:#d5fff2;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.65}
+.note.warning{border-color:rgba(255,205,112,.20);background:rgba(255,205,112,.08);color:#ffe8b6}
+.note.info{border-color:rgba(97,168,255,.2);background:rgba(97,168,255,.05);color:#cfe2ff}
+.note.danger{border-color:rgba(255,111,111,.30);background:rgba(255,111,111,.08);color:#ffd2d2}
+
+.calc-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:12px;border:1px solid transparent;font-weight:800;font-size:14px;cursor:pointer;transition:all .22s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 10px 26px rgba(59,130,246,.26)}
+.btn-primary:hover{box-shadow:0 14px 32px rgba(59,130,246,.38)}
+.btn-secondary{color:var(--text);background:rgba(255,255,255,.03);border-color:var(--border)}
+.btn-secondary:hover{border-color:rgba(97,168,255,.34)}
+
+.result-stack{display:grid;gap:12px}
+.result-card{border:1px solid var(--border);border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));padding:14px 16px}
+.result-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800;margin-bottom:6px}
+.result-value{font-size:clamp(20px,3vw,30px);letter-spacing:-.04em;line-height:1;font-weight:900;color:#f4f8ff;margin-bottom:6px}
+.result-meta{color:var(--muted);font-size:12px;line-height:1.6}
+.math-box{border:1px solid rgba(97,168,255,.18);background:rgba(97,168,255,.05);color:#d8e9ff;border-radius:14px;padding:12px 14px;font-size:12.5px;line-height:1.7}
+.math-box strong{color:#fff}
+.calc-line{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.calc-line:last-child{border-bottom:none}
+.hidden{display:none!important}
+
+.result-card.hero{border:2px solid rgba(126,240,210,.55);background:linear-gradient(135deg, rgba(126,240,210,.12), rgba(97,168,255,.08));box-shadow:0 16px 44px rgba(126,240,210,.10), inset 0 1px 0 rgba(255,255,255,.08);padding:18px 22px;position:relative}
+.result-card.hero::before{content:"";position:absolute;inset:-2px;border-radius:18px;background:linear-gradient(135deg, rgba(126,240,210,.35), rgba(97,168,255,.15));z-index:-1;opacity:.5;filter:blur(8px)}
+.result-card.hero .result-kicker{font-size:11px;color:#9be8d0;letter-spacing:.16em;margin-bottom:10px}
+.result-card.hero .result-value{font-size:clamp(40px, 6.5vw, 56px);color:#ecfff8;letter-spacing:-.05em;font-weight:900;margin-bottom:8px;text-shadow:0 2px 12px rgba(126,240,210,.12)}
+.result-card.hero .result-value .unit{font-size:.32em;font-weight:800;color:#9be8d0;margin-left:4px;letter-spacing:0}
+.result-card.hero .result-meta{color:#cdd6e2;font-size:13px}
+
+details{margin-top:2px}
+details summary{cursor:pointer;list-style:none;padding:10px 12px;border-radius:11px;border:1px dashed var(--border);background:rgba(255,255,255,.02);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:space-between;transition:all .2s ease}
+details summary:hover{color:var(--text);border-color:rgba(97,168,255,.3)}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font-size:16px;color:var(--accent);font-weight:900}
+details[open] summary::after{content:"−"}
+details[open] summary{margin-bottom:10px;border-style:solid}
+
+.foot{padding:18px 0 32px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:8px}
+
+@media (max-width:980px){.grid-wrap{grid-template-columns:1fr}.head-meta{text-align:left}}
+@media (max-width:540px){.form-grid,.sub-grid,.mini-grid{grid-template-columns:1fr}}
+
+/* ── Treatment Menu (Why / SOP / Safety) ───────────── */
+.treatment-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 22px}
+.menu-card{display:flex;flex-direction:column;padding:18px 18px 16px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));text-decoration:none;color:inherit;transition:all .22s ease;position:relative;overflow:hidden;min-height:128px}
+.menu-card::before{content:"";position:absolute;top:-40%;right:-20%;width:160px;height:160px;border-radius:50%;opacity:.10;pointer-events:none;transition:opacity .22s ease}
+.menu-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.30)}
+.menu-card:hover::before{opacity:.20}
+.menu-card.menu-why{border-color:rgba(97,168,255,.32);background:linear-gradient(135deg,rgba(97,168,255,.10),rgba(126,240,210,.04))}
+.menu-card.menu-why::before{background:radial-gradient(circle,rgba(97,168,255,.6),transparent 70%)}
+.menu-card.menu-why:hover{border-color:rgba(97,168,255,.6)}
+.menu-card.menu-sop{border-color:rgba(207,169,95,.30);background:linear-gradient(135deg,rgba(207,169,95,.08),rgba(255,255,255,.015));opacity:.78}
+.menu-card.menu-sop::before{background:radial-gradient(circle,rgba(207,169,95,.6),transparent 70%)}
+.menu-card.menu-sop:hover{border-color:rgba(207,169,95,.55);opacity:1}
+.menu-card.menu-safety{border-color:rgba(255,143,182,.30);background:linear-gradient(135deg,rgba(255,143,182,.10),rgba(126,240,210,.04))}
+.menu-card.menu-safety::before{background:radial-gradient(circle,rgba(255,143,182,.6),transparent 70%)}
+.menu-card.menu-safety:hover{border-color:rgba(255,143,182,.6)}
+.menu-icon{font-size:22px;line-height:1;margin-bottom:8px;position:relative;z-index:1}
+.menu-title{font-size:14.5px;font-weight:900;color:#fff;letter-spacing:-.01em;margin-bottom:5px;position:relative;z-index:1}
+.menu-desc{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;position:relative;z-index:1}
+.menu-foot{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;position:relative;z-index:1}
+.menu-foot .badge{padding:2px 8px;border-radius:999px;font-size:9.5px}
+.menu-foot.ready{color:#9be8d0}
+.menu-foot.ready .badge{background:rgba(126,240,210,.14);color:#cdfaea;border:1px solid rgba(126,240,210,.35)}
+.menu-foot.progress{color:#e6c682}
+.menu-foot.progress .badge{background:rgba(207,169,95,.14);color:#f0dba8;border:1px solid rgba(207,169,95,.35)}
+.menu-arrow{font-size:13px;font-weight:900}
+@media (max-width:780px){.treatment-menu{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">D</div>
+      <div>
+        <div class="brand-title">DART Tools</div>
+        <div class="brand-sub">Clinical calculator suite</div>
+      </div>
+    </a>
+    <div class="nav-right">
+      <span class="chip"><span class="dot"></span>Hemodialysis</span>
+      <a class="chip chip-home" href="index.html">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle"       style="--x:11%;--y:25%;--delay:0.70s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:0.95s"></div>
+      <div class="twinkle"       style="--x:28%;--y:8%; --delay:1.20s"></div>
+      <div class="twinkle tiny"  style="--x:34%;--y:12%;--delay:1.40s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.60s"></div>
+      <div class="twinkle"       style="--x:51%;--y:28%;--delay:1.85s"></div>
+      <div class="twinkle tiny"  style="--x:58%;--y:38%;--delay:2.05s"></div>
+      <div class="twinkle small" style="--x:65%;--y:45%;--delay:2.25s"></div>
+      <div class="twinkle"       style="--x:74%;--y:48%;--delay:2.50s"></div>
+      <div class="twinkle small" style="--x:82%;--y:38%;--delay:2.70s"></div>
+      <div class="twinkle tiny"  style="--x:89%;--y:25%;--delay:2.90s"></div>
+      <div class="twinkle small" style="--x:95%;--y:15%;--delay:3.10s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Hemodialysis</div>
+      <div class="head-title"><span class="accent">Hemodialysis Calculator</span></div>
+    </div>
+    <div class="head-meta" style="position:relative;z-index:1">Estimates circuit volume, ECV % of TBV, pediatric prime threshold, UFR safety. Dialyzer priming volumes referenced from publicly available operator manuals.</div>
+  </div>
+
+  <nav class="treatment-menu" aria-label="HD references">
+    <a class="menu-card menu-why" href="whyhemodialysis.html">
+      <div class="menu-icon">📖</div>
+      <div class="menu-title">Why Hemodialysis?</div>
+      <div class="menu-desc">Physics of diffusion + convection, dialyzer specs, adequacy targets.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-sop" href="sophd.html">
+      <div class="menu-icon">📋</div>
+      <div class="menu-title">HD Standards of Practice</div>
+      <div class="menu-desc">Institutional protocols, technique standards, and procedural workflow.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+    <a class="menu-card menu-safety" href="safetyhd.html">
+      <div class="menu-icon">🛡️</div>
+      <div class="menu-title">HD Safety Considerations</div>
+      <div class="menu-desc">Hypotension, disequilibrium, UFR safety, access infections.</div>
+      <div class="menu-foot ready"><span class="badge">Ready</span><span class="menu-arrow">→</span></div>
+    </a>
+  </nav>
+
+  <div class="grid-wrap">
+
+    <section class="panel">
+
+      <!-- PATIENT -->
+      <div class="section-divider"><div class="section-label">Patient</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="label">Weight Unit</label>
+            <div class="inline-toggle">
+              <button class="toggle-btn active" type="button" id="weightMetricBtn">kg</button>
+              <button class="toggle-btn" type="button" id="weightEnglishBtn">lb</button>
+            </div>
+          </div>
+          <div class="field" id="weightKgWrap">
+            <label class="label" for="weightKg">Pre-HD Weight (kg)</label>
+            <input id="weightKg" type="number" step="0.1" min="0" placeholder="e.g. 70" autofocus />
+          </div>
+          <div class="field hidden" id="weightLbWrap">
+            <label class="label" for="weightLb">Pre-HD Weight (lb)</label>
+            <input id="weightLb" type="number" step="0.1" min="0" placeholder="e.g. 154" />
+          </div>
+        </div>
+      </div>
+
+      <!-- CIRCUIT -->
+      <div class="section-divider"><div class="section-label">Circuit (Dialyzer + Tubing)</div>
+        <div class="form-grid">
+          <div class="field full">
+            <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Product names below are listed only so clinicians can match what is physically in use on their unit. They remain the trademarks of their respective owners; this tool has no affiliation with any manufacturer. Priming volumes are referenced from publicly available operator manuals — verify against the current IFU for the lot in use.</div>
+            <label class="label" for="filter">Dialyzer / Filter</label>
+            <select id="filter">
+              <option value="">Select dialyzer</option>
+              <optgroup label="── Optiflux (high-flux, polysulfone) ──">
+                <option value="opt160">Optiflux F160NR · 1.5 m² · 84 mL prime · high-flux</option>
+                <option value="opt180">Optiflux F180NR · 1.8 m² · 96 mL prime · high-flux</option>
+                <option value="opt200">Optiflux F200NR · 2.0 m² · 113 mL prime · high-flux</option>
+                <option value="opt250">Optiflux F250NR · 2.5 m² · 165 mL prime · high-flux</option>
+              </optgroup>
+              <optgroup label="── Revaclear (high-flux, Polyflux) ──">
+                <option value="rev300">Revaclear 300 · 1.4 m² · 105 mL prime · high-flux</option>
+                <option value="rev400">Revaclear 400 · 1.8 m² · 134 mL prime · high-flux</option>
+              </optgroup>
+              <optgroup label="── F-series (low-flux polysulfone) ──">
+                <option value="f4">F4 HPS · 0.8 m² · 42 mL prime · low-flux</option>
+                <option value="f5">F5 HPS · 1.0 m² · 63 mL prime · low-flux</option>
+                <option value="f6">F6 HPS · 1.3 m² · 82 mL prime · low-flux</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="field full">
+            <label class="label" for="tubing">Tubing Set</label>
+            <select id="tubing">
+              <option value="">Select tubing</option>
+              <option value="husky">Husky / Neonatal · 52 mL · for &lt; 10 kg</option>
+              <option value="peds">Pediatric · 73 mL · for ~10–30 kg</option>
+              <option value="adult">Adult · 140 mL · for &gt; 25 kg</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- UF SAFETY -->
+      <div class="section-divider"><div class="section-label">UF Safety (recommended)</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="label" for="ufgoal">UF Goal (mL total)</label>
+            <input id="ufgoal" type="number" step="100" min="0" max="6000" placeholder="e.g. 2500" />
+          </div>
+          <div class="field">
+            <label class="label" for="durationHr">Treatment Time (hr)</label>
+            <input id="durationHr" type="number" step="0.25" min="1" max="8" placeholder="e.g. 4" value="4" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ADVANCED -->
+      <div class="section-divider"><div class="section-label">Advanced (optional)</div>
+        <details>
+          <summary>Sex + Height for Nadler TBV · Hematocrit · Order parameters</summary>
+          <div class="form-grid" style="margin-top:8px">
+            <div class="field">
+              <label class="label" for="sex">Sex (for Nadler TBV)</label>
+              <select id="sex">
+                <option value="">— skip (uses 70 mL/kg estimate)</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="hct">Hematocrit (%)</label>
+              <input id="hct" type="number" step="0.1" min="0" placeholder="e.g. 30" />
+            </div>
+            <div class="field">
+              <label class="label">Height Unit</label>
+              <div class="inline-toggle">
+                <button class="toggle-btn active" type="button" id="heightMetricBtn">cm</button>
+                <button class="toggle-btn" type="button" id="heightEnglishBtn">ft + in</button>
+              </div>
+            </div>
+            <div class="field" id="heightCmWrap">
+              <label class="label" for="heightCm">Height (cm)</label>
+              <input id="heightCm" type="number" step="0.1" min="0" placeholder="e.g. 170" />
+            </div>
+            <div class="field hidden" id="heightEnglishWrap">
+              <label class="label">Height (ft + in)</label>
+              <div class="sub-grid">
+                <input id="heightFt" type="number" step="1" min="0" placeholder="ft" />
+                <input id="heightIn" type="number" step="0.1" min="0" placeholder="in" />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="bfr">Blood Flow Rate (mL/min)</label>
+              <input id="bfr" type="number" step="10" min="20" max="600" placeholder="e.g. 350" />
+            </div>
+            <div class="field">
+              <label class="label" for="dfr">Dialysate Flow (mL/min)</label>
+              <input id="dfr" type="number" step="100" min="100" max="1000" placeholder="e.g. 600" />
+            </div>
+            <div class="field">
+              <label class="label" for="temp">Dialysate Temp (°C)</label>
+              <input id="temp" type="number" step="0.1" min="34" max="38" placeholder="e.g. 36.5" />
+            </div>
+            <div class="field">
+              <label class="label" for="heparin">Heparin (units)</label>
+              <input id="heparin" type="number" step="100" min="0" placeholder="e.g. 2000" />
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="note info"><strong>Estimates only — not an order.</strong> Independent educational tool, no manufacturer affiliation. Verify dialyzer / tubing prime volumes against the device's current operator manual / IFU. Pediatric ECV thresholds match institutional apheresis policy.</div>
+      </div>
+
+      <div class="calc-row">
+        <button class="btn btn-primary" id="calculateBtn" type="button">Calculate</button>
+        <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-title">Results</div>
+      <div class="panel-sub">Total circuit volume, ECV % of TBV, pediatric prime decision (≤ 25 kg), UFR safety, dialyzer specs, optional order summary.</div>
+      <div class="result-stack" id="results">
+        <div class="result-card">
+          <div class="result-kicker">Awaiting inputs</div>
+          <div class="result-value">—</div>
+          <div class="result-meta">Enter weight, dialyzer, tubing — UF goal + time recommended for safety check.</div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <div class="foot">
+    <span>DART Tools · Hemodialysis</span>
+    <span>Estimates only · Not affiliated with any device manufacturer · Verify against institutional protocol</span>
+  </div>
+
+</div>
+
+<script>
+/* ── Fresenius dialyzer database (priming volumes, surface area, flux class) ── */
+const dialyzers = {
+  'f4':    {label:'Fresenius F4 HPS',          primeMl: 42, area:0.8, flux:'low',  membrane:'Polysulfone'},
+  'f5':    {label:'Fresenius F5 HPS',          primeMl: 63, area:1.0, flux:'low',  membrane:'Polysulfone'},
+  'f6':    {label:'Fresenius F6 HPS',          primeMl: 82, area:1.3, flux:'low',  membrane:'Polysulfone'},
+  'opt160':{label:'Optiflux F160NR',           primeMl: 84, area:1.5, flux:'high', membrane:'Polysulfone (e-beam)'},
+  'opt180':{label:'Optiflux F180NR',           primeMl: 96, area:1.8, flux:'high', membrane:'Polysulfone (e-beam)'},
+  'opt200':{label:'Optiflux F200NR',           primeMl:113, area:2.0, flux:'high', membrane:'Polysulfone (e-beam)'},
+  'opt250':{label:'Optiflux F250NR',           primeMl:165, area:2.5, flux:'high', membrane:'Polysulfone (e-beam)'},
+  'rev300':{label:'Revaclear 300',             primeMl:105, area:1.4, flux:'high', membrane:'Polyflux (Polyarylethersulfone/PVP)'},
+  'rev400':{label:'Revaclear 400',             primeMl:134, area:1.8, flux:'high', membrane:'Polyflux (Polyarylethersulfone/PVP)'},
+};
+const tubings = {
+  'husky':{label:'Husky / Neonatal', primeMl: 52, fit:'< 10 kg'},
+  'peds': {label:'Pediatric',        primeMl: 73, fit:'10–30 kg'},
+  'adult':{label:'Adult',            primeMl:140, fit:'> 25 kg'},
+};
+
+/* ── Pediatric TBV (matches apheresis policy) ── */
+function pediatricTBVml(weightKg){
+  if(weightKg <= 5)  return { tbv: 90 * weightKg, factor: 90, band: 'Neonate (≤ 5 kg)' };
+  if(weightKg <= 15) return { tbv: 80 * weightKg, factor: 80, band: 'Infant / Small Child (5.1–15 kg)' };
+  return                    { tbv: 70 * weightKg, factor: 70, band: 'Child (15.1–25 kg)' };
+}
+const PEDIATRIC_THRESHOLD_KG = 25;
+function nadlerTBVml(sex, heightCm, weightKg){ const h=heightCm/100; return sex==='male' ? 604 + (367*Math.pow(h,3)) + (32.2*weightKg) : 183 + (356*Math.pow(h,3)) + (33.1*weightKg); }
+/* Adult fallback when sex+height not provided: ≈ 70 mL/kg */
+const ADULT_FALLBACK_ML_PER_KG = 70;
+
+/* ── Prime decision (matches apheresis institutional policy) ── */
+function decidePrime(ecvPctOfTbv, totalCircuitMl){
+  if(ecvPctOfTbv > 15){
+    return {level:'diluted-strong', label:'Strongly recommend Diluted Blood Prime', color:'#ffb4b4', bg:'rgba(255,111,111,.10)', border:'rgba(255,111,111,.32)', icon:'⚠',
+      detail:`Circuit volume is <strong>${ecvPctOfTbv.toFixed(1)}%</strong> of patient TBV (above 15%). Recommend pre-procedure <strong>Diluted PRBC Prime (35% Hct, ${Math.max(250, Math.ceil(totalCircuitMl*1.15/50)*50)} mL)</strong>.`};
+  }
+  if(ecvPctOfTbv > 10){
+    const bias = ecvPctOfTbv >= 12.5 ? 'closer to 15%' : 'closer to 10%';
+    return {level:'consider-prime', label:'Consider Custom Prime (Albumin or Diluted Blood)', color:'#ffe8b6', bg:'rgba(255,205,112,.08)', border:'rgba(255,205,112,.32)', icon:'▲',
+      detail:`Circuit volume is <strong>${ecvPctOfTbv.toFixed(1)}%</strong> of patient TBV (10–15% range, ${bias}). Consider <strong>Albumin Prime</strong> (closer 10%) or <strong>Diluted PRBC Prime (35% Hct)</strong> closer to 15%.`};
+  }
+  return {level:'standard', label:'Standard NS prime acceptable', color:'#cdfaea', bg:'rgba(126,240,210,.06)', border:'rgba(126,240,210,.28)', icon:'●',
+    detail:`Circuit volume is <strong>${ecvPctOfTbv.toFixed(1)}%</strong> of patient TBV (≤ 10%). Standard NS prime acceptable if hemodynamically stable.`};
+}
+
+/* ── helpers ── */
+const state = {heightMode:'cm', weightMode:'kg'};
+const $ = (id) => document.getElementById(id);
+const el = {
+  sex:$('sex'), hct:$('hct'),
+  heightCm:$('heightCm'), heightFt:$('heightFt'), heightIn:$('heightIn'),
+  weightKg:$('weightKg'), weightLb:$('weightLb'),
+  filter:$('filter'), tubing:$('tubing'),
+  bfr:$('bfr'), dfr:$('dfr'), temp:$('temp'), ufgoal:$('ufgoal'), durationHr:$('durationHr'), heparin:$('heparin'),
+  results:$('results'), calculateBtn:$('calculateBtn'), resetBtn:$('resetBtn'),
+  heightMetricBtn:$('heightMetricBtn'), heightEnglishBtn:$('heightEnglishBtn'),
+  weightMetricBtn:$('weightMetricBtn'), weightEnglishBtn:$('weightEnglishBtn'),
+  heightCmWrap:$('heightCmWrap'), heightEnglishWrap:$('heightEnglishWrap'),
+  weightKgWrap:$('weightKgWrap'), weightLbWrap:$('weightLbWrap'),
+};
+function setActive(buttons, activeButton){ buttons.forEach(b=>b.classList.remove('active')); activeButton.classList.add('active'); }
+function fmt(n, d=1){ if(!Number.isFinite(n)) return '—'; return Number(n).toLocaleString(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}); }
+function fmtInt(n){ if(!Number.isFinite(n)) return '—'; return Math.round(Number(n)).toLocaleString(); }
+function heightToCm(){ if(state.heightMode==='cm') return parseFloat(el.heightCm.value); const ft=parseFloat(el.heightFt.value||0); const inches=parseFloat(el.heightIn.value||0); return ((ft*12)+inches)*2.54; }
+function weightToKg(){ if(state.weightMode==='kg') return parseFloat(el.weightKg.value); return parseFloat(el.weightLb.value)*0.45359237; }
+function validatePositive(v, n){ if(!Number.isFinite(v) || v<=0) throw new Error(`Please enter a valid ${n}.`); }
+
+/* ── calculate ── */
+function calculate(){
+  try{
+    const weightKg = weightToKg();
+    validatePositive(weightKg, 'pre-HD weight');
+
+    const filterKey = el.filter.value;
+    const tubingKey = el.tubing.value;
+    if(!filterKey) throw new Error('Please select a dialyzer.');
+    if(!tubingKey) throw new Error('Please select a tubing set.');
+
+    const sex = el.sex.value || null;
+    const heightCmRaw = heightToCm();
+    const heightCm = Number.isFinite(heightCmRaw) && heightCmRaw > 0 ? heightCmRaw : null;
+
+    const hctRaw = parseFloat(el.hct.value);
+    const bfr = parseFloat(el.bfr.value);
+    const dfr = parseFloat(el.dfr.value);
+    const tempC = parseFloat(el.temp.value);
+    const ufgoal = parseFloat(el.ufgoal.value);
+    const durationHr = parseFloat(el.durationHr.value);
+    const duration = Number.isFinite(durationHr) ? durationHr * 60 : NaN; // min
+    const heparin = parseFloat(el.heparin.value);
+
+    // TBV
+    let tbvMl, tbvMethod, pedInfo = null, tbvFallbackNote = null;
+    if(weightKg <= PEDIATRIC_THRESHOLD_KG){
+      pedInfo = pediatricTBVml(weightKg);
+      tbvMl = pedInfo.tbv;
+      tbvMethod = `Pediatric formula (${pedInfo.band})`;
+    } else if(sex && heightCm){
+      tbvMl = nadlerTBVml(sex, heightCm, weightKg);
+      tbvMethod = 'Nadler equation (> 25 kg)';
+    } else {
+      tbvMl = ADULT_FALLBACK_ML_PER_KG * weightKg;
+      tbvMethod = `Estimate (${ADULT_FALLBACK_ML_PER_KG} mL/kg) — add sex + height in Advanced for Nadler precision`;
+      tbvFallbackNote = true;
+    }
+
+    const dialyzer = dialyzers[filterKey];
+    const tubing = tubings[tubingKey];
+
+    const totalCircuitMl = dialyzer.primeMl + tubing.primeMl;
+    const ecvPctOfTbv = (totalCircuitMl / tbvMl) * 100;
+    const primeDecision = decidePrime(ecvPctOfTbv, totalCircuitMl);
+
+    // UFR safety (KDOQI: < 13 mL/kg/hr)
+    let ufrPerKgHr = null, ufrAlert = null;
+    if(Number.isFinite(ufgoal) && ufgoal > 0 && Number.isFinite(duration) && duration > 0){
+      ufrPerKgHr = (ufgoal / weightKg) / (duration/60);
+      if(ufrPerKgHr > 13) ufrAlert = {color:'#ffb4b4', bg:'rgba(255,111,111,.10)', text:`UFR ${fmt(ufrPerKgHr,1)} mL/kg/hr exceeds the KDOQI 13 mL/kg/hr safety threshold — risk of intradialytic hypotension and increased mortality. Consider longer time or smaller goal.`};
+      else if(ufrPerKgHr > 10) ufrAlert = {color:'#ffe8b6', bg:'rgba(255,205,112,.08)', text:`UFR ${fmt(ufrPerKgHr,1)} mL/kg/hr is above the 10 mL/kg/hr KDIGO caution band — monitor BP closely.`};
+      else ufrAlert = {color:'#cdfaea', bg:'rgba(126,240,210,.06)', text:`UFR ${fmt(ufrPerKgHr,1)} mL/kg/hr is within recommended safety limits.`};
+    }
+
+    // BFR guidance
+    let bfrGuidance = '';
+    if(Number.isFinite(bfr) && bfr > 0){
+      const bfrPerKg = bfr / weightKg;
+      bfrGuidance = weightKg <= 25
+        ? `Pediatric: ${fmt(bfrPerKg,1)} mL/kg/min (typical 3–5 mL/kg/min; max ~7).`
+        : `Adult: ${fmt(bfr,0)} mL/min (typical 300–500 for full clearance; lower for hemodynamic instability).`;
+    }
+
+    // V (urea distribution volume) — only meaningful if sex known
+    let V_L = null;
+    if(sex){
+      V_L = (sex === 'male' ? 0.58 : 0.55) * weightKg;
+    }
+
+    const data = {
+      sex, weightKg, heightCm, tbvMl, tbvMethod, pedInfo, tbvFallbackNote,
+      dialyzer, tubing, totalCircuitMl, ecvPctOfTbv, primeDecision,
+      bfr, dfr, tempC, ufgoal, duration, durationHr, heparin, hctRaw,
+      ufrPerKgHr, ufrAlert, bfrGuidance, V_L
+    };
+
+    el.results.innerHTML = createResultHTML(data);
+  } catch(err){
+    el.results.innerHTML = `
+      <div class="result-card">
+        <div class="result-kicker">Input Error</div>
+        <div class="result-value" style="font-size:18px;color:#ffb4b4">Unable to calculate</div>
+        <div class="result-meta">${err.message}</div>
+      </div>`;
+  }
+}
+
+function createResultHTML(d){
+  const anyOrder = Number.isFinite(d.bfr) || Number.isFinite(d.dfr) || Number.isFinite(d.tempC) || Number.isFinite(d.heparin) || Number.isFinite(d.hctRaw);
+  return `
+    ${d.pedInfo ? `
+    <div class="result-card" style="border-color:rgba(255,205,112,.28);background:linear-gradient(180deg, rgba(255,205,112,.05), rgba(97,168,255,.03));">
+      <div class="result-kicker">⚠ Pediatric Patient — Nadler not used</div>
+      <div class="result-meta" style="margin-bottom:8px;font-size:12.5px">Weight <strong>${fmt(d.weightKg,1)} kg</strong> is ≤ 25 kg. Pediatric weight-based TBV formula.</div>
+      <div class="math-box" style="background:rgba(255,205,112,.06);border-color:rgba(255,205,112,.22)">
+        <div class="calc-line"><strong>${d.pedInfo.band}</strong> → TBV = ${d.pedInfo.factor} mL/kg × ${fmt(d.weightKg,1)} kg = <strong>${fmtInt(d.tbvMl)} mL</strong></div>
+        <div class="calc-line" style="color:#ffe8b6">Bands: ≤ 5 kg → 90 mL/kg · 5.1–15 kg → 80 mL/kg · 15.1–25 kg → 70 mL/kg</div>
+      </div>
+    </div>` : ''}
+
+    ${d.tbvFallbackNote ? `
+    <div class="note info" style="margin-bottom:0">TBV estimated at <strong>${ADULT_FALLBACK_ML_PER_KG} mL/kg × ${fmt(d.weightKg,1)} kg = ${fmtInt(d.tbvMl)} mL</strong>. Add sex + height in Advanced for Nadler-based precision (matters most when ECV is borderline 10–15%).</div>
+    ` : ''}
+
+    <!-- HERO: Total Circuit Volume -->
+    <div class="result-card hero">
+      <div class="result-kicker">Total Circuit Volume</div>
+      <div class="result-value">${fmtInt(d.totalCircuitMl)}<span class="unit">mL</span></div>
+      <div class="result-meta">${d.dialyzer.label} (${d.dialyzer.primeMl} mL) + ${d.tubing.label} tubing (${d.tubing.primeMl} mL) · <strong>${d.dialyzer.flux === 'high' ? 'HIGH-FLUX' : 'LOW-FLUX'}</strong> · ${fmt(d.ecvPctOfTbv,1)}% of patient TBV</div>
+    </div>
+
+    <!-- Prime Decision -->
+    <div class="result-card" style="border-color:${d.primeDecision.border};background:linear-gradient(180deg, ${d.primeDecision.bg}, rgba(255,255,255,.01));">
+      <div class="result-kicker" style="color:${d.primeDecision.color}">${d.primeDecision.icon} Prime Decision · Circuit ${fmt(d.ecvPctOfTbv,1)}% of TBV</div>
+      <div class="result-value" style="font-size:18px;color:${d.primeDecision.color}">${d.primeDecision.label}</div>
+      <div class="result-meta" style="margin-top:6px;font-size:12.5px">${d.primeDecision.detail}</div>
+      ${d.primeDecision.level !== 'standard' ? `
+      <div class="math-box" style="margin-top:10px;background:${d.primeDecision.bg};border-color:${d.primeDecision.border}">
+        <div class="calc-line"><strong>Thresholds:</strong> ≤ 10% → standard NS · 10–15% → consider Albumin (closer 10%) or Diluted Blood (closer 15%) · &gt; 15% → strongly recommend Diluted Blood Prime</div>
+        <div class="calc-line" style="color:#ffd2d2;margin-top:4px"><strong>⚠ ALBUMIN PRIME → BLOOD RINSEBACK at end of treatment</strong> per institutional apheresis policy.</div>
+        <div class="calc-line" style="color:#cdfaea"><strong>● DILUTED BLOOD PRIME → NO RINSEBACK</strong> · Requires physician order + transfusion consent.</div>
+        <div class="calc-line"><strong>Pediatric PRBC dose:</strong> 10 mL/kg standard transfusion volume; coordinate with blood bank.</div>
+      </div>` : ''}
+    </div>
+
+    ${d.ufrAlert ? `
+    <div class="result-card" style="border-color:${d.ufrAlert.color === '#ffb4b4' ? 'rgba(255,111,111,.32)' : d.ufrAlert.color === '#ffe8b6' ? 'rgba(255,205,112,.32)' : 'rgba(126,240,210,.28)'};background:linear-gradient(180deg, ${d.ufrAlert.bg}, rgba(255,255,255,.01));">
+      <div class="result-kicker" style="color:${d.ufrAlert.color}">Ultrafiltration Rate Safety</div>
+      <div class="result-meta" style="margin-top:6px;color:${d.ufrAlert.color};font-size:13px">${d.ufrAlert.text}</div>
+      <div class="math-box" style="margin-top:8px">
+        <div class="calc-line"><strong>UF Goal:</strong> ${fmtInt(d.ufgoal)} mL over ${fmt(d.durationHr,2)} hr = <strong>${fmt(d.ufgoal/d.durationHr,0)} mL/hr</strong></div>
+        <div class="calc-line"><strong>Reference:</strong> KDOQI 2015 recommends UFR &lt; 13 mL/kg/hr to reduce intradialytic hypotension and cardiovascular mortality.</div>
+      </div>
+    </div>` : ''}
+
+    <!-- Dialyzer & Flux -->
+    <div class="result-card">
+      <div class="result-kicker">Dialyzer Specs</div>
+      <div class="result-meta" style="margin-bottom:8px"><strong>${d.dialyzer.label}</strong> · ${d.dialyzer.membrane}</div>
+      <div class="math-box">
+        <div class="calc-line"><strong>Surface area:</strong> ${d.dialyzer.area} m²</div>
+        <div class="calc-line"><strong>Priming volume:</strong> ${d.dialyzer.primeMl} mL</div>
+        <div class="calc-line"><strong>Flux classification:</strong> ${d.dialyzer.flux === 'high' ? 'HIGH-FLUX (Kuf &gt; 20 mL/hr/mmHg, β2-microglobulin clearance, larger middle-molecule removal)' : 'LOW-FLUX (Kuf &lt; 10 mL/hr/mmHg, small-solute clearance primarily)'}</div>
+        <div class="calc-line"><strong>Membrane:</strong> ${d.dialyzer.membrane}</div>
+      </div>
+    </div>
+
+    ${anyOrder ? `
+    <div class="result-card">
+      <div class="result-kicker">Order Summary</div>
+      <div class="math-box">
+        ${Number.isFinite(d.bfr) && d.bfr > 0 ? `<div class="calc-line"><strong>Blood Flow Rate:</strong> ${fmt(d.bfr,0)} mL/min · ${d.bfrGuidance}</div>` : ''}
+        ${Number.isFinite(d.dfr) && d.dfr > 0 ? `<div class="calc-line"><strong>Dialysate Flow Rate:</strong> ${fmt(d.dfr,0)} mL/min (typical 500 — go to 800 for higher clearance)</div>` : ''}
+        ${Number.isFinite(d.tempC) ? `<div class="calc-line"><strong>Dialysate Temp:</strong> ${fmt(d.tempC,1)} °C ${d.tempC < 36 ? '(cool — for BP support / hemodynamic instability)' : d.tempC > 37 ? '(warm — verify indication)' : '(standard isothermic)'}</div>` : ''}
+        ${Number.isFinite(d.hctRaw) ? `<div class="calc-line"><strong>Hematocrit:</strong> ${fmt(d.hctRaw,1)}%</div>` : ''}
+        ${Number.isFinite(d.heparin) && d.heparin > 0 ? `<div class="calc-line"><strong>Heparin:</strong> ${fmtInt(d.heparin)} units (verify load vs continuous infusion order)</div>` : ''}
+        ${Number.isFinite(d.V_L) ? `<div class="calc-line"><strong>Urea distribution volume (V):</strong> ≈ ${fmt(d.V_L,1)} L (${d.sex === 'male' ? '0.58' : '0.55'} × weight) — for Kt/V when K and t available</div>` : ''}
+      </div>
+    </div>` : ''}
+
+    <!-- Reference card -->
+    <div class="result-card">
+      <div class="result-kicker">Reference</div>
+      <div class="math-box">
+        <div class="calc-line"><strong>Total Circuit Volume</strong> = Dialyzer priming volume + Tubing priming volume.</div>
+        <div class="calc-line"><strong>Flux:</strong> low-flux Kuf &lt; 10 (small solute); high-flux Kuf &gt; 20 (also clears β2-microglobulin and middle molecules) — see "Why HD?" for clinical implications.</div>
+        <div class="calc-line"><strong>Prime thresholds:</strong> &gt; 10% TBV → consider albumin · &gt; 15% TBV → diluted PRBC (35% Hct).</div>
+        <div class="calc-line"><strong>UFR thresholds:</strong> KDOQI &lt; 13 mL/kg/hr · KDIGO caution &gt; 10 mL/kg/hr.</div>
+      </div>
+    </div>
+  `;
+}
+
+function resetForm(){
+  el.sex.value=''; el.hct.value='';
+  el.heightCm.value=''; el.heightFt.value=''; el.heightIn.value='';
+  el.weightKg.value=''; el.weightLb.value='';
+  el.filter.value=''; el.tubing.value='';
+  el.bfr.value=''; el.dfr.value=''; el.temp.value=''; el.ufgoal.value=''; el.durationHr.value='4'; el.heparin.value='';
+  state.heightMode='cm'; state.weightMode='kg';
+  setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightMetricBtn);
+  setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn);
+  el.heightCmWrap.classList.remove('hidden'); el.heightEnglishWrap.classList.add('hidden');
+  el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden');
+  el.results.innerHTML = `<div class="result-card"><div class="result-kicker">Awaiting inputs</div><div class="result-value">—</div><div class="result-meta">Enter weight, dialyzer, tubing — UF goal + time recommended for safety check.</div></div>`;
+}
+
+el.heightMetricBtn.addEventListener('click', ()=>{ state.heightMode='cm'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightMetricBtn); el.heightCmWrap.classList.remove('hidden'); el.heightEnglishWrap.classList.add('hidden'); });
+el.heightEnglishBtn.addEventListener('click', ()=>{ state.heightMode='ftin'; setActive([el.heightMetricBtn, el.heightEnglishBtn], el.heightEnglishBtn); el.heightCmWrap.classList.add('hidden'); el.heightEnglishWrap.classList.remove('hidden'); });
+el.weightMetricBtn.addEventListener('click', ()=>{ state.weightMode='kg'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightMetricBtn); el.weightKgWrap.classList.remove('hidden'); el.weightLbWrap.classList.add('hidden'); });
+el.weightEnglishBtn.addEventListener('click', ()=>{ state.weightMode='lb'; setActive([el.weightMetricBtn, el.weightEnglishBtn], el.weightEnglishBtn); el.weightKgWrap.classList.add('hidden'); el.weightLbWrap.classList.remove('hidden'); });
+el.calculateBtn.addEventListener('click', calculate);
+el.resetBtn.addEventListener('click', resetForm);
+document.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); calculate(); } });
+</script>
+</body>
+</html>

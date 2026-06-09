@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why LDL Apheresis? — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(97,168,255,.10),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.08),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(126,240,210,.22),rgba(97,168,255,.14));border-color:rgba(126,240,210,.4);color:#cdfaea}
+.chip-calc:hover{border-color:rgba(126,240,210,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 50 C 180 0,380 -8,600 30 C 820 70,1020 60,1340 18');offset-rotate:auto;opacity:0;animation:cometRun 3.6s cubic-bezier(0.42,0.04,0.58,0.98) 0.4s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.22);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.06));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#7ef0d2,#61a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#cdfaea;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-research{background:rgba(179,137,255,.08);border-color:var(--purple)}.callout-research .callout-label{color:#b389ff}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cfe2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(97,168,255,.15),rgba(126,240,210,.10));border:1px solid rgba(97,168,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#cfe2ff}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(59,130,246,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:#9bc4ff;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.ref-list a{color:#9bc4ff;text-decoration:underline}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style></head>
+<body>
+<nav><div class="container nav-inner">
+  <a class="brand" href="index.html"><div class="brand-mark">D</div><div><div class="brand-title">DART Tools</div><div class="brand-sub">Educational Reference</div></div></a>
+  <div class="nav-right"><a class="chip chip-calc" href="ldl-apheresis.html">🧮 Open Calculator</a><a class="chip chip-home" href="index.html">← Home</a></div>
+</div></nav>
+<div class="container">
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle" style="--x:11%;--y:25%;--delay:0.80s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:1.05s"></div>
+      <div class="twinkle" style="--x:28%;--y:8%;--delay:1.30s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.70s"></div>
+      <div class="twinkle" style="--x:51%;--y:30%;--delay:1.95s"></div>
+      <div class="twinkle small" style="--x:65%;--y:50%;--delay:2.35s"></div>
+      <div class="twinkle" style="--x:74%;--y:52%;--delay:2.60s"></div>
+      <div class="twinkle small" style="--x:82%;--y:40%;--delay:2.85s"></div>
+      <div class="twinkle tiny" style="--x:89%;--y:25%;--delay:3.05s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Education · Kaneka Liposorber LA-15</div>
+      <div class="head-title"><span class="accent">Why LDL Apheresis?</span></div>
+      <div class="head-sub">When statins, PCSK9 inhibitors, and lifestyle still aren't enough: a deep but readable guide to the mechanical removal of LDL and Lp(a) — and why we hold the ACE-i for 24 hours.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav"><div class="container"><div class="section-nav-inner">
+  <a class="sec-pill" href="#mechanism">01 · How It Works</a>
+  <a class="sec-pill" href="#indications">02 · Who Gets It</a>
+  <a class="sec-pill" href="#columns">03 · The Columns</a>
+  <a class="sec-pill" href="#ace">04 · The ACE-i Problem</a>
+  <a class="sec-pill" href="#schedule">05 · Schedule</a>
+  <a class="sec-pill" href="#lpa">06 · Lp(a)</a>
+  <a class="sec-pill" href="#fsgs">07 · FSGS Use</a>
+  <a class="sec-pill" href="#new">08 · 2024–2025</a>
+  <a class="sec-pill" href="#refs">References</a>
+</div></div></div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The 60-second version</div>
+  <div class="hero-tldr-text">
+    LDL apheresis is a <strong>mechanical solution to a genetic problem</strong>. Patients with familial hypercholesterolemia (FH) — homozygous or heterozygous with established cardiovascular disease and stubbornly high LDL despite maximal statin/PCSK9-inhibitor therapy — can have their LDL cleared from circulation by passing plasma through a column that selectively binds apoB-containing lipoproteins. The Kaneka <strong>Liposorber LA-15</strong> uses dextran-sulfate cellulose columns to clear ~60–70% of LDL and Lp(a) in a single session lasting 2–4 hours. Performed every 1–2 weeks lifelong, it cuts MACE substantially in this otherwise-untreatable cohort.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">~70%</div><div class="stat-label">Acute LDL reduction per session</div></div>
+    <div class="stat"><div class="stat-num">~35%</div><div class="stat-label">Time-averaged LDL reduction (biweekly)</div></div>
+    <div class="stat"><div class="stat-num">~50%</div><div class="stat-label">MACE reduction vs untreated FH</div></div>
+    <div class="stat"><div class="stat-num">3.5 L</div><div class="stat-label">Typical plasma volume processed</div></div>
+  </div>
+</div>
+
+<section class="sec" id="mechanism">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">How LDL Apheresis Works</div><div class="sec-subtitle">Dual-circuit plasma separation + selective adsorption</div></div></div>
+  <div class="prose">
+    <p>The Liposorber LA-15 is an integrated apheresis system. Blood is drawn from the patient through a venous catheter or AV fistula and passed through a <strong>plasma separator</strong> (similar in principle to a hemodialysis membrane but with larger pores, allowing plasma to filter through while retaining cells). The cellular component returns to the patient via the return line, unmodified.</p>
+    <p>The separated plasma flows through one of two parallel <strong>dextran-sulfate cellulose adsorption columns</strong>. Dextran sulfate is a polyanion that binds positively charged apoB-containing lipoproteins (LDL, VLDL, Lp(a)) via electrostatic interaction. The "cleaned" plasma exits the column and is returned to the patient through the venous return line. The two columns alternate — while one is adsorbing, the other regenerates with a hypertonic saline elution buffer that strips bound LDL off the column for reuse.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">What gets removed (and what doesn't)</span><strong>Removed:</strong> LDL-C (~70%), Lp(a) (~60–70%), VLDL (~50%), apoB-containing remnants. <strong>Not removed (preserved):</strong> HDL, immunoglobulins (mostly), albumin, clotting factors (mostly preserved). The selectivity is part of the safety story — you're not depleting the patient of plasma proteins generally, just lipid carriers.</div></div>
+    <p>The Liposorber requires <strong>heparin anticoagulation</strong> (not citrate, like centrifugal apheresis). The typical heparin order is 25 U/kg load + 25 U/kg/hr continuous infusion, titrated to ACT during the procedure. The DART LDL calculator computes these doses based on weight.</p>
+  </div>
+</section>
+
+<section class="sec" id="indications">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">Who Gets LDL Apheresis</div><div class="sec-subtitle">FDA-approved indications and the FH/Lp(a) population</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Indication</th><th>FDA Status</th><th>Population</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Homozygous FH (HoFH)</strong></td><td>FDA-approved (LA-15)</td><td>LDL receptor near-absent; minimal response to statins; lifelong apheresis</td></tr>
+        <tr><td><strong>HeFH + CAD/PAD, LDL ≥ 100</strong></td><td>FDA-approved (LA-15)</td><td>HeFH with established atherosclerotic disease on max tolerated therapy</td></tr>
+        <tr><td><strong>HeFH, LDL ≥ 300 (no CAD)</strong></td><td>FDA-approved (LA-15)</td><td>Severe HeFH unable to reach goal pharmacologically</td></tr>
+        <tr><td><strong>FH + CAD/PAD, LDL ≥ 100, Lp(a) ≥ 60</strong></td><td>FDA-approved (LA-15)</td><td>High-Lp(a) population — the "residual risk" cohort</td></tr>
+        <tr><td><strong>Recurrent FSGS (post-kidney tx)</strong></td><td>FDA HDE/expanded</td><td>Recurrent focal segmental glomerulosclerosis after transplant</td></tr>
+      </tbody>
+    </table>
+    <p>Despite &gt; 60 years of dyslipidemia pharmacology, a meaningful subset of patients remain hypercholesterolemic on maximal therapy: statin + PCSK9 inhibitor + bempedoic acid + ezetimibe + lifestyle. For these patients, LDL apheresis adds a mechanical 60–70% session-acute reduction that metabolic effort cannot deliver.</p>
+  </div>
+</section>
+
+<section class="sec" id="columns">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">The Columns Themselves</div><div class="sec-subtitle">Dextran sulfate, polyacrylate, immunoadsorption</div></div></div>
+  <div class="prose">
+    <p>Several LDL apheresis systems exist worldwide. The US-approved Kaneka Liposorber LA-15 uses <strong>dextran sulfate cellulose</strong> beads. Other systems use:</p>
+    <table class="compare-table">
+      <thead><tr><th>System</th><th>Mechanism</th><th>Where used</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Kaneka Liposorber LA-15</strong></td><td>Dextran sulfate cellulose</td><td>US, Japan</td></tr>
+        <tr><td><strong>HELP (Heparin-Induced LDL Precipitation)</strong></td><td>pH-mediated heparin-LDL precipitation</td><td>Europe</td></tr>
+        <tr><td><strong>DALI</strong></td><td>Direct adsorption — whole blood (no separator)</td><td>Europe</td></tr>
+        <tr><td><strong>Lipopak / Polyacrylate</strong></td><td>Polyacrylate adsorption</td><td>Some European centers</td></tr>
+        <tr><td><strong>Immunoadsorption (anti-apoB)</strong></td><td>Affinity column with anti-apoB antibodies</td><td>Limited use, mostly research</td></tr>
+      </tbody>
+    </table>
+    <p>Clinical outcomes are roughly similar across systems for LDL reduction. The differences matter mostly for ACE-i interaction (see next section) and column reusability.</p>
+  </div>
+</section>
+
+<section class="sec" id="ace">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">The ACE-i Problem</div><div class="sec-subtitle">Why we hold lisinopril for 24 hours</div></div></div>
+  <div class="prose">
+    <div class="callout callout-warn"><span class="callout-icon">⚠</span><div class="callout-body"><span class="callout-label">A potentially fatal drug interaction</span>Dextran-sulfate and polyacrylate columns <strong>generate bradykinin</strong> from kininogen during plasma adsorption. In a patient on an ACE inhibitor (which blocks bradykinin degradation), bradykinin accumulates and causes <strong>severe hypotension, flushing, dyspnea, anaphylactoid reactions</strong> — sometimes fatal. The DART LDL calculator flags this with a red banner whenever ACE-i status is positive.</div></div>
+    <p>The institutional rule: <strong>hold ACE inhibitors at least 24 hours before LDL apheresis</strong>. Many centers prefer to switch the patient to an angiotensin-receptor blocker (ARB) entirely, which doesn't have the bradykinin-related interaction. The conversion: lisinopril → losartan (or equivalent). Patients should know to alert any new provider that this restriction exists.</p>
+    <p>Other systems (immunoadsorption, HELP) don't generate bradykinin as significantly, but the conservative practice is to hold ACE-i for any LDL apheresis modality.</p>
+  </div>
+</section>
+
+<section class="sec" id="schedule">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Schedule &amp; Goals</div><div class="sec-subtitle">Why every 1–2 weeks, and what to target</div></div></div>
+  <div class="prose">
+    <p>After a single LDL apheresis session, LDL drops ~70%. Within hours, hepatic LDL re-synthesis begins, and within 1 week, LDL recovers to ~80% of pre-procedure values. By 2 weeks, it's nearly back to baseline. This is why scheduling is critical:</p>
+    <table class="compare-table">
+      <thead><tr><th>Schedule</th><th>Time-averaged LDL reduction</th><th>Typical use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Weekly</strong></td><td>~46%</td><td>HoFH; severe HeFH with active disease</td></tr>
+        <tr><td><strong>Biweekly</strong></td><td>~35%</td><td>HeFH + CAD; standard practice for most centers</td></tr>
+        <tr><td><strong>Every 3 weeks</strong></td><td>~25%</td><td>Rare; some Lp(a)-elevated patients on adjunct PCSK9i</td></tr>
+      </tbody>
+    </table>
+    <p>Modern goals: get time-averaged LDL below <strong>70 mg/dL</strong> (for secondary prevention) or below <strong>55 mg/dL</strong> (for highest-risk recurrent events). These often require combining LDL apheresis with PCSK9 inhibitors and other oral agents.</p>
+  </div>
+</section>
+
+<section class="sec" id="lpa">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">Lp(a) — The Residual Risk Player</div><div class="sec-subtitle">When statin + PCSK9i still aren't enough</div></div></div>
+  <div class="prose">
+    <p>Lipoprotein(a) is a genetically determined LDL-like particle with an additional apo(a) protein attached. Elevated Lp(a) (&gt; 60 mg/dL or &gt; 125 nmol/L by some assays) carries independent cardiovascular risk that <strong>statins don't address</strong>. PCSK9 inhibitors lower Lp(a) modestly (~20%). LDL apheresis remains one of the most effective ways to reduce Lp(a) acutely (~60–70% reduction per session).</p>
+    <div class="callout callout-research"><span class="callout-icon">🧪</span><div class="callout-body"><span class="callout-label">Pipeline: Lp(a)-specific drugs</span><strong>Pelacarsen</strong> (an antisense oligonucleotide targeting Lp(a)) and <strong>olpasiran</strong> (siRNA against Lp(a)) are in phase 3 trials. If these drugs demonstrate hard cardiovascular endpoint benefit (HORIZON, OCEAN(a)-Outcomes trials), the role of LDL apheresis for Lp(a)-elevated patients may shift. Until then, apheresis remains the most effective Lp(a) intervention available.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="fsgs">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">The FSGS Indication</div><div class="sec-subtitle">A Kaneka FDA expanded use that surprises people</div></div></div>
+  <div class="prose">
+    <p>The Liposorber LA-15 also has FDA approval for <strong>recurrent focal segmental glomerulosclerosis</strong> (FSGS) after kidney transplant. The mechanism is hypothesized to be removal of a circulating <strong>permeability factor</strong> that causes recurrent disease in the new kidney. The exact molecule remains debated (suPAR is a candidate but not confirmed; cardiotrophin-like cytokine factor 1 [CLCF-1] is another).</p>
+    <p>The institutional protocol is typically a <strong>12-session course over 9 weeks</strong>, then taper based on proteinuria response. Pediatric patients with recurrent FSGS post-transplant are common candidates. The technical procedure is identical to the LDL indication — the same columns, same parameters — only the indication and patient population differ.</p>
+  </div>
+</section>
+
+<section class="sec" id="new">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">2024–2025 Developments</div><div class="sec-subtitle">Pharmacotherapy vs apheresis</div></div></div>
+  <div class="prose">
+    <div class="callout callout-research"><span class="callout-icon">💊</span><div class="callout-body"><span class="callout-label">Inclisiran's growing role</span>Inclisiran (an siRNA against PCSK9, dosed every 6 months) has expanded HoFH and HeFH treatment options. Some patients on stable inclisiran may be able to reduce apheresis frequency. Real-world data on combined apheresis + inclisiran is now accumulating.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🎯</span><div class="callout-body"><span class="callout-label">Pelacarsen Phase 3 readouts</span>The HORIZON trial (pelacarsen vs placebo in patients with Lp(a) ≥ 70 mg/dL and CVD) is reading out in 2024–2025. If positive, this could reshape the Lp(a)-elevated apheresis population.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">Evinacumab in HoFH</span>Evinacumab (anti-ANGPTL3 mAb) lowers LDL via a non-LDL-receptor pathway. Particularly relevant in HoFH where LDL-receptor activity is minimal. May further reduce apheresis frequency in select patients.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">📊</span><div class="callout-body"><span class="callout-label">Outcomes data continues</span>Long-term cohort studies (Japanese, German, US Liposorber registries) continue to demonstrate cardiovascular event reduction with chronic LDL apheresis in FH populations, both alone and combined with novel pharmacotherapies.</div></div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan an LDL apheresis?</div>
+    <div class="cta-sub">Open the LDL Apheresis Calculator for plasma volume processed, heparin dose, ACE-i flag, and full Liposorber priming protocol.</div>
+  </div>
+  <a class="cta-btn" href="ldl-apheresis.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Curated, evidence-based sources</div></div></div>
+  <ol class="ref-list">
+    <li>Cuchel M, et al. <strong>2023 ESC guidelines on homozygous FH.</strong> Eur Heart J.</li>
+    <li>Schwartz GG, et al. <strong>Effect of lipoprotein apheresis on MACE in high-Lp(a) patients.</strong> JACC 2024.</li>
+    <li>Endotext. <strong>Lipoprotein Apheresis.</strong> NCBI Bookshelf NBK425700.</li>
+    <li>Tsimikas S. <strong>Pelacarsen for elevated Lp(a) — HORIZON design.</strong> NEJM Evidence 2024.</li>
+    <li>Kaneka. <strong>Liposorber LA-15 Instructions for Use.</strong> Current revision.</li>
+    <li>2023 AHA Scientific Statement on Lipoprotein Apheresis.</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Why LDL Apheresis?</span>
+  <span>Educational reference — verify all clinical decisions against current guidelines and your institutional protocol.</span>
+</div>
+</div></body></html>

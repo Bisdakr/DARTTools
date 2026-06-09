@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why RBCx? — DART Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--border:rgba(149,173,205,.14);--text:#e9f0fa;--muted:#96a7bf;--primary:#61a8ff;--primary2:#3b82f6;--accent:#7ef0d2;--gold:#cfa95f;--warn:#ffcd70;--danger:#ff6f6f;--purple:#b389ff;--pink:#ff8fb6;--nav-bg:rgba(7,11,17,.82);--grid:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,rgba(97,168,255,.10),transparent 30%),radial-gradient(circle at 80% 20%,rgba(126,240,210,.08),transparent 24%),linear-gradient(180deg,var(--bg),#05080d 100%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;opacity:.45;mask-image:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 80%)}
+a{text-decoration:none;color:inherit}
+.container{width:min(1080px,calc(100% - 28px));margin:0 auto}
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--border)}
+.nav-inner{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 28px rgba(59,130,246,.28)}
+.brand-title{font-size:21px;font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.brand-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;font-weight:700;transition:all .2s ease}
+.chip-home{background:linear-gradient(135deg,rgba(97,168,255,.14),rgba(126,240,210,.10));border-color:rgba(97,168,255,.3);color:#d8ecff}
+.chip-home:hover{border-color:rgba(97,168,255,.55);color:#fff;transform:translateY(-1px)}
+.chip-calc{background:linear-gradient(135deg,rgba(126,240,210,.22),rgba(97,168,255,.14));border-color:rgba(126,240,210,.4);color:#cdfaea}
+.chip-calc:hover{border-color:rgba(126,240,210,.65);color:#fff;transform:translateY(-1px)}
+.head-bar{padding:34px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden}
+.head-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:800;margin-bottom:8px}
+.head-title{font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.035em;font-weight:900}
+.head-title .accent{background:linear-gradient(135deg,#eaf3ff 0%,#99c9ff 45%,#7ef0d2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:680px;line-height:1.65}
+.comet-stage{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.comet{position:absolute;top:0;left:0;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.95) 35%,rgba(97,168,255,.4) 65%,transparent 75%);box-shadow:0 0 6px 2px rgba(255,255,255,.9),0 0 14px 4px rgba(126,240,210,.7),0 0 28px 8px rgba(97,168,255,.4),0 0 50px 14px rgba(97,168,255,.18);offset-path:path('M -40 50 C 180 0,380 -8,600 30 C 820 70,1020 60,1340 18');offset-rotate:auto;opacity:0;animation:cometRun 3.6s cubic-bezier(0.42,0.04,0.58,0.98) 0.4s forwards}
+.comet::after{content:'';position:absolute;top:50%;right:100%;width:90px;height:3px;background:linear-gradient(to left,rgba(255,255,255,.95),rgba(126,240,210,.75) 20%,rgba(97,168,255,.45) 50%,rgba(97,168,255,.15) 75%,transparent);transform:translateY(-50%);filter:blur(1.2px);border-radius:99px}
+.comet::before{content:'';position:absolute;top:50%;right:100%;width:46px;height:8px;background:linear-gradient(to left,rgba(126,240,210,.4),rgba(97,168,255,.18) 60%,transparent);transform:translateY(-50%);filter:blur(4px);border-radius:99px}
+@keyframes cometRun{0%{offset-distance:0%;opacity:0}7%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.twinkle{position:absolute;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(126,240,210,.85) 45%,transparent 70%);filter:drop-shadow(0 0 4px rgba(126,240,210,.85)) drop-shadow(0 0 8px rgba(97,168,255,.4));opacity:0;animation:twink 1.4s ease-out var(--delay) forwards}
+.twinkle.small{width:2.5px;height:2.5px}
+.twinkle.tiny{width:1.5px;height:1.5px;background:radial-gradient(circle,#fff,transparent 60%)}
+@keyframes twink{0%{opacity:0;transform:scale(0) rotate(0)}22%{opacity:1;transform:scale(2.2) rotate(45deg)}42%{opacity:.55;transform:scale(1) rotate(90deg)}100%{opacity:0;transform:scale(.4) rotate(180deg)}}
+@media (prefers-reduced-motion:reduce){.comet,.twinkle{animation:none!important;opacity:0!important}}
+@media (max-width:780px){.comet{offset-path:path('M -20 35 C 90 0,180 -4,260 18 C 340 40,440 28,640 6');animation-duration:3.2s}.comet::after{width:60px;height:2.5px}.comet::before{width:30px;height:6px}.twinkle{transform:scale(.85)}}
+.section-nav{position:sticky;top:58px;z-index:100;background:rgba(7,11,17,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:24px}
+.section-nav-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:2px 0}
+.section-nav-inner::-webkit-scrollbar{height:3px}
+.section-nav-inner::-webkit-scrollbar-thumb{background:rgba(126,240,210,.3);border-radius:99px}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+.sec-pill:hover{border-color:rgba(126,240,210,.4);color:var(--text);background:rgba(126,240,210,.05)}
+.hero-card{margin-bottom:30px;padding:28px;border-radius:24px;border:1px solid rgba(126,240,210,.22);background:linear-gradient(135deg,rgba(126,240,210,.08),rgba(97,168,255,.06));position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(126,240,210,.15),transparent 70%);pointer-events:none}
+.hero-tldr-label{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.hero-tldr-text{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.7;color:#dfeef8;font-weight:400}
+.hero-tldr-text strong{color:#fff;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.stat{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.stat-num{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:6px}
+.stat-num.accent{background:linear-gradient(135deg,#7ef0d2,#61a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;line-height:1.4}
+.sec{margin:60px 0;scroll-margin-top:140px}
+.sec-header{display:flex;align-items:baseline;gap:18px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.sec-num{font-family:'Source Serif 4',serif;font-size:54px;font-weight:600;line-height:1;letter-spacing:-.05em;background:linear-gradient(180deg,rgba(126,240,210,.6),rgba(97,168,255,.3));-webkit-background-clip:text;background-clip:text;color:transparent;flex-shrink:0}
+.sec-title{font-size:clamp(24px,3.2vw,32px);font-weight:900;letter-spacing:-.025em;line-height:1.1}
+.sec-subtitle{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.prose{font-size:15.5px;line-height:1.78;color:#d6e0ee}
+.prose p{margin-bottom:18px}
+.prose p strong{color:#fff;font-weight:700}
+.prose em{color:#cdfaea;font-style:italic}
+.callout{margin:24px 0;padding:18px 22px;border-radius:14px;border-left:4px solid;display:flex;gap:16px;align-items:flex-start}
+.callout-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1;font-size:14.5px;line-height:1.65}
+.callout-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;font-weight:800;margin-bottom:6px;display:block}
+.callout-key{background:rgba(126,240,210,.07);border-color:var(--accent)}.callout-key .callout-label{color:#7ef0d2}
+.callout-history{background:rgba(207,169,95,.08);border-color:var(--gold)}.callout-history .callout-label{color:#cfa95f}
+.callout-tip{background:rgba(97,168,255,.08);border-color:var(--primary)}.callout-tip .callout-label{color:#61a8ff}
+.callout-warn{background:rgba(255,205,112,.08);border-color:var(--warn)}.callout-warn .callout-label{color:#ffcd70}
+.callout-research{background:rgba(179,137,255,.08);border-color:var(--purple)}.callout-research .callout-label{color:#b389ff}
+.callout-mind{background:rgba(255,143,182,.08);border-color:var(--pink)}.callout-mind .callout-label{color:#ff8fb6}
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:rgba(97,168,255,.10);color:#cfe2ff;padding:12px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.compare-table td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.compare-table td strong{color:#fff}
+.disease-grid{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.disease-pill{padding:5px 11px;border-radius:99px;font-size:11.5px;font-weight:700;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted)}
+.disease-pill.cat1{border-color:rgba(126,240,210,.3);color:#9be8d0;background:rgba(126,240,210,.06)}
+.disease-pill.cat2{border-color:rgba(97,168,255,.3);color:#9bc4ff;background:rgba(97,168,255,.06)}
+.disease-pill.cat3{border-color:rgba(255,205,112,.3);color:#ffd9a3;background:rgba(255,205,112,.05)}
+.cta-card{margin:50px 0 30px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(97,168,255,.15),rgba(126,240,210,.10));border:1px solid rgba(97,168,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.cta-sub{font-size:13.5px;color:#cfe2ff}
+.cta-btn{padding:13px 22px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(59,130,246,.3);transition:all .22s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,.45)}
+.ref-list{list-style:none;padding:0;margin:16px 0;counter-reset:refnum}
+.ref-list li{counter-increment:refnum;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#cdd6e2;display:flex;gap:14px}
+.ref-list li::before{content:counter(refnum);min-width:24px;height:24px;border-radius:6px;background:rgba(97,168,255,.15);color:#9bc4ff;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
+.ref-list a{color:#9bc4ff;text-decoration:underline}
+.foot{padding:24px 0 40px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:780px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-header{flex-direction:column;gap:4px}.sec-num{font-size:38px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">D</div>
+      <div><div class="brand-title">DART Tools</div><div class="brand-sub">Educational Reference</div></div>
+    </a>
+    <div class="nav-right">
+      <a class="chip chip-calc" href="rbcx.html">🧮 Open Calculator</a>
+      <a class="chip chip-home" href="index.html">← Home</a>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="head-bar">
+    <div class="comet-stage" aria-hidden="true">
+      <div class="comet"></div>
+      <div class="twinkle"       style="--x:11%;--y:25%;--delay:0.80s"></div>
+      <div class="twinkle small" style="--x:19%;--y:15%;--delay:1.05s"></div>
+      <div class="twinkle"       style="--x:28%;--y:8%; --delay:1.30s"></div>
+      <div class="twinkle tiny"  style="--x:34%;--y:12%;--delay:1.50s"></div>
+      <div class="twinkle small" style="--x:42%;--y:18%;--delay:1.70s"></div>
+      <div class="twinkle"       style="--x:51%;--y:30%;--delay:1.95s"></div>
+      <div class="twinkle tiny"  style="--x:58%;--y:42%;--delay:2.15s"></div>
+      <div class="twinkle small" style="--x:65%;--y:50%;--delay:2.35s"></div>
+      <div class="twinkle"       style="--x:74%;--y:52%;--delay:2.60s"></div>
+      <div class="twinkle small" style="--x:82%;--y:40%;--delay:2.85s"></div>
+      <div class="twinkle tiny"  style="--x:89%;--y:25%;--delay:3.05s"></div>
+    </div>
+    <div style="position:relative;z-index:1">
+      <div class="head-kicker">Education · Red Blood Cell Exchange</div>
+      <div class="head-title"><span class="accent">Why RBCx?</span></div>
+      <div class="head-sub">From acute sickle stroke to gene-therapy preparation: a deep but readable guide to RBC exchange — the math of dilution, the patient population, and the new role in the cure era.</div>
+    </div>
+  </div>
+</div>
+<div class="section-nav">
+  <div class="container">
+    <div class="section-nav-inner">
+      <a class="sec-pill" href="#mechanism">01 · How It Works</a>
+      <a class="sec-pill" href="#scd">02 · Sickle Cell</a>
+      <a class="sec-pill" href="#indications">03 · Other Indications</a>
+      <a class="sec-pill" href="#math">04 · The Math</a>
+      <a class="sec-pill" href="#fcr">05 · Why FCR</a>
+      <a class="sec-pill" href="#prbc">06 · PRBC Selection</a>
+      <a class="sec-pill" href="#complications">07 · Complications</a>
+      <a class="sec-pill" href="#peds">08 · Pediatrics</a>
+      <a class="sec-pill" href="#new">09 · 2024–2025</a>
+      <a class="sec-pill" href="#refs">References</a>
+    </div>
+  </div>
+</div>
+<div class="container">
+
+<div class="hero-card">
+  <div class="hero-tldr-label">TL;DR — The 60-second version</div>
+  <div class="hero-tldr-text">
+    Red blood cell exchange (RBCx) is <strong>targeted RBC dilution</strong>. The Optia simultaneously removes the patient's diseased red cells (HbS-containing in sickle cell disease, parasitized in malaria) and infuses normal donor PRBCs. Unlike a simple top-up transfusion — which raises both HbA <em>and</em> hematocrit, courting hyperviscosity — RBCx drives HbS percentage from 80% to under 30% in roughly two hours <em>without dangerously raising total Hct</em>. The math is exponential dilution: <strong>PRBC Volume = Effective TBV × (Avg Hct ÷ Fluid Hct) × ln(100 ÷ FCR)</strong>. The DART RBCx calculator computes this plus pediatric prime-decision banners.
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num accent">&lt; 30%</div><div class="stat-label">HbS target for SCD stroke prophylaxis</div></div>
+    <div class="stat"><div class="stat-num">~2 hr</div><div class="stat-label">Typical procedure duration</div></div>
+    <div class="stat"><div class="stat-num">3–10</div><div class="stat-label">Units of PRBC per adult exchange</div></div>
+    <div class="stat"><div class="stat-num">Cat I</div><div class="stat-label">ASFA grade for acute SCD stroke</div></div>
+  </div>
+</div>
+
+<section class="sec" id="mechanism">
+  <div class="sec-header"><div class="sec-num">01</div><div><div class="sec-title">How It Actually Works</div><div class="sec-subtitle">Targeted removal of one RBC population, replacement with another</div></div></div>
+  <div class="prose">
+    <p>RBCx exploits the same centrifuge separation that drives plasmapheresis, with a different exit strategy. The Optia spins blood into three layers — packed RBCs, buffy coat, plasma — and rather than skimming plasma off the inside, the machine <strong>removes the dense RBC fraction to a waste bag</strong> while simultaneously infusing donor PRBCs through the return line. Plasma and platelets are returned to the patient alongside the donor cells. Intravascular volume stays roughly constant because in-flow ≈ out-flow throughout the procedure.</p>
+    <p>The therapeutic key is that donor PRBCs <em>dilute</em> the patient's remaining native RBCs in a predictable, mathematical way. The fraction-of-cells-remaining at any point follows exponential decay: <strong>FCR = e<sup>−V/EBV</sup></strong> where V is the volume of blood processed and EBV is the patient's effective blood volume.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Why exchange beats simple transfusion</span>A top-up transfusion in SCD raises both HbA <em>and</em> hematocrit, pushing whole-blood viscosity dangerously high and risking hyperviscosity stroke. RBCx <strong>removes diseased cells as you add healthy ones</strong>, keeping the hematocrit stable at target while dramatically lowering HbS percentage. It's a swap, not an addition.</div></div>
+    <p>The Optia uses a continuous-flow centrifuge with a thin sealed channel and optical interface sensing — the same architecture as TPE. Two pumps (inlet and return) plus a third for ACD-A anticoagulation manage the flows. ACD-A defaults to 12:1 inlet:AC ratio. Inlet flow is typically 80–100 mL/min for an adult.</p>
+  </div>
+</section>
+
+<section class="sec" id="scd">
+  <div class="sec-header"><div class="sec-num">02</div><div><div class="sec-title">The Sickle Cell Mainstay</div><div class="sec-subtitle">Where RBCx earns most of its ASFA Category I citations</div></div></div>
+  <div class="prose">
+    <p>Sickle cell disease is the dominant indication for RBCx in the US. The pathology is HbSS hemoglobin polymerizing into rigid fibers under hypoxia — sickling deforms the RBCs into the classic crescent shape. Sickled cells obstruct microcirculation, cause vaso-occlusive crisis, end-organ damage, and stroke. The therapeutic question is: how do we drop HbS percentage below the threshold where polymerization stops driving disease?</p>
+    <p>For most SCD indications, the target is <strong>HbS &lt; 30%</strong>. Acute stroke, severe acute chest syndrome, multi-organ failure, and stroke prophylaxis all use this number. Pre-operative RBCx aims for HbS &lt; 30%, sometimes &lt; 20% for high-risk cardiac surgery. Chronic transfusion programs run monthly RBCx sessions to maintain a time-averaged HbS &lt; 30%.</p>
+    <table class="compare-table">
+      <thead><tr><th>SCD Indication</th><th>ASFA</th><th>HbS Target</th></tr></thead>
+      <tbody>
+        <tr><td>Acute stroke / TIA</td><td><strong>Cat I, 1C</strong></td><td>&lt; 30%</td></tr>
+        <tr><td>Stroke prophylaxis (chronic)</td><td><strong>Cat I, 1A</strong></td><td>&lt; 30%</td></tr>
+        <tr><td>Acute chest syndrome (severe)</td><td><strong>Cat I, 1C</strong></td><td>&lt; 30%</td></tr>
+        <tr><td>Pre-operative (high-risk surgery)</td><td><strong>Cat II</strong></td><td>&lt; 30% (some &lt; 20%)</td></tr>
+        <tr><td>Multi-organ failure</td><td>Cat III</td><td>&lt; 30% empirically</td></tr>
+        <tr><td>Priapism (severe, refractory)</td><td>Cat III</td><td>Individualized</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">The gene-therapy era</span>FDA approval of <strong>exa-cel (Casgevy)</strong> and <strong>lovo-cel (Lyfgenia)</strong> in December 2023 introduced curative options for SCD. RBCx now plays a critical preparatory role: <em>HbS must be brought below 30% via apheresis before HPC-A mobilization can safely begin</em>. G-CSF is contraindicated in SCD due to vaso-occlusive crisis risk, so plerixafor monotherapy is used — and that only works when sickling potential is suppressed via RBCx. Your apheresis program is now integral to your transplant center's gene therapy pathway.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="indications">
+  <div class="sec-header"><div class="sec-num">03</div><div><div class="sec-title">Beyond Sickle Cell</div><div class="sec-subtitle">Other ASFA indications</div></div></div>
+  <div class="prose">
+    <p>RBCx finds use in other diseases where one RBC population is pathologic and needs targeted replacement:</p>
+    <div class="disease-grid">
+      <span class="disease-pill cat1">Severe Falciparum Malaria (Cat II)</span>
+      <span class="disease-pill cat2">Hereditary Hemochromatosis (Cat I/II)</span>
+      <span class="disease-pill cat2">Polycythemia Vera (Cat I)</span>
+      <span class="disease-pill cat3">Babesiosis, severe (Cat II)</span>
+      <span class="disease-pill cat3">Hyperhemolysis syndrome (Cat III)</span>
+    </div>
+    <p>In <strong>severe falciparum malaria</strong>, RBCx removes parasitized RBCs and parasite-derived toxins. Modern WHO guidelines favor IV artesunate as first-line therapy; RBCx is reserved for parasitemia &gt; 30% with organ dysfunction. In <strong>hereditary hemochromatosis</strong>, erythrocytapheresis (selective RBC removal without replacement) replaces traditional phlebotomy — it removes 2–3× the iron load per session. <strong>Polycythemia vera</strong> uses erythrocytapheresis for symptomatic hyperviscosity, where total RBC mass needs reduction rather than dilution.</p>
+    <p>The procedural mechanics differ between exchange (RBCx) and depletion (erythrocytapheresis): exchange replaces removed cells with donor PRBCs to maintain Hct; depletion replaces with crystalloid (saline) to lower Hct.</p>
+  </div>
+</section>
+
+<section class="sec" id="math">
+  <div class="sec-header"><div class="sec-num">04</div><div><div class="sec-title">The RBCx Math</div><div class="sec-subtitle">Why the calculator looks the way it does</div></div></div>
+  <div class="prose">
+    <p>The classic formula used by the Optia and the DART calculator:</p>
+    <div class="callout callout-key"><span class="callout-icon">📐</span><div class="callout-body"><span class="callout-label">PRBC Volume Formula</span><strong>PRBC Volume = Effective TBV × (Avg Hct ÷ Fluid Hct) × ln(100 ÷ FCR)</strong><br><br>Where:<br>• <strong>Effective TBV</strong> = TBV − warmer/tubing volume (50 mL default for Optia)<br>• <strong>Avg Hct</strong> = (Pre-Hct + Target Hct) ÷ 2<br>• <strong>Fluid Hct</strong> = PRBC unit Hct (typically 55–60%)<br>• <strong>FCR</strong> = Fraction of Cells Remaining target (typically 20–30%)</div></div>
+    <p>The natural logarithm comes from the exponential decay of patient cells as donor cells dilute them in real time. To drive HbS from 80% to 30%, you need FCR = 30/80 = 0.375, or about 37.5%. To go from 80% to 20%, FCR = 25%. The ln(100/FCR) factor captures how many "exchanges" of effective TBV are needed.</p>
+    <p>For a typical adult (TBV 5 L, pre-Hct 25%, target Hct 30%, fluid Hct 60%, FCR 30%): <em>4970 × (27.5 ÷ 60) × ln(100/30) ≈ 4970 × 0.458 × 1.20 ≈ 2728 mL of PRBC</em>, which works out to roughly 9 units at 300 mL each.</p>
+    <p>The calculator surfaces this math step-by-step in the result panel so you can verify each input visually before placing the blood bank order.</p>
+  </div>
+</section>
+
+<section class="sec" id="fcr">
+  <div class="sec-header"><div class="sec-num">05</div><div><div class="sec-title">Why FCR Drives Everything</div><div class="sec-subtitle">Picking the target fraction-of-cells-remaining</div></div></div>
+  <div class="prose">
+    <p>FCR is operator-set and represents how aggressively you want to dilute the patient's native cells. For SCD with HbS at ~80% baseline, an FCR of 25–30% drops post-exchange HbS to roughly 20–24% — within the &lt; 30% therapeutic window with a safety margin.</p>
+    <p>Lower FCR means more donor PRBC required (more donor exposure, more antigens, more iron) but lower post-procedure HbS. Higher FCR means less donor exposure but higher residual HbS. The trade-off:</p>
+    <table class="compare-table">
+      <thead><tr><th>FCR Target</th><th>Post-HbS (from 80%)</th><th>PRBC need (relative)</th><th>Clinical use</th></tr></thead>
+      <tbody>
+        <tr><td>40%</td><td>~32%</td><td>0.92×</td><td>Borderline — not preferred</td></tr>
+        <tr><td>30%</td><td>~24%</td><td>1.20×</td><td>Standard for SCD acute/chronic</td></tr>
+        <tr><td>25%</td><td>~20%</td><td>1.39×</td><td>Pre-cardiac surgery, gene therapy prep</td></tr>
+        <tr><td>20%</td><td>~16%</td><td>1.61×</td><td>Severe disease, special situations</td></tr>
+      </tbody>
+    </table>
+    <p>For chronic transfusion programs (monthly RBCx for stroke prophylaxis), FCR is set higher (30–35%) because the goal is a time-averaged HbS &lt; 30% rather than a single low value. The intervening 4 weeks allow some marrow synthesis of new HbS cells — the time-averaged exposure drives the long-term protection.</p>
+  </div>
+</section>
+
+<section class="sec" id="prbc">
+  <div class="sec-header"><div class="sec-num">06</div><div><div class="sec-title">PRBC Selection</div><div class="sec-subtitle">Crossmatch, sickle-negative, leukoreduced, fresh</div></div></div>
+  <div class="prose">
+    <p>SCD patients are <strong>alloimmunized at high rates</strong> — chronic transfusion exposes them to dozens of foreign antigens. To minimize alloantibody development, donor PRBCs for SCD RBCx should be:</p>
+    <ul style="padding-left:20px;margin-bottom:18px">
+      <li><strong>ABO/Rh compatible</strong> plus extended phenotype-matched (Kell, Duffy, Kidd, MNS, Lewis at minimum). Many centers now do molecular typing.</li>
+      <li><strong>HbS-negative</strong> (sickle prep tested) — don't transfer sickling capability back to the patient.</li>
+      <li><strong>Leukoreduced</strong> (standard now) to reduce febrile non-hemolytic reactions and HLA sensitization.</li>
+      <li><strong>Fresh</strong> (preferably &lt; 7 days old) for SCD chronic exchange to maximize 2,3-BPG and oxygen-carrying capacity.</li>
+      <li><strong>CMV-safe</strong> in CMV-negative patients planning future transplant.</li>
+    </ul>
+    <div class="callout callout-warn"><span class="callout-icon">💉</span><div class="callout-body"><span class="callout-label">Premedication ritual</span>The institutional protocol calls for premedication with <strong>acetaminophen, diphenhydramine, and corticosteroid</strong> (typically hydrocortisone or methylprednisolone) before each procedure to reduce febrile and allergic reactions. Reactions are still possible but typically milder.</div></div>
+    <p>Bag access and timing matter operationally. The Optia processes one bag at a time, and the warming line keeps PRBC at body temperature throughout. The blood bank often delivers a few bags up front, with additional bags ready to be released as the procedure progresses, depending on the calculator's predicted total.</p>
+  </div>
+</section>
+
+<section class="sec" id="complications">
+  <div class="sec-header"><div class="sec-num">07</div><div><div class="sec-title">Complications</div><div class="sec-subtitle">Mostly transfusion-related, some apheresis-related</div></div></div>
+  <div class="prose">
+    <table class="compare-table">
+      <thead><tr><th>Complication</th><th>Mechanism</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Febrile reaction</strong></td><td>Cytokines from white cell debris, anti-HLA</td><td>Leukoreduction, premedication</td></tr>
+        <tr><td><strong>Allergic / urticarial</strong></td><td>Donor plasma proteins</td><td>Diphenhydramine, premed steroid</td></tr>
+        <tr><td><strong>Alloimmunization</strong></td><td>Foreign RBC antigens</td><td>Phenotype-matched donors</td></tr>
+        <tr><td><strong>Iron overload</strong></td><td>Each unit ≈ 250 mg iron</td><td>RBCx actually <em>reduces</em> iron load vs simple transfusion — that's a feature</td></tr>
+        <tr><td><strong>Hyperhemolysis</strong></td><td>Rare immune-mediated lysis of both donor &amp; native cells</td><td>Steroids + IVIG; may need rituximab</td></tr>
+        <tr><td><strong>Hypocalcemia (citrate)</strong></td><td>AC infused with each unit</td><td>Prophylactic calcium gluconate</td></tr>
+        <tr><td><strong>Vascular access issues</strong></td><td>Apheresis catheter dysfunction</td><td>Access team consultation, long-term access planning</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-mind"><span class="callout-icon">💭</span><div class="callout-body"><span class="callout-label">A surprising upside</span>Patients on chronic RBCx programs generally have <em>lower</em> serum ferritin than those on chronic simple transfusion, because every PRBC unit infused replaces an HbS unit removed — net iron balance is much closer to zero. Many SCD patients on RBCx can avoid iron chelation entirely. This is a meaningful quality-of-life difference compared to simple transfusion programs.</div></div>
+  </div>
+</section>
+
+<section class="sec" id="peds">
+  <div class="sec-header"><div class="sec-num">08</div><div><div class="sec-title">Pediatric RBCx</div><div class="sec-subtitle">When the patient is smaller than the circuit</div></div></div>
+  <div class="prose">
+    <p>Pediatric RBCx uses the same arithmetic but with substantially smaller margins. The institutional pediatric TBV bands (90/80/70 mL/kg for neonate/infant/child) replace Nadler for patients ≤ 25 kg.</p>
+    <p>The Optia TPE/RBCx circuit ECV is 235 mL (185 + 50 warmer). For a 12 kg child with TBV ≈ 960 mL, that's ~25% of total blood volume — which is why the DART RBCx calculator flips to <strong>Strongly Recommend Diluted PRBC Prime</strong> automatically. The prime fluid (250 mL of PRBC mixed to 35% Hct with saline) fills the circuit before patient blood enters, maintaining isovolemic state at procedure initiation.</p>
+    <div class="callout callout-key"><span class="callout-icon">🔑</span><div class="callout-body"><span class="callout-label">Institutional rinseback rule</span>Per institutional practice, <strong>rinseback is not routinely performed for RBCx</strong> regardless of prime type. This matters for predicting post-procedure volume balance and final Hct: the 235 mL of circuit blood remains in the discard line. The calculator's "Effective TBV" subtracts this for the math.</div></div>
+    <p>Vascular access in pediatric RBCx is a logistical art. Many children with SCD on chronic transfusion eventually get a chronic central line (port, tunneled catheter); single-procedure RBCx often uses dual-lumen peripheral catheters or short-term central access placed for the procedure.</p>
+  </div>
+</section>
+
+<section class="sec" id="new">
+  <div class="sec-header"><div class="sec-num">09</div><div><div class="sec-title">2024–2025 Developments</div><div class="sec-subtitle">Where RBCx is going</div></div></div>
+  <div class="prose">
+    <div class="callout callout-research"><span class="callout-icon">🧬</span><div class="callout-body"><span class="callout-label">RBCx as gene-therapy enabler</span>The Casgevy (exa-cel) and Lyfgenia (lovo-cel) workflows require HbS &lt; 30% pre-mobilization. Many transplant centers now run an intensified RBCx protocol in the weeks before HPC-A — sometimes 2 sessions in close succession to durably lower HbS. The downstream apheresis collection then proceeds with plerixafor monotherapy and the Bluebird/Genetix-specific Optia settings (dark collection preference, 8:1 starting AC ratio).</div></div>
+    <div class="callout callout-research"><span class="callout-icon">📈</span><div class="callout-body"><span class="callout-label">Long-term cardiovascular outcomes</span>Multiple 2023–2024 retrospective analyses confirm that chronic RBCx programs reduce silent infarct accumulation in pediatric SCD and may slow nephropathy progression compared to historical simple-transfusion protocols. The mechanism is multi-pronged: lower time-averaged HbS, less iron overload, more stable hematocrit.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">💊</span><div class="callout-body"><span class="callout-label">Voxelotor era and after</span>Voxelotor (an HbS polymerization inhibitor approved 2019) was withdrawn from the US market in 2024 after post-marketing data raised safety concerns. Crizanlizumab (anti-P-selectin mAb) remains available. Many adult patients now combine apheresis + crizanlizumab + hydroxyurea for incremental gains, particularly bridging to definitive gene therapy.</div></div>
+    <div class="callout callout-research"><span class="callout-icon">🏥</span><div class="callout-body"><span class="callout-label">Outpatient RBCx programs</span>The shift to outpatient chronic RBCx (vs inpatient) continues to mature. Specialized SCD comprehensive centers run dedicated RBCx clinics; nurses cross-trained in both transfusion medicine and chronic SCD care become a critical resource. Patient satisfaction and quality-of-life endpoints favor outpatient delivery.</div></div>
+  </div>
+</section>
+
+<div class="cta-card">
+  <div class="cta-text">
+    <div class="cta-title">Ready to plan an RBCx?</div>
+    <div class="cta-sub">Open the RBCx Calculator for Estimated PRBC Volume, Calcium Gluconate dose, and pediatric prime-decision banner.</div>
+  </div>
+  <a class="cta-btn" href="rbcx.html">🧮 Open Calculator</a>
+</div>
+
+<section class="sec" id="refs">
+  <div class="sec-header"><div class="sec-num">∞</div><div><div class="sec-title">References &amp; Further Reading</div><div class="sec-subtitle">Curated, evidence-based sources</div></div></div>
+  <ol class="ref-list">
+    <li>Connelly-Smith L, Alquist CR, Aqui NA, et al. <strong>Guidelines on the Use of Therapeutic Apheresis in Clinical Practice — ASFA Ninth Special Issue.</strong> J Clin Apher. 2023;38(2):77–278. <a href="https://onlinelibrary.wiley.com/doi/10.1002/jca.22043" target="_blank">DOI</a></li>
+    <li>Frangoul H, et al. <strong>CRISPR-Cas9 Gene Editing for Sickle Cell Disease — exa-cel.</strong> NEJM 2021;384:252–60.</li>
+    <li>FDA. <strong>Casgevy (exa-cel) and Lyfgenia (lovo-cel) approvals</strong>, December 2023.</li>
+    <li>Kanter J, et al. <strong>Modern Management of Sickle Cell Disease.</strong> NEJM 2023.</li>
+    <li>DeBaun MR, et al. <strong>Stroke prevention in SCD — chronic RBCx outcomes.</strong> Blood. 2024.</li>
+    <li>Howard J, et al. <strong>BSH guidelines on red cell transfusion in sickle cell disease</strong> (updated 2023).</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <span>DART Tools · Why RBCx?</span>
+  <span>Educational reference — verify all clinical decisions against current guidelines and your institutional protocol.</span>
+</div>
+
+</div>
+</body>
+</html>
